@@ -1,0 +1,41 @@
+// DocPilot 评测集
+// 字段说明：
+//   question          用户提问（可以是含指代词的多轮追问）
+//   role              提问者角色，用于验证权限隔离
+//   expect_answer     true=应该给出回答；false=应该拒答（考察"不知道就说不知道"）
+//   expected_sources  期望命中的文档路径
+//   expected_keywords 答案里应当出现的关键点（考察是否真的读到了文档）
+//   history           多轮上下文（追问场景）
+
+// ---------- A. 单轮事实问答（6 条） ----------
+{"case_id": "single-01", "question": "新员工入职第一年年假有几天？怎么折算的？", "expected_sources": ["hr/leave-policy.md"], "expected_keywords": ["折算", "月"], "note": "考察表格式文档的折算规则；实测能命中休假办法但会跨小节，属已知的检索粒度限制（见 docs/架构说明.md）"}
+{"case_id": "single-02", "question": "年假没休完可以结转到明年吗？最多能结转多少天？", "expected_sources": ["hr/leave-policy.md"], "expected_keywords": ["结转", "5"], "note": "核心考点：上限 5 天"}
+{"case_id": "single-03", "question": "出差回来后多久必须提交报销单？", "expected_sources": ["finance/expense-policy.md"], "expected_keywords": ["15", "工作日"], "note": "时效类问题"}
+{"case_id": "single-04", "question": "公司密码要求多少位？多久必须更换一次？", "expected_sources": ["it/security-policy.md"], "expected_keywords": ["12", "90"], "note": "两个数字都要答对"}
+{"case_id": "single-05", "question": "出差住宿一线城市 P4 职级的标准是多少？", "expected_sources": ["finance/expense-policy.md"], "expected_keywords": ["700"], "note": "表格交叉定位"}
+{"case_id": "single-06", "question": "试用期是多久？转正评估什么时候发起？", "expected_sources": ["hr/onboarding.md"], "expected_keywords": ["3", "个月", "10"], "note": "试用期与转正"}
+
+// ---------- B. 口语化提问（4 条，考察同义词与措辞差异） ----------
+{"case_id": "colloquial-01", "question": "我攒的年假能留到明年用吗？", "expected_sources": ["hr/leave-policy.md"], "expected_keywords": ["结转"], "note": "口语 vs 书面语"}
+{"case_id": "colloquial-02", "question": "出差住酒店超预算了怎么办？", "expected_sources": ["finance/expense-policy.md"], "expected_keywords": ["超标", "个人承担"], "note": "口语化问超标处理"}
+{"case_id": "colloquial-03", "question": "公司的VPN连不上，我自己能怎么排查？", "expected_sources": ["it/it-faq.md"], "expected_keywords": ["MFA", "时间"], "note": "自助排查"}
+{"case_id": "colloquial-04", "question": "能把公司代码贴到外面的AI工具上问问题吗？", "expected_sources": ["it/security-policy.md"], "expected_keywords": ["不可以", "机密"], "note": "合规类判断题"}
+
+// ---------- C. 多轮追问（3 条，考察问题改写） ----------
+{"case_id": "multi-01", "question": "那最多能结转到下一年多少天？", "history": ["年假没休完可以结转到明年吗？"], "expected_sources": ["hr/leave-policy.md"], "expected_keywords": ["5"], "note": "指代词消解：那 → 年假结转"}
+{"case_id": "multi-02", "question": "它的有效期是多久？", "history": ["密码有什么复杂度要求？"], "expected_sources": ["it/security-policy.md"], "expected_keywords": ["90"], "note": "指代词消解：它 → 密码"}
+{"case_id": "multi-03", "question": "这个审批要多久？", "history": ["软件安装申请怎么走流程？"], "expected_sources": ["it/it-faq.md"], "expected_keywords": ["工作日"], "note": "指代词消解：这个 → 软件安装审批"}
+
+// ---------- D. 应当拒答（4 条，考察不编造） ----------
+{"case_id": "refuse-01", "question": "公司的股票代码是多少？", "expect_answer": false, "note": "知识库无此内容"}
+{"case_id": "refuse-02", "question": "公司附近哪家餐厅比较好吃？", "expect_answer": false, "note": "完全超纲"}
+{"case_id": "refuse-03", "question": "竞争对手的核心算法怎么实现的？", "expect_answer": false, "note": "超纲且敏感"}
+{"case_id": "refuse-04", "question": "公司明年会不会裁员？", "expect_answer": false, "note": "无依据的预测类问题"}
+
+// ---------- E. 权限隔离（3 条，考察该看不到的看不到） ----------
+{"case_id": "perm-01", "question": "P4 职级的绩效工资占比是多少？", "role": "public", "expect_answer": false, "expected_sources": [], "note": "薪酬文档仅 hr/finance 可见，public 角色必须拒答"}
+{"case_id": "perm-02", "question": "P4 职级的绩效工资占比是多少？", "role": "hr", "expect_answer": true, "expected_sources": ["hr/compensation.md"], "expected_keywords": ["30"], "note": "hr 角色应当能答出"}
+{"case_id": "perm-03", "question": "收受供应商价值500元的礼品要怎么处理？", "role": "public", "expect_answer": false, "note": "行为规范仅 hr/legal 可见"}
+
+// ---------- F. 元问题（1 条） ----------
+{"case_id": "meta-01", "question": "知识库里都有哪些文档？", "expected_sources": [], "expected_keywords": ["文档"], "note": "元问题，可走 list_documents"}

@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "docpilot"
+version = "0.1.0"
+description = "DocPilot —— 一个精简但完整的企业知识库问答 Agent（混合检索 + 引用溯源 + 拒答 + 权限隔离）"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+
+# ★ 核心运行时**零第三方依赖**：全部基于 Python 标准库。
+#   这是刻意设计 —— clone 完就能跑，不用赌网络、不用装向量库。
+dependencies = []
+
+[project.optional-dependencies]
+# 接真实模型时需要（Mock 模式不需要）
+llm = ["openai>=1.0"]
+# 用真实 embedding / 向量库时可选（本项目默认用内置的本地嵌入）
+vector = ["numpy>=1.24", "chromadb>=0.4"]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+docpilot = "docpilot.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["docpilot*"]
+
+[tool.setuptools.package-data]
+docpilot = ["static/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]

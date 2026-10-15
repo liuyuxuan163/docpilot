@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DocPilot · 企业知识库问答</title>
+<style>
+  :root {
+    --bg: #0f1420; --panel: #171e2e; --panel-2: #1e2739; --line: #2a3547;
+    --text: #e6ebf5; --muted: #8b98ad; --accent: #4f9cf9; --ok: #35c48a;
+    --warn: #f0b429; --danger: #ef5f6b; --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  }
+  header {
+    padding: 18px 26px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    background: linear-gradient(180deg, #182234, var(--bg));
+  }
+  header h1 { font-size: 17px; margin: 0; letter-spacing: .3px; }
+  header .sub { color: var(--muted); font-size: 13px; }
+  .badge {
+    font-size: 12px; padding: 2px 9px; border-radius: 20px;
+    border: 1px solid var(--line); color: var(--muted);
+  }
+  .badge.on { color: var(--ok); border-color: #1f5c42; background: #122a20; }
+  main { max-width: 1180px; margin: 0 auto; padding: 22px 26px 70px; }
+  .row { display: flex; gap: 18px; align-items: flex-start; }
+  .col { flex: 1; min-width: 0; }
+  @media (max-width: 900px) { .row { flex-direction: column; } }
+
+  .card {
+    background: var(--panel); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px;
+  }
+  .card h2 {
+    font-size: 13px; color: var(--muted); margin: 0 0 12px;
+    text-transform: uppercase; letter-spacing: .8px; font-weight: 600;
+  }
+  textarea {
+    width: 100%; min-height: 74px; resize: vertical; padding: 11px 13px;
+    background: var(--panel-2); color: var(--text);
+    border: 1px solid var(--line); border-radius: 8px;
+    font: inherit; outline: none;
+  }
+  textarea:focus { border-color: var(--accent); }
+  .controls { display: flex; gap: 10px; align-items: center; margin-top: 11px; flex-wrap: wrap; }
+  select, button {
+    font: inherit; padding: 8px 15px; border-radius: 8px;
+    border: 1px solid var(--line); background: var(--panel-2); color: var(--text); cursor: pointer;
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #06111f; font-weight: 600; }
+  button.primary:disabled { opacity: .55; cursor: default; }
+  .examples { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .chip {
+    font-size: 13px; padding: 5px 11px; border-radius: 16px;
+    border: 1px solid var(--line); background: var(--panel-2);
+    color: var(--muted); cursor: pointer;
+  }
+  .chip:hover { color: var(--text); border-color: var(--accent); }
+
+  .answer { white-space: pre-wrap; word-break: break-word; }
+  .refused { border-left: 3px solid var(--warn); padding-left: 13px; color: #f5d99a; }
+
+  .meta {
+    display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px;
+    padding-top: 12px; border-top: 1px solid var(--line);
+    font-size: 12.5px; color: var(--muted);
+  }
+  .meta b { color: var(--text); font-weight: 600; }
+
+  .cite {
+    display: flex; gap: 11px; padding: 10px 0; border-bottom: 1px dashed var(--line);
+  }
+  .cite:last-child { border-bottom: none; }
+  .cite .mark {
+    flex: 0 0 auto; font-weight: 700; color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .cite .body { min-width: 0; }
+  .cite .label { font-size: 13px; color: var(--text); word-break: break-all; }
+  .cite .snip { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+
+  .hit { padding: 9px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
+  .hit:last-child { border-bottom: none; }
+  .hit .top { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+  .hit .src { word-break: break-all; }
+  .track {
+    height: 5px; border-radius: 3px; background: var(--panel-2); margin-top: 6px; overflow: hidden;
+  }
+  .track i { display: block; height: 100%; background: var(--accent); }
+  .hit.no .track i { background: var(--danger); }
+
+  .doc { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 6px 0; }
+  .doc .vis { color: var(--muted); font-size: 12px; }
+  .locked { color: var(--danger); }
+
+  .err { color: var(--danger); font-size: 13.5px; }
+  .empty { color: var(--muted); font-size: 13.5px; }
+  .spin { color: var(--muted); font-size: 13.5px; }
+  code { background: var(--panel-2); padding: 1px 5px; border-radius: 4px; font-size: 12.5px; }
+  footer { text-align: center; color: var(--muted); font-size: 12.5px; padding: 8px 20px 30px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>DocPilot</h1>
+  <span class="sub">企业知识库问答 Agent · 混合检索 / 引用溯源 / 拒答 / 权限隔离</span>
+  <span class="badge" id="provider">连接中…</span>
+</header>
+
+<main>
+  <div class="row">
+    <div class="col" style="flex: 1.35">
+      <div class="card">
+        <h2>提问</h2>
+        <textarea id="question" placeholder="例如：年假没休完可以结转到明年吗？最多结转多少天？"></textarea>
+        <div class="controls">
+          <label class="sub" style="color:var(--muted);font-size:13px">提问者角色</label>
+          <select id="role">
+            <option value="public">public（普通员工）</option>
+            <option value="hr">hr（人力资源）</option>
+            <option value="finance">finance（财务）</option>
+            <option value="legal">legal（法务）</option>
+          </select>
+          <button class="primary" id="ask">提问</button>
+        </div>
+        <div class="examples" id="examples"></div>
+      </div>
+
+      <div class="card">
+        <h2>回答</h2>
+        <div id="answer" class="answer empty">还没有提问。上面选一个问题或自己输入。</div>
+        <div class="meta" id="meta" style="display:none"></div>
+      </div>
+
+      <div class="card">
+        <h2>引用来源</h2>
+        <div id="citations" class="empty">引用会显示在这里。</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card">
+        <h2>检索证据（含相关度）</h2>
+        <div id="evidence" class="empty">每次提问后显示检索到的片段与相关度，用来判断"依据够不够"。</div>
+      </div>
+      <div class="card">
+        <h2>当前角色可见文档</h2>
+        <div id="documents" class="empty">加载中…</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  数据全部来自 <code>data/docs</code> 的示例文档，与任何真实公司无关。
+  当前为 Mock 模式时回答由确定性引擎生成，不调用外部模型。
+</footer>
+
+<script>
+const EXAMPLES = [
+  "年假没休完可以结转到明年吗？最多结转多少天？",
+  "出差住酒店超预算了怎么办？",
+  "公司密码要求多少位？多久必须更换一次？",
+  "P4 职级的绩效工资占比是多少？",
+  "知识库里都有哪些文档？",
+  "今天天气怎么样？",
+];
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+// ---- 示例问题 ----
+EXAMPLES.forEach((text) => {
+  const chip = document.createElement("span");
+  chip.className = "chip";
+  chip.textContent = text;
+  chip.onclick = () => { $("question").value = text; ask(); };
+  $("examples").appendChild(chip);
+});
+
+// ---- 健康检查 ----
+fetch("/api/health").then((r) => r.json()).then((d) => {
+  const el = $("provider");
+  el.textContent = `${d.provider} · ${d.model}`;
+  el.classList.add(d.provider === "mock" ? "" : "on");
+}).catch(() => { $("provider").textContent = "服务未就绪"; });
+
+// ---- 可见文档 ----
+async function loadDocuments() {
+  const role = $("role").value;
+  try {
+    const res = await fetch(`/api/documents?role=${encodeURIComponent(role)}`);
+    const data = await res.json();
+    const docs = data.documents || [];
+    $("documents").innerHTML = docs.length
+      ? docs.map((d) => `
+          <div class="doc">
+            <span>${esc(d.source)}</span>
+            <span class="vis ${d.visibility && d.visibility.includes("public") ? "" : "locked"}">
+              ${esc((d.visibility || []).join("/"))} · ${d.sections} 段
+            </span>
+          </div>`).join("")
+      : '<div class="empty">该角色没有任何可见文档。</div>';
+  } catch (e) {
+    $("documents").innerHTML = `<div class="err">加载失败：${esc(e.message)}</div>`;
+  }
+}
+$("role").onchange = () => { loadDocuments(); };
+
+// ---- 提问 ----
+let busy = false;
+async function ask() {
+  const question = $("question").value.trim();
+  if (!question || busy) return;
+  busy = true;
+  $("ask").disabled = true;
+  $("answer").className = "answer spin";
+  $("answer").textContent = "正在检索并生成回答…";
+  $("meta").style.display = "none";
+
+  try {
+    const res = await fetch("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question, role: $("role").value }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    render(data);
+  } catch (e) {
+    $("answer").className = "answer err";
+    $("answer").textContent = `出错了：${e.message}`;
+  } finally {
+    busy = false;
+    $("ask").disabled = false;
+  }
+}
+$("ask").onclick = ask;
+$("question").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) ask();
+});
+
+function render(data) {
+  // 回答
+  $("answer").className = "answer" + (data.refused ? " refused" : "");
+  $("answer").textContent = data.refused
+    ? `【拒答】${data.text}`
+    : data.text;
+
+  // 指标
+  const meta = $("meta");
+  meta.style.display = "flex";
+  const items = [
+    ["推理步数", data.steps],
+    ["工具调用", (data.tool_calls || []).join(", ") || "无"],
+    ["估算 token", data.tokens],
+    ["延迟", `${data.latency_ms} ms`],
+  ];
+  if (data.rewritten_question && data.rewritten_question !== data.question) {
+    items.push(["问题改写", data.rewritten_question]);
+  }
+  if (data.degraded) items.push(["状态", "已降级"]);
+  meta.innerHTML = items.map(([k, v]) => `<span>${esc(k)}：<b>${esc(v)}</b></span>`).join("");
+
+  // 引用
+  const cites = data.citations || [];
+  $("citations").className = cites.length ? "" : "empty";
+  $("citations").innerHTML = cites.length
+    ? cites.map((c) => `
+        <div class="cite">
+          <span class="mark">${esc(c.marker)}</span>
+          <span class="body">
+            <div class="label">${esc(c.label)}</div>
+            <div class="snip">${esc(c.snippet)}…</div>
+          </span>
+        </div>`).join("")
+    : (data.refused ? "拒答时不会附引用（没有可用依据）。" : "本次回答没有引用。");
+
+  // 检索证据
+  const retrieved = data.retrieved || [];
+  $("evidence").className = retrieved.length ? "" : "empty";
+  $("evidence").innerHTML = retrieved.length
+    ? retrieved.map((h) => {
+        const score = Math.max(0, Math.min(1, Number(h.score) || 0));
+        const weak = score < 0.3;
+        return `
+          <div class="hit ${weak ? "no" : ""}">
+            <div class="top">
+              <span class="src">${esc(h.source)}#${esc(String(h.section).split(">").pop().trim())}</span>
+              <span class="badge">${score.toFixed(3)}</span>
+            </div>
+            <div class="track"><i style="width:${(score * 100).toFixed(1)}%"></i></div>
+          </div>`;
+      }).join("")
+    : '这次没有检索到任何片段 —— 这本身就是「没有依据」的信号。';
+}
+
+loadDocuments();
+$("question").value = EXAMPLES[0];
+</script>
+</body>
+</html>

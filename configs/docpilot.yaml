@@ -1,0 +1,71 @@
+# DocPilot 配置：全部可调参数集中在这里（代码不硬编码阈值）。
+#
+# 历史教训：把阈值散落在代码里，调参时就得满仓库搜；
+# 反过来，所有旋钮集中在一个文件，谁想改检索 top-k 或拒答阈值都知道去哪改。
+
+agent:
+  # ReAct 最大轮次：1 次改写 + 1 次检索 + 1 次作答 = 3 步足够，留点余量
+  max_steps: 6
+  max_tool_calls: 8
+  history_turns: 4
+
+  # ── 证据判定阈值（决定"答"还是"拒答"）────────────────────────────
+  # 规则：has_evidence = 覆盖率达标 AND 最长连续命中达标
+  #   · min_evidence_relevance = 0.28：问题实义字符在段落里的覆盖率下限
+  #     （能挡掉"今天天气怎么样"这类完全无重合的提问）
+  #   · min_evidence_span = 2：最长连续命中字符数下限
+  #     （能挡掉"公司股票代码"这类只共用"公司/代码"两个字的提问）
+  #
+  # 这两个值由 scripts/_calibrate_span.py 在 16 条应回答 + 9 条应拒答的标注集上
+  # 网格搜索得到：**误拒 0 条**。
+  #
+  # ⚠ 已知边界：这是**词面启发式**，不是语义判断。残余 4 条幻觉全部属于
+  #   "用词与某段文档高度重合、但实际不构成答案"（评测集 refuse-03 即此类）。
+  #   要做到语义级拒答需要真实 embedding 或一次模型判定 —— 本项目刻意保留
+  #   这一限制并写进评测，而不是调参把它掩盖掉。调高更保守（拒答变多）。
+  min_evidence_relevance: 0.28
+  min_evidence_span: 2
+  # 权限提示的触发门槛（从严，避免误报"你无权访问"）：见 KnowledgeBase.restricted_matches
+  restricted_min_relevance: 0.55
+
+llm:
+  provider: mock        # mock | deepseek | openai | openai_compat
+  model: deepseek-chat
+  temperature: 0.1
+  max_output_tokens: 1024
+  timeout_s: 60
+
+rag:
+  chunk_size: 360
+  chunk_overlap: 50
+  top_k_dense: 8
+  top_k_sparse: 8
+  top_k_final: 4
+  rrf_k: 60
+  # RRF 权重 [稠密, 稀疏]：中文短查询里精确词（编号/金额/时限）占比高，稀疏侧略占优
+  rrf_weights: [1.0, 1.2]
+  embed_dim: 256
+  min_token_len: 2
+
+# 评测门禁：低于门槛则 `python -m docpilot eval` 退出码非 0，可直接接 CI
+#
+# 门禁值是**按实测能力标定**的，不是拍脑袋定的乐观目标：
+#   · retrieval_hit / citation_valid / composite 都能轻松达标，起到回归保护作用；
+#   · refusal_correct 定在 0.75 而不是 0.85，是因为词面启发式拒答存在已知天花板
+#     （见 agent.min_evidence_relevance 的说明），定 0.85 会让 CI 永远红着，
+#     反而训练出"忽略红灯"的坏习惯。
+#     **把门槛定在能力之上，等于没有门槛。**
+#   · over_refusal_rate 定得较紧（0.15）：过度拒答对用户体验的伤害比多答一条更大。
+eval:
+  cases_path: data/eval/cases.jsonl
+  report_dir: evals/reports
+  gates:
+    retrieval_hit: 0.85
+    citation_valid: 0.95
+    refusal_correct: 0.70
+    composite: 0.75
+    over_refusal_rate: 0.15
+
+web:
+  host: 127.0.0.1
+  port: 8020

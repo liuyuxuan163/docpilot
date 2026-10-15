@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# 测试与缓存
+.pytest_cache/
+.runtime/
+.coverage
+htmlcov/
+
+# 评测报告（latest.json 会随每次运行变化，不入库）
+evals/reports/
+
+# 本地配置（可覆盖 configs/docpilot.yaml，但不该提交）
+configs/docpilot.local.yaml
+
+# 环境变量
+.env
+
+# ── 求职私人材料（★ 刻意不入库） ──────────────────────────────────────
+# 这几个文件是**给你自己看**的求职准备材料，公开到 GitHub 会有实际风险：
+#   · 面试问答准备.md   —— 面试官搜到会判断你在"背答案"，可信度受损
+#   · 简历项目描述.md   —— 含"可替换措辞"对照表，暴露话术包装痕迹
+#   · 上手计划.md       —— 自我学习计划，属于私人准备材料
+# 保留在本地、不提交即可；架构说明与 README 是要公开的技术文档。
+docs/简历项目描述.md
+docs/面试问答准备.md
+docs/*上手计划.md
+docs/private/
+
+# 编辑器 / 系统
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db

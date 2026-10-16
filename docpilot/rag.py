@@ -268,9 +268,44 @@ def _split_long(text: str, size: int) -> List[str]:
 
 
 class BM25Index:
-    """内存 BM25 倒排索引。自己实现而不是装 rank_bm25，是为了零依赖 + 可增量可序列化。"""
+    """内存 BM25 倒排索引（含 BM25+ 下界修正）。
+
+    为什么自己实现而不是装 ``rank_bm25``：为了**零依赖**，并且支持
+    **增量更新**（``add``/``remove``）与**序列化**（``to_dict``/``from_dict``）——
+    这两点对"索引持久化、避免每次重建"是必需的。
+
+    它解决的问题：**"文档里出现了查询词吗？出现几次？这个词稀有吗？文档多长？"**
+    综合这四点给每篇文档打分，用于关键词级的精确召回。
+
+    四个打分参数（都在这里初始化，之后只读）：
+
+    ==========  =======  ==========================================================
+    参数         默认值   作用
+    ==========  =======  ==========================================================
+    ``k1``       1.5      控制词频（TF）的**饱和速度**：值越大饱和越慢，越接近线性
+    ``b``        0.75     控制**长度归一化**强度：0=不归一化，1=完全归一化
+    ``delta``    0.5      **BM25+ 的下界修正**，给每个命中词一个保底分，
+                          防止长文档因归一化而被系统性低估
+    ``min_len``  2        分词的最短 token 长度，透传给 :func:`tokenize`
+    ==========  =======  ==========================================================
+
+    内部维护四张表（倒排索引的标准结构）：
+
+    * ``doc_ids``：所有文档 ID（**列表**，顺序即插入顺序）
+    * ``term_freq``：``{doc_id: Counter({term: 次数})}`` —— 每篇文档的词频
+    * ``doc_len``：``{doc_id: 该文档的 token 总数}`` —— 用于长度归一化
+    * ``postings``：``{term: {包含该词的 doc_id 集合}}`` —— **倒排表**，
+      是"快速找到候选文档"的关键：查一个词就能直接拿到所有含它的文档
+
+    ``_avgdl`` 是平均文档长度的**缓存**，初值 0 表示"尚未计算"。
+    """
 
     def __init__(self, k1: float = 1.5, b: float = 0.75, delta: float = 0.5, min_len: int = 2) -> None:
+        """初始化空索引，并设定四个打分参数（详见类文档）。
+
+        注意：这里**不接收任何文档**。索引构建靠后续的 :meth:`add`，
+        这样同一套结构既能"批量建库"，也能"增量追加"。
+        """
         self.k1, self.b, self.delta, self.min_len = k1, b, delta, min_len
         self.doc_ids: List[str] = []
         self.term_freq: Dict[str, Counter] = {}
@@ -279,17 +314,72 @@ class BM25Index:
         self._avgdl = 0.0
 
     def add(self, doc_id: str, text: str) -> None:
+        """把一篇文档加入索引（**增量**，不需要重建全部）。
+
+        Args:
+            doc_id: 文档唯一标识（本项目用 chunk_id）。
+            text: 文档原文。调用方传入的通常是 ``f"{section} {chunk.text}"`` ——
+                **标题也参与索引**，这样"问题命中标题"也能贡献分数。
+
+        做的事分四步：
+
+        1. **幂等处理**：若 ``doc_id`` 已存在，先 :meth:`remove` 再重新加入。
+           这不是"保险起见"，而是**正确性要求** —— 见下方说明。
+        2. **分词 + 计词频**：调 :func:`tokenize` 得到 token 列表，
+           用 ``Counter`` 合并重复项，得到"词 → 出现次数"。
+        3. **写三张表**：``doc_ids`` / ``term_freq`` / ``doc_len``，
+           并在 ``postings`` 里**反向登记**"这个词出现在哪些文档"。
+        4. **让平均长度缓存失效**：``self._avgdl = 0.0``。
+
+        关于第 1 步为什么必须"先删再加"：``postings`` 是**叠加**结构
+        （``set.add``），直接覆盖 ``term_freq`` 会让旧词在 ``postings`` 里
+        留下**陈旧登记**。后果有两层：
+
+        * 旧词的反查会取到一篇其实已不含该词的文档（白跑一次打分）；
+        * 更严重的是 **``idf`` 的 ``df`` 被虚高** —— 而 ``df`` 变大意味着
+          IDF 变小，**所有文档在这个词上的区分度都被削弱**，
+          且这种污染是全局的、很难排查。
+
+        关于第 4 步：``avgdl`` 参与长度归一化，加了新文档平均值就变了。
+        置 0 是**惰性失效**策略 —— 不必每次 add 都重算，
+        只在真正需要打分时（访问 ``avgdl`` 属性）算一次。
+        """
         if doc_id in self.term_freq:
             self.remove(doc_id)
         counts = Counter(tokenize(text, min_len=self.min_len))
         self.doc_ids.append(doc_id)
         self.term_freq[doc_id] = counts
+        # 下限取 1 而非 0：BM25 公式隐含着"文档长度 ≥ 1"的假设。
+        # 当前 score() 里 (dl / avgdl) 即使 dl=0 也不会崩，
+        # 但 dl=0 会让 (a) 空文档把 avgdl 整体拉低，影响所有文档的归一化；
+        #                    (b) 一旦以后有人在公式里用 1/dl，就会除零。
+        # 给一个最小长度 1 是"最近似的合理值"（视作极短文档）。
         self.doc_len[doc_id] = max(1, sum(counts.values()))
         for term in counts:
             self.postings.setdefault(term, set()).add(doc_id)
         self._avgdl = 0.0
 
     def remove(self, doc_id: str) -> None:
+        """从索引中删除一篇文档（**增量**）。
+
+        删除必须**同时更新三张表**，漏掉任何一张都会留下"幽灵数据"：
+
+        1. ``term_freq``：用 ``pop`` 取出并移除该文档的词频；
+        2. ``postings``：把该文档从每个相关词的倒排集合中**摘掉**；
+        3. ``doc_ids`` / ``doc_len``：移除记录。
+
+        两个容易被忽略的细节：
+
+        * **倒排集合空了要删掉整个 key**（``if not bucket: pop``）——
+          否则 ``postings`` 里会堆积大量空集合，
+          而 :meth:`idf` 计算 ``df`` 时会把"空集合"也算成一个词项，
+          导致词项数量虚高。
+        * **用 ``discard`` 而不是 ``remove``**：``discard`` 在元素不存在时不报错。
+          这里已经拿到 bucket 了，理论上元素一定在，
+          但用 ``discard`` 更抗状态不一致（幂等删除不会崩）。
+
+        删除同样会让 ``avgdl`` 失效，所以最后也把缓存清零。
+        """
         for term in self.term_freq.pop(doc_id, {}):
             bucket = self.postings.get(term)
             if bucket:
@@ -303,21 +393,93 @@ class BM25Index:
 
     @property
     def avgdl(self) -> float:
+        """所有文档的**平均 token 长度**（average document length）。
+
+        它是 BM25 长度归一化的基准：某篇文档的 ``dl / avgdl`` 大于 1 说明它偏长，
+        打分时会被压低（防止长文档靠"字多"占便宜）。
+
+        用 ``@property`` 而非普通方法的原因：调用方只关心"是多少"，
+        不需要知道"是否已缓存、何时重算"—— 这是**惰性求值 + 对外透明**的封装。
+
+        实现细节：
+
+        * ``if self._avgdl <= 0 and self.doc_len``：只在缓存失效**且**有文档时才重算；
+        * 末尾 ``or 1.0``：**空索引时返回 1.0 而不是 0** ——
+          因为 :meth:`score` 里会拿它当除数，返回 0 会导致除零崩溃。
+          这是"宁可给一个无意义的默认值，也不让下游崩"的防御性写法。
+        """
         if self._avgdl <= 0 and self.doc_len:
             self._avgdl = sum(self.doc_len.values()) / len(self.doc_len)
         return self._avgdl or 1.0
 
     @property
     def n_docs(self) -> int:
+        """索引里的文档总数。:meth:`idf` 需要它来估算"这个词在多大范围内稀有"。"""
         return len(self.doc_ids)
 
     def idf(self, term: str) -> float:
+        """计算词项的 **IDF（逆文档频率）** —— 衡量"这个词有多稀有"。
+
+        公式（BM25 常用的平滑变体）::
+
+            IDF(t) = ln(1 + (N - df + 0.5) / (df + 0.5))
+
+        其中 ``N = n_docs``（文档总数），``df`` = 含该词的文档数（来自 ``postings``）。
+
+        **直觉**：``df`` 越小（越稀有），IDF 越大。举例（8 篇文档时）：
+
+        * "公司" 出现在全部 8 篇 → df=8 → IDF ≈ 0.06（几乎没有区分力）
+        * "年假" 只出现在 1 篇   → df=1 → IDF ≈ 1.9 （很有区分力）
+
+        这就是为什么搜"年假结转"时，讲年假的文档能赢过到处都提"公司"的文档。
+
+        **为什么加 0.5**：这是**平滑**。若 ``df = 0``（词根本没出现过），
+        分母会变成 0.5 而不是 0，避免除零；分子也加 0.5 让公式在两端更平缓。
+
+        **为什么外层套 ``ln(1 + ...)``**：保证 IDF **恒为正**。
+        标准 BM25 的原始 IDF 在 ``df > N/2`` 时会是负数
+        （即"超过一半文档都含这个词"时给负分），这在实际检索里会造成
+        "含常见词的文档被扣分"的异常。加 1 再取对数后永远 ≥ 0。
+
+        返回 0 的两种情况（词不存在 / 索引为空）——
+        调用方 :meth:`score` 会据此跳过该词。
+        """
         df = len(self.postings.get(term, ()))
         if not df or not self.n_docs:
             return 0.0
         return math.log(1.0 + (self.n_docs - df + 0.5) / (df + 0.5))
 
     def score(self, query: str, doc_id: str) -> float:
+        """给**单篇文档**对某个查询打 BM25 分。
+
+        完整公式（把 :meth:`idf` 与三处修正合起来）::
+
+            score(q, d) = Σ  IDF(t) × ── TF(t,d) × (k1+1) ──  +  delta × IDF(t)
+                         t∈q          TF(t,d) + norm
+            其中  norm = k1 × (1 - b + b × |d| / avgdl)
+
+        四个部件各自修一个具体毛病：
+
+        1. **IDF**：惩罚"到处都出现"的词（如"公司"），突出稀有词。
+        2. **TF 饱和**（分子分母里的 ``tf``）：防止"提 100 次 = 重要 100 倍"。
+           增长曲线大致是 ``tf=1→1.0，tf=5→2.1，tf=50→2.9``，很快趋于平缓。
+        3. **长度归一化**（``norm`` 里的 ``|d|/avgdl``）：
+           长文档词频天然更高，按长度缩放以消除这个优势。
+        4. **``delta × IDF`` 下界项**：不管 tf 多少都**保底加分**。
+           这是 BM25+ 的修正，用于解决长文档因 ``norm`` 很大
+           而"明明命中了却几乎拿不到分"的问题。
+
+        实现上的三个细节：
+
+        * 只遍历 ``set(tokenize(query))`` —— **去重**，
+          因为查询里同一个词出现两次不该算两次（文档内才计词频）。
+        * ``if not tf: continue`` —— 该词不在这篇文档里就跳过，
+          省掉无意义的浮点运算。
+        * 分母里的 ``+ 1e-9`` —— **防除零**。理论上 ``tf + norm`` 恒为正，
+          但浮点下界保护能避免极端参数（如 ``k1=0`` 配合空文档）产生 ZeroDivisionError。
+
+        返回 0 表示"该文档与查询无任何词项重叠"。
+        """
         counts = self.term_freq.get(doc_id)
         if not counts:
             return 0.0
@@ -333,6 +495,42 @@ class BM25Index:
         return total
 
     def search(self, query: str, top_k: int = 8, allowed: Optional[Set[str]] = None) -> List[Tuple[str, float]]:
+        """检索：返回 ``[(doc_id, 分数), ...]``，**按分数降序**，最多 ``top_k`` 条。
+
+        Args:
+            query: 查询文本。
+            top_k: 最多返回多少条。
+            allowed: **权限过滤用的白名单**。传 ``None`` 表示不限制；
+                传一个集合则只在该集合内检索。
+                这就是"无权限内容在检索阶段就不可见"的实现位置 ——
+                无权访问的 chunk **根本不会进入打分**，而不是先查出来再过滤。
+
+        实现是**倒排索引的经典两步**：
+
+        **第一步：用倒排表取候选（这是快的来源）**
+
+        ::
+
+            candidates = 所有查询词的 postings 集合的并集
+
+        完全不遍历全库 —— 只碰"至少含一个查询词"的文档。
+        这正是稀疏检索相对于"逐篇算相似度"的效率优势所在。
+        若传了 ``allowed``，用 ``&=`` 做交集，把无权文档剔掉。
+
+        **第二步：对候选打分并排序**
+
+        * ``scored = [(doc, self.score(...)) for doc in candidates]``
+        * 过滤掉分数为 0 的（理论上不该有，因为候选都含查询词，
+          但浮点误差或 ``delta=0`` 时可能出现，过滤掉更干净）
+        * 排序键 ``(-kv[1], kv[0])`` —— **先按分数降序，分数相同时按 doc_id 升序**。
+          第二项是为了**保证结果确定性**：否则同分文档的顺序取决于集合迭代顺序，
+          会导致同样输入产生不同排名，检索回归测试就没法写了。
+        * 最后切片 ``[:top_k]``
+
+        Returns:
+            列表元素为 ``(doc_id, 分数)``，分数高者在前。
+            没有候选时返回空列表。
+        """
         candidates: Set[str] = set()
         for term in set(tokenize(query, min_len=self.min_len)):
             candidates |= self.postings.get(term, set())
@@ -345,6 +543,23 @@ class BM25Index:
 
     # -- 持久化 --------------------------------------------------------- #
     def to_dict(self) -> Dict[str, Any]:
+        """把索引序列化成**可 JSON 化**的普通字典（用于落盘缓存）。
+
+        序列化 ``doc_ids`` / ``doc_len`` / ``term_freq`` 和四个参数。
+
+        **注意这里刻意不序列化 ``postings``**，因为它可以由 ``term_freq``
+        完全重建 —— 存两份等于让缓存体积翻倍，还引入"两份数据不一致"的风险。
+        :meth:`from_dict` 会在反序列化时重建它。
+
+        两个转换细节：
+
+        * ``{k: dict(v) for k, v in self.term_freq.items()}`` ——
+          把 ``Counter`` 转成普通 ``dict``。``Counter`` 是 ``dict`` 的子类，
+          但显式转成 ``dict`` 能确保序列化行为稳定（否则可能被写成特殊的 Counter 结构）。
+        * ``"params": [k1, b, delta, min_len]`` —— 用**列表**存参数。
+          这样反序列化时能用一行解包（见 :meth:`from_dict`）。
+          代价是可读性差一点，好处是能保证"参数与实现版本绑定"。
+        """
         return {
             "doc_ids": self.doc_ids,
             "doc_len": self.doc_len,
@@ -354,6 +569,31 @@ class BM25Index:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "BM25Index":
+        """从 :meth:`to_dict` 的输出**重建**索引。
+
+        用 ``@classmethod`` 而非静态方法的原因：这样返回的是 ``cls(...)``，
+        **子类调用时会构造子类实例**（对继承友好）。
+
+        做四件事：
+
+        1. **还原参数**：从 ``params`` 解包，缺失时用标准默认值兜底
+           （``data.get("params", [1.5, 0.75, 0.5, 2])``）。
+           这保证"旧版本缓存文件缺少新参数"时仍能加载。
+        2. **还原三张直接存的表**：``doc_ids`` / ``doc_len`` / ``term_freq``。
+        3. **重建 ``postings``**：遍历每篇文档的 ``term_freq`` 反向登记，
+           恢复倒排结构（因为 ``to_dict`` 没存它）。
+        4. **不还原 ``_avgdl``** —— 保持初值 0.0 让它惰性重算。
+           这比"存下来再读"更安全：万一缓存里的平均值与实际数据不一致，
+           惰性重算总能得到正确值。
+
+        **全程用 ``str(k)`` / ``int(v)`` 做类型强制转换**，理由很实际：
+        JSON 的键**永远是字符串**、数字可能变成 float。
+        如果索引是从 JSON 加载的，``doc_id`` 会被读成 ``str``、
+        ``doc_len`` 可能读成 ``float``，与内存版本的类型不一致会导致
+        查表失败（``1 != "1"``）或浮点比较问题。
+        这里统一转换，保证"从磁盘加载"与"内存构建"得到**行为一致**的索引
+        （测试里有序列化往返的断言）。
+        """
         k1, b, delta, min_len = data.get("params", [1.5, 0.75, 0.5, 2])
         index = cls(k1=k1, b=b, delta=delta, min_len=int(min_len))
         index.doc_ids = list(data.get("doc_ids", []))

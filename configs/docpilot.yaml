@@ -46,6 +46,13 @@ rag:
   rrf_weights: [1.0, 1.2]
   embed_dim: 256
   min_token_len: 2
+  # ── 通道开关（默认都开，正常使用保持 true）────────────────────────────
+  # 用途只有一个：**消融实验**。关掉某一侧，才能量化"这条通道对最终 top-k
+  # 到底贡献了多少"（见 scripts/experiment_dense_channel.py）。
+  # 注意不能用"把 rrf_weights 调小"代替：RRF 只用排名，调权重不会改变
+  # 候选池的成员，于是"改了配置指标不变"会被误读成"这条通道没用"。
+  enable_dense: true
+  enable_sparse: true
 
 # 评测门禁：低于门槛则 `python -m docpilot eval` 退出码非 0，可直接接 CI
 #
@@ -69,3 +76,12 @@ eval:
 web:
   host: 127.0.0.1
   port: 8020
+
+mcp:
+  # MCP 服务端**绑定的角色**（默认值；优先级：--role > DOCPILOT_MCP_ROLE > 这里）。
+  #
+  # 这个值是刻意放在配置里的：它说明"角色是**部署属性**，不是请求属性"。
+  # MCP 的调用方是宿主里的模型，如果把 role 做成工具参数，任何客户端都能自称
+  # hr 去读薪酬文档 —— 那等于把检索阶段的权限隔离整条废掉。
+  # 一个进程一个角色；要多角色就多起几个进程（或接真实权限中心，见 tools.needs_role）。
+  role: public

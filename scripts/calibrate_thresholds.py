@@ -9,7 +9,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from docpilot.core import load_config
+from docpilot.core import ensure_utf8_stdio, load_config
 from docpilot.rag import KnowledgeBase
 
 # 应回答（in-scope）
@@ -46,6 +46,10 @@ OUT_OF_SCOPE = [
 
 
 def main() -> int:
+    # 这个脚本会在末尾打印 ✅/❌。Windows 的 GBK 控制台一旦接管道，
+    # 那两个符号会抛 UnicodeEncodeError —— 一条**已经验证完零误拒**的命令
+    # 会以退出码 1 结束，被误读成"出现回归"。所以先切 UTF-8。
+    ensure_utf8_stdio()
     config = load_config()
     kb = KnowledgeBase(config)
     kb.build()

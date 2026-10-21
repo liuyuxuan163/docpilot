@@ -32,6 +32,7 @@ configs/docpilot.local.yaml
 # 保留在本地、不提交即可；架构说明与 README 是要公开的技术文档。
 docs/简历项目描述.md
 docs/面试问答准备.md
+docs/我改动了什么.md
 docs/*上手计划.md
 docs/private/
 

@@ -29,7 +29,7 @@ python -m docpilot demo     # 6 个典型场景，不需要 API Key
 cd DocPilot
 python -m docpilot info     # 环境自检
 python -m docpilot demo     # 演示 6 个典型场景
-python -m pytest tests -q   # 180 个测试
+python -m pytest tests -q   # 205 个测试
 python -m docpilot eval     # 跑评测 + 质量门禁
 ```
 
@@ -68,7 +68,8 @@ python -m docpilot ask "年假可以结转到明年吗"
 
 ▸ ④ 超纲提问（应当拒答，不编造）
   问：今天天气怎么样？
-  答（拒答）：知识库中没有检索到与问题相关的内容，因此无法回答。
+  答（拒答）：检索结果与问题的实义字符覆盖率仅 0.20，且没有明显突出的片段，
+              说明问题在知识库中没有对应依据，因此我不做推测。
 
 ▸ ⑤ 权限隔离（public 角色看不到薪酬文档）
   问：P4 职级的绩效工资占比是多少？
@@ -104,7 +105,7 @@ python -m docpilot ask "年假可以结转到明年吗"
 | 平均 token | 2,196 | — | 每次问答 |
 | P95 延迟 | 67 ms | — | 纯本地检索 |
 
-**其它**：180 个单元测试全绿；检索 top-1 命中率 8/8（人工标注的"该命中哪一篇"回归测试）。
+**其它**：205 个单元测试全绿；检索 top-1 命中率 8/8（人工标注的"该命中哪一篇"回归测试）。
 
 ### 为什么 `over_refusal_rate = 0` 值得单独说
 
@@ -123,27 +124,30 @@ python -m docpilot ask "年假可以结转到明年吗"
 ```
 DocPilot/
 ├── docpilot/
-│   ├── core.py        类型契约、配置、mini-YAML、错误体系      (451 行代码)
+│   ├── core.py        类型契约、配置、mini-YAML、错误体系      (466 行代码)
 │   ├── matching.py    文本匹配：实义片段切分、覆盖率测量        ( 78 行)
-│   ├── rag.py         切块 → BM25 + 本地嵌入 → RRF → 重排     (530 行)
+│   ├── rag.py         切块 → BM25 + 本地嵌入 → RRF → 重排     (562 行)
 │   ├── tools.py       工具注册表、schema 校验、证据判定         (290 行)
 │   ├── llm.py         Mock 引擎 / OpenAI 兼容网关（双模式）     (375 行)
 │   ├── agent.py       单文件 ReAct 主循环 + 引用映射 + 多轮会话  (219 行)
 │   ├── eval.py        评测指标与质量门禁                       (264 行)
 │   ├── web.py         标准库 HTTP 演示服务                     (109 行)
-│   └── cli.py         命令行入口                               (216 行)
+│   ├── mcp.py         MCP 服务端（stdio，零依赖手写协议）        (179 行)
+│   └── cli.py         命令行入口                               (232 行)
 ├── data/
 │   ├── docs/          8 篇示例文档（含权限标注），75 个片段
 │   └── eval/          评测集
-├── tests/             180 个测试
+├── tests/             205 个测试
 ├── scripts/
-│   ├── calibrate_thresholds.py   拒答阈值标定（可复现的标定证据）
-│   └── count_lines.py            规模统计
+│   ├── calibrate_thresholds.py      拒答阈值标定（可复现的标定证据）
+│   ├── experiment_dense_channel.py  通道消融（稠密通道到底贡献了多少）
+│   ├── experiment_chunk_size.py     切块粒度实验（含一次推翻自身假设的实验）
+│   └── count_lines.py               规模统计
 ├── configs/docpilot.yaml         所有可调参数集中在此
-└── docs/              架构说明 / 上手计划 / 简历描述 / 面试问答
+└── docs/              系统工作流程 / 架构说明 / 上手计划 / 简历描述 / 面试问答
 ```
 
-**规模**：源码 3,730 行（其中**有效代码 2,556 行**，其余是解释"为什么这么做"的注释），测试 1,642 行。
+**规模**：源码 4,439 行（其中**有效代码 2,798 行**，其余是解释"为什么这么做"的注释），测试 1,941 行。
 
 > **关于上手时间，我需要说实话**：你原本希望 2~3 天读透，实际是 **4~5 天**。
 > 多出来的部分主要在两处，都是"通用且值得讲"的能力：**权限隔离**与**拒答标定**。
@@ -191,9 +195,17 @@ DocPilot/
 RAG 问答的最小闭环就是「消解指代 → 检索 → 作答」。
 工具多了不涨能力、只涨不确定性 —— 这也是本项目刻意不做 Multi-Agent 编排的原因。
 
+**这套东西不止一个前端在用。** 上面那张图是"Agent 前端"；
+`KnowledgeBase` 与 `ToolRegistry` 是共用的，所以同一个检索内核被三种方式调用：
+
+| 前端 | 用法 | 谁在决策 |
+|---|---|---|
+| CLI / Web / Agent | `ask` / `demo` / 网页 | 本项目的 ReAct 循环 |
+| **MCP 服务端** | `python -m docpilot mcp` | **宿主的模型**（Claude Desktop / Cursor） |
+
 ---
 
-## 六个值得展开讲的设计决策
+## 七个值得展开讲的设计决策
 
 ### 1. 混合检索，而不是"上向量库就完事"
 
@@ -211,7 +223,18 @@ fused(d) = Σ_r  w_r / (k + rank_r(d))
 
 **为什么稠密侧用本地嵌入而不是真实 embedding？** 换来三件事：零依赖、零成本、**完全可复现**。
 最后一点尤其关键 —— 检索结果不确定，就没法对检索质量写回归测试。
-要升级只需替换 `LocalEmbedder.embed()`，调用方一行不用改。
+
+**但更硬的理由是实测出来的**：我做了通道消融（`python scripts/experiment_dense_channel.py`），
+**把稠密通道整个关掉，21 条用例的质量指标一个都没变** ——
+复合分 0.9310 / 检索命中 0.9524 / 拒答正确 0.8571 / 幻觉率 0.1429，逐例分数也完全相同。
+原因是排序主键 `relevance` 与拒答判定 `has_evidence` **都只读词面信号**；
+稠密通道唯一独有的 2 个槽位还落在那条已知幻觉 `refuse-03` 上，没改变任何判定。
+
+所以结论不是"本地嵌入够用"，而是：**在这条链路上，"换一个更好的 embedding"不是优化项。**
+想动幻觉率，必须先动判定信号（见「已知限制」第 1 条）。只换嵌入再跑一遍评测，
+得到的会是"改了很多、指标没动"，然后误以为是自己做错了。反面证据也在这份数据里：
+单开稠密时幻觉率反而降到 0.0952，但检索命中掉到 0.9048、误拒从 0 升到 0.0476 ——
+**指标对"候选池的组成"敏感，而不是对"语义能力"敏感。**
 
 ### 2. 重排里那个"文件名先验"
 
@@ -275,6 +298,45 @@ mini-YAML 自己解析（约 120 行，覆盖配置文件用到的语法子集�
 代价是没有自动文档、没有流式输出。收益是 **clone 完就能跑** ——
 面试现场被要求"跑一下"时，不需要先等 `pip install` 两分钟。
 
+### 7. 把检索能力接进别人的 Agent（MCP）
+
+前三个前端（CLI / Web / Agent）都只能在本项目内部用。
+`python -m docpilot mcp --role public` 起一个 **MCP 服务端**（stdio 传输），
+于是 Claude Desktop / Cursor / Cline 只要配一行 JSON，就能把同一份知识库
+当工具用 —— 而且引用、拒答、权限隔离的行为**完全一致**，
+因为它复用的是同一个 `ToolRegistry`，不是另写一套检索。
+
+```json
+{
+  "mcpServers": {
+    "docpilot": {
+      "command": "python",
+      "args": ["-m", "docpilot", "--root", "D:\\path\\to\\DocPilot",
+               "mcp", "--role", "public"]
+    }
+  }
+}
+```
+
+暴露的工具只有两个：`search_docs` 与 `list_documents`（都只读）。
+
+**三个刻意的取舍，都值得被追问：**
+
+| 取舍 | 原因 |
+|---|---|
+| **手写协议，不引官方 SDK** | stdio 传输就是"一行一条 JSON-RPC 2.0"，我们只需要 `initialize` / `notifications/initialized` / `ping` / `tools/list` / `tools/call` 五个方法，约 200 行。与"零核心依赖"一致：clone 完就能挂 |
+| **角色绑在服务端，绝不作为工具参数** | MCP 的调用方是**宿主里的模型**。把 `role` 做成参数等于允许客户端自称 HR 去读薪酬文档，整条检索期权限隔离就废了。所以角色来自 `--role` / 环境变量 / 配置，且 `needs_role` 会在参数校验**之后覆盖**客户端传来的同名字段 |
+| **不暴露 `ask`，只暴露检索** | 宿主自己就在跑 Agent。再塞一个自带 ReAct 循环的 Agent 会互相抢决策 —— 双 Agent 反模式。MCP 这一层的职责边界就是"检索" |
+
+`initialize` 的返回里带了 `instructions`，等于一份**跨进程的 SYSTEM_PROMPT**：
+告诉宿主 `has_evidence=false` 表示没有依据、应当拒答，`restricted_sources` 非空
+表示无权限、不要拿别的文档代替。即使宿主不是我们的 Agent，三条纪律也跟着走。
+
+**提权是被测试锁住的**：客户端在 `arguments` 里塞 `role: "hr"`，
+服务端仍是 `public`，结果里 `has_evidence=false`、`restricted_sources=["hr/compensation.md"]`。
+这正是 `test_client_cannot_escalate_role` 那条用例。
+
+
 ---
 
 ## 已知坑（都已在代码注释与测试中固化）
@@ -298,8 +360,10 @@ mini-YAML 自己解析（约 120 行，覆盖配置文件用到的语法子集�
 | **`tempfile.mkdtemp` 目录无法建子目录** | `PermissionError: [WinError 5]` | 它创建的目录权限是 0o700，受限 Windows 令牌下写不进去 |
 | **Tab 缩进检查永远不触发** | YAML 的 Tab 检查形同虚设 | `\t` 被后面的 `strip` 吃掉了。修复：在去空白**之前**检查 |
 | **PyYAML 让内置解析器永不被测** | 内置 mini-YAML 的报错路径测不到 | 装了 PyYAML 就永远走它。修复：加 `force_mini` 开关 |
+| **一个 BOM 让整条 MCP 会话失败** | 手工造的输入文件让首条 `initialize` 返回 `-32700`，现象是"宿主连不上" | PowerShell 的 `-Encoding utf8` 会写 BOM，而 JSON 解析器不认。修复：读入时 `lstrip("\ufeff")`。**根因藏在第一个字节里**，比报错信息难找得多 |
 | **PowerShell 验证接口时中文变乱码** | 所有问题都被拒答，一度以为是服务端 bug | 请求体没显式转 UTF-8 字节，按本地代码页编码了。**是客户端问题** |
 | **`chunk_size` 超过段落长度后失效** | `800` 与 `360` 产出的片段数完全相同（都是 75） | 示例文档单段最长 247 字符，`len(candidate) <= chunk_size` 恒成立。**参数有适用区间，不是 bug** |
+| **接上管道，评测就崩** | `python -m docpilot eval` 在 Windows 上以退出码 1 结束并报 `UnicodeEncodeError`；同一命令直接跑却完全正常 | 接管道后 Python 不再走控制台的宽字符接口，改按 GBK（cp936）编码输出，`✓`/`✗` 编不出来 —— **崩在最后一行输出上，而不是评测本身**。修复：`core.ensure_utf8_stdio()` 把 stdout 切成 UTF-8 + `errors="replace"` |
 
 > 上面倒数第二条尤其值得记住：**症状在服务端，根因在客户端**。
 > 当时我差点去改服务端代码，幸好先用进程内调用做了隔离验证。
@@ -318,7 +382,8 @@ mini-YAML 自己解析（约 120 行，覆盖配置文件用到的语法子集�
 | 了解向量数据库 / 嵌入 | `LocalEmbedder`（hashing trick + 符号投影 + L2 归一化），接口可替换为真实 embedding |
 | Prompt Engineering | `SYSTEM_PROMPT` 写明三条纪律；拒答判定独立于提示词（**不依赖模型自觉**） |
 | Agent / 工具调用 | 手写 ReAct 循环（零框架）、function-calling schema、工具注册表与入参校验、多轮指代消解 |
-| Python 工程能力 | 2,556 行有效代码、180 个测试、类型注解、零核心依赖、模块边界清晰 |
+| **MCP / 能力复用** | `mcp.py` 零依赖手写 stdio 协议（initialize / tools/list / tools/call）；**角色服务端绑定、客户端不可提权**（`test_client_cannot_escalate_role`）；检索能力可被 Claude Desktop / Cursor 直接挂载 |
+| Python 工程能力 | 2,798 行有效代码、205 个测试、类型注解、零核心依赖、模块边界清晰 |
 | 评测与质量意识 | 4 类互相制衡的指标、CI 质量门禁、**阈值标定脚本可复现**、已知限制如实公开 |
 | 数据安全 / 权限 | 文档级角色过滤（检索阶段生效）+ 权限提示，`test_permission_*` 系列测试锁定 |
 | 快速迭代 / 可复现 | Mock 模式保证离线确定；`configs/docpilot.yaml` 集中所有可调参数 |
@@ -337,8 +402,10 @@ python -m docpilot ask "P4 绩效占比" --role hr # 指定角色（权限隔离
 python -m docpilot ingest --role hr           # 查看某角色可见的文档
 python -m docpilot eval --report evals/reports/latest.md
 python -m docpilot web                        # Web 演示界面
+python -m docpilot mcp --role public          # MCP 服务端（stdio，挂到 Claude Desktop/Cursor）
 python -m pytest tests -q                     # 跑测试
 python scripts/calibrate_thresholds.py        # 复核拒答阈值（改检索后必跑）
+python scripts/experiment_dense_channel.py    # 通道消融：稠密通道贡献了多少
 ```
 
 ---
@@ -349,7 +416,7 @@ python scripts/calibrate_thresholds.py        # 复核拒答阈值（改检索�
 |---|---|---|
 | `openai` | 用 Mock 引擎（离线确定性） | 可接 DeepSeek / OpenAI / vLLM |
 | `PyYAML` | 用内置 mini-YAML（约 120 行） | 用 PyYAML 解析配置 |
-| `pytest` | 无法跑测试 | 180 个测试 |
+| `pytest` | 无法跑测试 | 205 个测试 |
 | `numpy` / `chromadb` | 用内置本地嵌入 | 可替换为真实向量检索 |
 
 ---
@@ -358,6 +425,8 @@ python scripts/calibrate_thresholds.py        # 复核拒答阈值（改检索�
 
 | 文档 | 内容 |
 |---|---|
+| [docs/系统工作流程.md](docs/系统工作流程.md) | **从提问到回答的完整链路图** + 12 个坑标注在发生的环节上（想搞清整体流程先看这份） |
+| [docs/我改动了什么.md](docs/我改动了什么.md) | **15 条改动清单**，每条含症状/排查/根因/改动/验证，可当面打开代码核对 |
 | [docs/架构说明.md](docs/架构说明.md) | 每个模块的设计取舍、数据流、关键算法与踩坑记录 |
 | [docs/4-5天上手计划.md](docs/4-5天上手计划.md) | 按天拆解的阅读顺序 + 动手实验 + 自检清单 |
 | [docs/简历项目描述.md](docs/简历项目描述.md) | STAR 结构、量化数据、可替换措辞 |
@@ -378,6 +447,8 @@ python scripts/calibrate_thresholds.py        # 复核拒答阈值（改检索�
 
 2. **本地嵌入没有语义泛化能力。** 它靠词面哈希，同义改写（"年假"↔"带薪年休假"）依赖手工同义词表。
    表里没有的说法就召回不到。
+   **但实测（见设计决策 1）显示：这个限制当前不影响端到端指标** ——
+   因为语义信号根本没被判定逻辑使用。所以它是"未来的天花板"，不是"当下的瓶颈"。
 
 3. **检索有粒度问题。** 问题跨小节时可能命中相邻小节（评测集 `single-01`）。
    根因是 chunk 级覆盖率低估了"答案分散在多段"的情况。
@@ -402,6 +473,12 @@ python scripts/calibrate_thresholds.py        # 复核拒答阈值（改检索�
    到十万级 chunk 必须换成真正的向量库与倒排索引。
 
 8. **没有流式输出。** Web 界面是"等全部生成完再显示"。
+
+9. **MCP 暴露后，提示词注入成了新的攻击面。** 检索结果会**原样进入宿主模型的上下文**，
+   所以文档正文里写的"忽略之前的指令"不再受本项目的 `SYSTEM_PROMPT` 约束 ——
+   那三条纪律只对**我们自己的 Agent** 有效。目前的缓解只有两条：
+   工具全是只读（`readOnlyHint`，宿主可免确认），以及返回值里只有数据、没有指令。
+   真要上线，还需要在索引侧做注入检测，或在宿主侧把检索内容显式标成 data。
 
 > 第 5、6 条来自一次**推翻了自身假设的实验** —— 我原本在文档里预测
 > "片段太大会稀释相关性"，实测发现指标根本不变。把这个反例如实记下来，

@@ -9,6 +9,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import sys
 import time
 import uuid
 from dataclasses import asdict, dataclass, field
@@ -243,7 +244,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     },
     "llm": {
         "provider": "mock",      # mock | deepseek | openai | openai_compat
-        "model": "deepseek-chat",
+        "model": "deepseek-flash",
         "temperature": 0.1,
         "max_output_tokens": 1024,
         "timeout_s": 60,
@@ -258,6 +259,8 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "rrf_weights": [1.0, 1.2],     # [稠密, 稀疏]，中文短查询稀疏侧略占优
         "embed_dim": 256,
         "min_token_len": 2,
+        "enable_dense": True,          # 通道开关：仅供消融实验，正常使用保持 True
+        "enable_sparse": True,
     },
     "web": {"host": "127.0.0.1", "port": 8020},
 }
@@ -598,3 +601,36 @@ def short_hash(*parts: Any) -> str:
 
 def now_ms() -> float:
     return time.perf_counter() * 1000.0
+
+
+def ensure_utf8_stdio() -> None:
+    """把 stdout / stderr 切到 UTF-8（幂等，失败静默）。
+
+    为什么需要这个函数
+    ------------------
+    Windows 的默认代码页是 GBK（cp936）。当 stdout **接管道或被重定向**时
+    （CI、``| Select-Object``、写日志文件），Python 不走控制台的宽字符接口，
+    而是按 locale 编码输出 —— 于是 ``eval`` 里的 ``✓``/``✗``、``info`` 里的
+    ``✅``/``❌`` 会直接抛 ``UnicodeEncodeError``，让一条**已经跑完**的命令
+    因为最后一行符号打不出来而失败（本项目在 Windows 上实测踩到：
+    ``python -m docpilot eval | ...`` 直接以退出码 1 结束）。
+
+    三个刻意的选择：
+
+    * 用 ``errors="replace"`` —— 宁可显示成 ``?``，也不让评测因为打印失败而失败；
+    * 只在编码**不是** UTF-8 时才改写 —— 接在真正的控制台上时 Python 用宽字符
+      接口输出，本来就没这个问题，不要多此一举；
+    * 用鸭子类型取 ``reconfigure`` —— 测试里 stdout 常被替换成 ``StringIO``，
+      它没有这个方法，此处必须优雅跳过。
+    """
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is None:
+            continue
+        encoding = (getattr(stream, "encoding", "") or "").replace("-", "").lower()
+        if encoding == "utf8":
+            continue
+        try:
+            reconfigure(encoding="utf-8", errors="replace")
+        except (ValueError, OSError):  # 流已关闭或不支持改写：保持原样
+            continue

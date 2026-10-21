@@ -11,6 +11,7 @@
     python -m docpilot ingest                        # 重建索引并打印统计
     python -m docpilot eval                          # 跑评测 + 质量门禁
     python -m docpilot web                           # 启动 Web 演示
+    python -m docpilot mcp --role public             # 以 MCP(stdio) 暴露检索能力
     python -m docpilot info                          # 环境与配置自检
 """
 
@@ -23,7 +24,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence
 
 from .agent import Agent
-from .core import Config, DocPilotError, load_config
+from .core import Config, DocPilotError, ensure_utf8_stdio, load_config
 from .eval import load_cases, run_eval
 from .llm import build_llm
 from .rag import KnowledgeBase
@@ -63,7 +64,11 @@ def cmd_demo(args: argparse.Namespace) -> int:
             "role": "public",
             "history": ["年假没休完可以结转到明年吗？"],
         },
-        {"tag": "④ 超纲提问（应当拒答，不编造）", "question": "公司的股票代码是多少？", "role": "public"},
+        # ④ 必须用"完全无关"的提问。早期这里放的是"公司的股票代码是多少？"，
+        # 而它恰好是词面启发式的**已知失败**（与《信息安全规定》里讲"代码"的段落
+        # 字面重合，被误判为有依据）—— 演示脚本于是当场自证"应当拒答"的标签是错的。
+        # 演示要展示能力，边界放在 README「已知限制」里如实公开，不要混在一起。
+        {"tag": "④ 超纲提问（应当拒答，不编造）", "question": "今天天气怎么样？", "role": "public"},
         {"tag": "⑤ 权限隔离（public 角色看不到薪酬文档）", "question": "P4 职级的绩效工资占比是多少？", "role": "public"},
         {"tag": "⑥ 权限内提问（hr 角色可以看到同一份文档）", "question": "P4 职级的绩效工资占比是多少？", "role": "hr"},
     ]
@@ -98,6 +103,10 @@ def cmd_demo(args: argparse.Namespace) -> int:
             print(f"  引用：{', '.join(answer.citation_labels)}")
         print(f"  指标：约 {answer.tokens} token · {answer.latency_ms:.0f} ms · 工具 {answer.tool_calls}")
     print("\n" + "=" * 78)
+    print("已知边界（如实公开，不是 bug 掩饰）：④ 用的是「完全无关」的提问。")
+    print("更难的一类是「话题相近但文档里没有答案」，例如「公司的股票代码是多少？」——")
+    print("它与《信息安全规定》讲「代码」的段落字面重合，词面启发式会误判为有依据。")
+    print("这类残余幻觉共 3/21，见 README「已知限制」第 1 条与 evals/reports/latest.md。")
     if args.json:
         _emit(rows, True)
     return EXIT_OK
@@ -225,6 +234,18 @@ def cmd_web(args: argparse.Namespace) -> int:
     return serve(config, host=args.host, port=args.port, open_browser=not args.no_browser)
 
 
+def cmd_mcp(args: argparse.Namespace) -> int:
+    """以 MCP（stdio）对外暴露检索能力。
+
+    注意：进入协议循环后 **stdout 完全属于协议**，人类可读的提示只能写 stderr
+    （见 docpilot/mcp.py 的设计决定 3）。所以这里不做任何 print。
+    """
+    from .mcp import main as run_mcp
+
+    config = load_config(root=args.root)
+    return run_mcp(config, role=args.role)
+
+
 # --------------------------------------------------------------------------- #
 # 解析器
 # --------------------------------------------------------------------------- #
@@ -272,10 +293,21 @@ def build_parser() -> argparse.ArgumentParser:
     p_web.add_argument("--no-browser", action="store_true")
     p_web.set_defaults(func=cmd_web)
 
+    p_mcp = sub.add_parser("mcp", help="以 MCP 协议(stdio)对外暴露检索能力")
+    p_mcp.add_argument(
+        "--role",
+        default=None,
+        help="服务端绑定的角色（优先级：本参数 > DOCPILOT_MCP_ROLE > 配置 mcp.role）",
+    )
+    p_mcp.set_defaults(func=cmd_mcp)
+
     return parser
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
+    # 必须放在最前面：Windows 的 GBK 控制台一旦接管道，`✓` / `✅` 的打印会抛
+    # UnicodeEncodeError，把一条**已经跑完**的命令变成"失败"（见 core.ensure_utf8_stdio）。
+    ensure_utf8_stdio()
     parser = build_parser()
     args = parser.parse_args(argv)
     try:

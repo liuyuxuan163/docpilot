@@ -803,6 +803,12 @@ class HybridRetriever:
     top_k_sparse: int = 8
     rrf_k: int = 60
     weights: Tuple[float, float] = (1.0, 1.2)
+    # 通道开关：**默认都开**，正常使用不受影响。
+    # 存在的唯一理由是**消融实验** —— 关掉一侧才能量化"这条通道到底贡献了
+    # 多少候选"。没有它，就只能靠"把权重调小"来间接猜，而 RRF 只用排名，
+    # 调权重根本改变不了候选池的成员，于是"改了配置指标不变"会被误读成"参数没用"。
+    enable_dense: bool = True
+    enable_sparse: bool = True
     last_debug: Dict[str, Any] = field(default_factory=dict)
 
     def search(
@@ -811,18 +817,31 @@ class HybridRetriever:
         top_k: int = 4,
         allowed_ids: Optional[Set[str]] = None,
     ) -> List[RetrievedChunk]:
-        """混合检索。``allowed_ids`` 用于**权限隔离**（在检索阶段就滤掉无权访问的 chunk）。"""
+        """混合检索。``allowed_ids`` 用于**权限隔离**（在检索阶段就滤掉无权访问的 chunk）。
+
+        两条通道各自可以被 :attr:`enable_dense` / :attr:`enable_sparse` 关掉；
+        关掉之后 RRF 退化成单通道排序，用于消融实验。两路都关时直接返回空，
+        不抛异常 —— 检索层返回"没结果"是合法状态，拒答逻辑本来就要处理它。
+        """
         if not query.strip() or not self.chunks:
             return []
         allowed = allowed_ids if allowed_ids is not None else set(self.chunks)
         # 全库片段数（不是候选数）：IDF 的分母必须反映整库的"常见程度"
         corpus_size = len(self.chunks)
 
-        sparse_hits = self.bm25.search(query, top_k=self.top_k_sparse, allowed=allowed)
-        dense_hits = self._dense_search(query, self.top_k_dense, allowed)
+        sparse_hits = self.bm25.search(query, top_k=self.top_k_sparse, allowed=allowed) if self.enable_sparse else []
+        dense_hits = self._dense_search(query, self.top_k_dense, allowed) if self.enable_dense else []
 
         sparse_ids = [doc_id for doc_id, _ in sparse_hits]
         dense_ids = [doc_id for doc_id, _ in dense_hits]
+        if not sparse_ids and not dense_ids:
+            self.last_debug = {
+                "query": query,
+                "channels": {"sparse": bool(self.enable_sparse), "dense": bool(self.enable_dense)},
+                "allowed": len(allowed),
+                "returned": [],
+            }
+            return []
         fused = rrf_fuse([dense_ids, sparse_ids], weights=list(self.weights), k=self.rrf_k)
 
         sparse_rank = {doc_id: i for i, (doc_id, _) in enumerate(sparse_hits, 1)}
@@ -848,12 +867,26 @@ class HybridRetriever:
             )
         pool = _rerank(query, pool, fused, corpus_size=corpus_size)[: max(top_k * 2, top_k)]
 
+        returned = [c.chunk_id for c in pool[:top_k]]
+        sparse_set, dense_set = set(sparse_ids), set(dense_ids)
         self.last_debug = {
             "query": query,
-            "sparse_top": sparse_ids[:5],
-            "dense_top": dense_ids[:5],
+            "channels": {"sparse": bool(self.enable_sparse), "dense": bool(self.enable_dense)},
+            "sparse_ids": sparse_ids,
+            "dense_ids": dense_ids,
             "allowed": len(allowed),
-            "returned": [c.chunk_id for c in pool[:top_k]],
+            "returned": returned,
+            # 每个最终结果"来自哪条通道"：both / sparse_only / dense_only。
+            # 这是消融实验的核心观测量 —— 如果 dense_only 恒为 0，
+            # 说明稠密通道对最终 top-k **没有任何独家贡献**，
+            # 那么"换更好的 embedding"在这条链路上就不会有可观测收益。
+            # 注意必须用**完整**的 sparse_ids/dense_ids（不是各自的前 5 条），
+            # 否则 rank 6~8 的结果会被误判成"另一条通道独有"。
+            "returned_origin": {
+                "both": sum(1 for i in returned if i in sparse_set and i in dense_set),
+                "sparse_only": sum(1 for i in returned if i in sparse_set and i not in dense_set),
+                "dense_only": sum(1 for i in returned if i in dense_set and i not in sparse_set),
+            },
         }
         return pool[:top_k]
 
@@ -886,10 +919,21 @@ class KnowledgeBase:
         self.rrf_k = int(rag.get("rrf_k", 60))
         self.weights = tuple(rag.get("rrf_weights", [1.0, 1.2]))[:2]
         self.embedder = LocalEmbedder(int(rag.get("embed_dim", 256)), int(rag.get("min_token_len", 2)))
+        # 通道开关（默认都开）。只为消融实验准备：正常使用不要关，
+        # 关掉任一通道都会让检索从"混合"退化成单路。
+        self.enable_dense = bool(rag.get("enable_dense", True))
+        self.enable_sparse = bool(rag.get("enable_sparse", True))
         self.bm25 = BM25Index(min_len=int(rag.get("min_token_len", 2)))
         self.chunks: Dict[str, RetrievedChunk] = {}
         self.vectors: Dict[str, List[float]] = {}
-        self.retriever = HybridRetriever(chunks=self.chunks, bm25=self.bm25, embedder=self.embedder, vectors=self.vectors)
+        self.retriever = HybridRetriever(
+            chunks=self.chunks,
+            bm25=self.bm25,
+            embedder=self.embedder,
+            vectors=self.vectors,
+            enable_dense=self.enable_dense,
+            enable_sparse=self.enable_sparse,
+        )
         self.build_stats: Dict[str, Any] = {}
 
     # ------------------------------------------------------------------ #
@@ -922,8 +966,10 @@ class KnowledgeBase:
                 metadata=meta,
             ):
                 self.chunks[chunk.chunk_id] = chunk
-                self.bm25.add(chunk.chunk_id, f"{chunk.section} {chunk.text}")
-                self.vectors[chunk.chunk_id] = self.embedder.embed(f"{chunk.section} {chunk.text}")
+                if self.enable_sparse:
+                    self.bm25.add(chunk.chunk_id, f"{chunk.section} {chunk.text}")
+                if self.enable_dense:
+                    self.vectors[chunk.chunk_id] = self.embedder.embed(f"{chunk.section} {chunk.text}")
 
         self.retriever = HybridRetriever(
             chunks=self.chunks,
@@ -934,6 +980,8 @@ class KnowledgeBase:
             top_k_sparse=int(self.config.get("rag.top_k_sparse", 8)),
             rrf_k=self.rrf_k,
             weights=self.weights,  # type: ignore[arg-type]
+            enable_dense=self.enable_dense,
+            enable_sparse=self.enable_sparse,
         )
         self.build_stats = {
             "documents": len(files),
@@ -1021,6 +1069,8 @@ class KnowledgeBase:
             "chunks": len(self.chunks),
             "embedder": self.embedder.signature(),
             "bm25_terms": len(self.bm25.postings),
+            # 索引里**实际**建了哪些通道（关掉的通道不会留下任何数据）
+            "channels": {"sparse": bool(self.enable_sparse), "dense": bool(self.enable_dense)},
         }
 
 

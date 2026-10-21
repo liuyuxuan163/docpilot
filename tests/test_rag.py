@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from docpilot.core import RetrievedChunk
+from docpilot.core import RetrievedChunk, load_config
 from docpilot.matching import significant_spans
 from docpilot.rag import (
     BM25Index,
@@ -317,3 +317,58 @@ class TestRelevanceSignals:
     def test_longest_span_chars_present(self, kb: KnowledgeBase):
         hits = kb.search("差旅报销时效", top_k=2, role="public")
         assert all("longest_span_chars" in hit.metadata for hit in hits)
+
+
+# --------------------------------------------------------------------------- #
+# 通道开关（消融实验用）
+# --------------------------------------------------------------------------- #
+
+
+class TestChannelToggles:
+    """``rag.enable_dense`` / ``rag.enable_sparse`` 是消融实验的唯一入口。
+
+    这组测试要保证两件事：
+    1. **单通道仍能工作** —— 否则消融实验跑出来的差异，可能只是"某一侧坏了"；
+    2. **双关不抛异常** —— 检索返回空是合法状态，拒答逻辑本来就要处理它。
+
+    为什么需要这两个开关：RRF 只用**排名**，所以"把稠密权重调小"不会改变
+    候选池的成员，只有真正关掉通道才能回答"这条通道有没有独家贡献"。
+    """
+
+    @staticmethod
+    def _build(root, **rag_overrides) -> KnowledgeBase:
+        config = load_config(root=root, overrides={"rag": rag_overrides})
+        knowledge = KnowledgeBase(config)
+        knowledge.build(force=True)
+        return knowledge
+
+    def test_sparse_only_still_finds_the_right_document(self, project_root):
+        kb = self._build(project_root, enable_dense=False)
+        hits = kb.search("年假没休完可以结转到明年吗", top_k=4, role="public")
+        assert hits, "只开稀疏通道时不应检索不到"
+        assert hits[0].source == "hr/leave-policy.md"
+
+    def test_disabling_dense_skips_vector_build(self, project_root):
+        kb = self._build(project_root, enable_dense=False)
+        assert kb.vectors == {}, "关掉稠密通道就不该再算向量（那是纯浪费）"
+        assert kb.stats()["channels"] == {"sparse": True, "dense": False}
+
+    def test_dense_only_still_returns_candidates(self, project_root):
+        kb = self._build(project_root, enable_sparse=False)
+        hits = kb.search("年假没休完可以结转到明年吗", top_k=4, role="public")
+        assert hits, "只开稠密通道时不应返回空"
+        assert kb.stats()["bm25_terms"] == 0, "关掉稀疏通道就不该建倒排索引"
+
+    def test_both_disabled_returns_empty_without_raising(self, project_root):
+        kb = self._build(project_root, enable_dense=False, enable_sparse=False)
+        assert kb.search("年假怎么算", top_k=4, role="public") == []
+        assert kb.retriever.last_debug["returned"] == []
+
+    def test_returned_origin_records_channel_contribution(self, project_root):
+        kb = self._build(project_root)
+        kb.search("年假可以结转到明年吗", top_k=4, role="public")
+        origin = kb.retriever.last_debug["returned_origin"]
+        assert set(origin) == {"both", "sparse_only", "dense_only"}
+        assert sum(origin.values()) <= 4
+        # 完整候选列表必须一并记录，否则 rank 6~8 的结果会被误判成"另一条通道独有"
+        assert set(kb.retriever.last_debug["sparse_ids"]) >= set(kb.retriever.last_debug["returned"])

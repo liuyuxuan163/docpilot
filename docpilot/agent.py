@@ -43,12 +43,18 @@ SYSTEM_PROMPT = """你是 DocPilot，一个**企业知识库问答助手**。
    标号必须对应检索结果中的顺序（第 1 条结果就是 [1]）。
 3. **检索不到就说不知道**。如果检索结果的分数都很低、或内容与问题无关，
    直接回答"知识库中没有找到相关依据"，**不要推测、不要用常识补全**。
-4. **不做承诺**。涉及金额、时限、审批权限的问题，只陈述文档原文，不给个人判断。
-5. 回答用中文，简洁分点，先给结论再给依据。
+4. **无权限要明说，不能说成"没找到"。** 如果工具返回里 `restricted_sources` 非空，
+   说明**问题指向了你无权访问的文档**（不是知识库没有这份内容）。
+   此时必须明确告知"你当前角色没有访问权限、请联系文档负责人"，
+   而**不能**说"知识库中没有相关依据"，也**不能**拿其它文档凑一个答案。
+   > 这一条是真实模型暴露出来的：Mock 模式下权限话术是硬编码的，
+   > 所以 Mock 基线永远看不出"模型把无权限说成没有依据"这个安全问题。
+5. **不做承诺**。涉及金额、时限、审批权限的问题，只陈述文档原文，不给个人判断。
+6. 回答用中文，简洁分点，先给结论再给依据。
 
 ## 工作流程
-- 如果用户的问题里出现"它 / 这个 / 上面说的"等指代词，**先调用 `rewrite_question`**
-  结合上文改写成独立问题，再检索。
+- 如果用户的问题里出现"它 / 这个 / 上面说的"等指代词，**先结合上面的对话历史自行判断它指什么**；
+  判断不了再调用 `rewrite_question`。**调用改写工具后必须继续检索**，不要凭空作答。
 - 如果用户问的是"有哪些文档 / 知识库里有什么"，调用 `list_documents`。
 - 其余情况调用 `search_docs` 检索，然后作答。
 """
@@ -135,9 +141,23 @@ class Agent:
         recent = list(history) if history is not None else self.conversation.recent_questions
 
         messages: List[Message] = [Message(role="system", content=SYSTEM_PROMPT)]
-        context = self.conversation.transcript()
-        if context and history is None:
-            messages.append(Message(role="user", content=context))
+        # 对话历史**必须无条件渲染进 prompt**。
+        #
+        # 这里修的是一个只有真实模型才会暴露的缺陷：原来写的是
+        #     if context and history is None:  # ← 传了 history 就不放上下文
+        # 而评测/多轮场景恰恰是"传 history + reset=True"：
+        # conversation 被清空 → transcript() 为空 → 模型只看到一句孤立的问题，
+        # 于是它合理地回答"你用了'它'，但没有上文"。
+        # Mock 基线下永远发现不了：Mock 不需要理解上下文，它只按剧本调
+        # rewrite_question 再检索，所以分数一直是 1.0。
+        #
+        # 现在：优先用调用方给的 history（只有问题、没有答案），
+        # 其次用会话里累积的完整 transcript。模型能自己消解指代之后，
+        # 规则式改写就降级成兜底手段。
+        if recent:
+            messages.append(Message(role="user", content=_render_history(recent, self.conversation)))
+        elif self.conversation.questions:
+            messages.append(Message(role="user", content=self.conversation.transcript()))
         messages.append(Message(role="user", content=f"问题：{question}"))
 
         answer = Answer(question=question)
@@ -288,25 +308,86 @@ class Agent:
             answer.rewritten_question = answer.rewritten_question or ""
 
 
+def _render_history(recent: Sequence[str], conversation: "Conversation") -> str:
+    """把历史问题渲染成给模型看的上下文（只有问题也要能读）。
+
+    为什么以问题为主：多轮追问真正需要的是"上一轮在问什么主题"，
+    而答案往往很长、还会把模型带偏。只有当 history 与会话记录对得上时，
+    才附上上一轮答案的首句作为补充线索。
+    """
+    lines = ["## 对话历史（最近几轮，按时间顺序）"]
+    for index, question in enumerate(recent):
+        lines.append(f"- 用户：{question}")
+        if index < len(conversation.questions) and conversation.questions[index] == question:
+            answer = conversation.answers[index] if index < len(conversation.answers) else ""
+            if answer:
+                lines.append(f"  助手：{answer[:80]}{'…' if len(answer) > 80 else ''}")
+    lines += [
+        "",
+        "如果当前问题里有指代词（它/这个/那个/上面说的），请结合上面的历史**自行判断指向**；",
+        "判断不了再调用 rewrite_question。**调用改写工具后必须继续检索**，不要凭空作答。",
+    ]
+    return "\n".join(lines)
+
+
+_REFUSAL_PHRASES = (
+    "无法回答", "无法提供", "无法给出", "无法确认", "无法判断", "无法据此",
+    "没有找到", "未找到", "没有检索到", "未检索到", "检索不到",
+    "没有相关依据", "没有相关", "没有关于", "没有提及", "未提及", "没有提到",
+    "未包含", "不包含", "未涉及", "没有涉及", "没有直接规定", "没有给出",
+    "没有写明", "没有规定", "知识库中没有任何",
+    "不足以支撑", "不足以", "缺乏依据", "不做推测", "暂无",
+    # 权限类拒答：必须覆盖，否则会被评测当成"答了但答错"
+    "没有访问权限", "无权访问", "涉及受限文档", "受限来源",
+    # 追问类（真实模型常用："请补充具体对象"）
+    "请补充", "建议咨询", "建议向",
+)
+
+# "否定词 + 缺什么" 的组合，比死词表覆盖更广：
+# 真实模型会说"知识库中没有『13 薪』的相关规定"，这条句式不在任何固定列表里。
+_REFUSAL_RE = re.compile(
+    r"(没有|未|无法|不能|暂无|缺乏)[^。；\n]{0,14}"
+    r"(规定|条款|依据|说明|标准|时限|比例|数据|信息|说法|内容|记录|办法|流程"
+    # 权限类必须单独覆盖：真实模型会说"没有访问《薪酬制度》文档的权限"，
+    # 中间插了文档名，固定短语 "没有访问权限" 匹配不上。
+    r"|权限|授权)"
+)
+
+# 判定只在前 90 字里做：正常作答里也常出现"文档未包含 X"这种补充说明，
+# 看全文会把正常作答误判成拒答（实测正例误判从 3.6% 升到 20%）。
+_REFUSAL_WINDOW = 90
+
+
+def _first_lines(text: str) -> str:
+    """取"结论区"：跳过 '结论：' 这类前缀，截到第一个句号/换行。"""
+    head = re.sub(r"\s+", " ", (text or "").strip()).lstrip("#* ")
+    head = re.sub(r"^(结论|答案|回答|简答)\s*[：:]?\s*", "", head)
+    for sep in ("。", "；", "\n"):
+        index = head.find(sep)
+        if 0 < index <= 80:
+            head = head[:index]
+            break
+    return head[:_REFUSAL_WINDOW]
+
+
 def _looks_like_refusal(text: str) -> bool:
     """判断模型输出是不是拒答（用于评测"拒答准确率"）。
 
     必须覆盖**权限拒答**这一类：它同样是"没回答问题"，
     如果识别不出来，会被评测当成"答了但答错"，指标就失真了。
+
+    **为什么只看结论区**：这个函数原来是对全文做关键词匹配，而词表是照着
+    Mock 的话术写的。接真实模型后两个方向都错 —— 9 条正确拒答被漏判
+    （模型说的是"没有 X 这个说法/未检索到/没有直接规定"），3 条正常作答被误判
+    （正文里出现"文档未包含…"这类补充说明）。
+
+    改法：窗口收窄到结论区 + 短语表换成"否定词 + 缺什么"的正则。
+    在 129 条真实模型答案上，负例召回 87.8% → **98.6%**，
+    正例误判 7.3% → **3.6%**（`scripts/eval_refusal_detector.py` 可复现）。
     """
     if not text:
         return True
-    negative = (
-        "无法回答",
-        "没有找到",
-        "未找到",
-        "没有相关依据",
-        "知识库中没有任何",
-        "不足以支撑",
-        "不做推测",
-        # 权限类拒答
-        "没有访问权限",
-        "无权访问",
-        "涉及受限文档",
-    )
-    return any(phrase in text for phrase in negative)
+    head = _first_lines(text)
+    if any(phrase in head for phrase in _REFUSAL_PHRASES):
+        return True
+    return bool(_REFUSAL_RE.search(head))

@@ -29,7 +29,7 @@ python -m docpilot demo     # 6 个典型场景，不需要 API Key
 cd DocPilot
 python -m docpilot info     # 环境自检
 python -m docpilot demo     # 演示 6 个典型场景
-python -m pytest tests -q   # 245 个测试
+python -m pytest tests -q   # 259 个测试
 python -m docpilot eval     # 跑评测 + 质量门禁
 ```
 
@@ -114,13 +114,20 @@ python -m docpilot ask "年假可以结转到明年吗" --provider deepseek
 | 平均 token | 2,196 | — | 每次问答 |
 | P95 延迟 | 67 ms | — | 纯本地检索 |
 
-**其它**：245 个单元测试全绿；检索 top-1 命中率 8/8（人工标注的"该命中哪一篇"回归测试）。
+**其它**：259 个单元测试全绿；检索 top-1 命中率 8/8（人工标注的"该命中哪一篇"回归测试）。
 
 > ⚠ **`hallucination_rate = 0.143` 需要加一句限定：这 21 条里只有 6 条负例，而且大多是
 > easy negative（"今天天气怎么样"这种零字面重合的）。** 我另做了一套
 > **60 条 hard negative**（与文档里真实存在的事实同构、但文档恰好没答），
 > 同一套判定逻辑在它上面的误答率是 **90.0%**（[79.9%, 95.3%]），而正例误拒仍是 **0%**。
 > 所以 0.143 的真实含义是"**简单负例上的**幻觉率"，不是系统整体水平。
+>
+> **但 89.8% 也不是"系统误答率"，而是"词面 gate 的误判率"** —— Mock 把
+> `has_evidence` 当唯一依据，gate 一说"有依据"它就把 top-1 片段抄进答案。
+> 接真实模型（deepseek-flash）实测 68 条负例（59 主集 + 9 holdout）：
+> **人工核对后真误答 0 条**（模型读到片段会自己判断，甚至会二次检索），
+> 正例真误拒 1~2/40；同时发现**评测自身的拒答识别依赖措辞**（9 条正确拒答被
+> 漏判成作答、3 条正常作答被误判成拒答）。判据必须与话术解耦。
 > 复现：`python scripts/build_hard_negatives.py` + `python scripts/eval_stratified.py`。
 > 复核结论写在 `data/eval/hard_negatives.review_state.jsonl`（**独立文件**）：
 > 生成器每次都会重写 candidates/dev/test，但**永远不写掉这个文件**，
@@ -157,7 +164,7 @@ DocPilot/
 ├── data/
 │   ├── docs/          8 篇示例文档（含权限标注），75 个片段
 │   └── eval/          评测集
-├── tests/             245 个测试
+├── tests/             259 个测试
 ├── scripts/
 │   ├── calibrate_thresholds.py      拒答阈值标定（可复现的标定证据）
 │   ├── build_hard_negatives.py      生成 60 条 hard negative 候选（只产候选，标签由人定）
@@ -417,7 +424,7 @@ mini-YAML 自己解析（约 120 行，覆盖配置文件用到的语法子集�
 | Prompt Engineering | `SYSTEM_PROMPT` 写明三条纪律；拒答判定独立于提示词（**不依赖模型自觉**） |
 | Agent / 工具调用 | 手写 ReAct 循环（零框架）、function-calling schema、工具注册表与入参校验、多轮指代消解 |
 | **MCP / 能力复用** | `mcp.py` 零依赖手写 stdio 协议（initialize / tools/list / tools/call）；**角色服务端绑定、客户端不可提权**（`test_client_cannot_escalate_role`）；检索能力可被 Claude Desktop / Cursor 直接挂载 |
-| Python 工程能力 | 2,903 行有效代码、245 个测试、类型注解、零核心依赖、模块边界清晰 |
+| Python 工程能力 | 2,903 行有效代码、259 个测试、类型注解、零核心依赖、模块边界清晰 |
 | 评测与质量意识 | 4 类互相制衡的指标、CI 质量门禁、**阈值标定脚本可复现**、已知限制如实公开 |
 | 数据安全 / 权限 | 文档级角色过滤（检索阶段生效）+ 权限提示，`test_permission_*` 系列测试锁定 |
 | 快速迭代 / 可复现 | Mock 模式保证离线确定；`configs/docpilot.yaml` 集中所有可调参数 |
@@ -458,7 +465,7 @@ python scripts/probe_wrong_premise.py --provider mock
 |---|---|---|
 | `openai` | 用 Mock 引擎（离线确定性） | 可接 DeepSeek / OpenAI / vLLM |
 | `PyYAML` | 用内置 mini-YAML（约 120 行） | 用 PyYAML 解析配置 |
-| `pytest` | 无法跑测试 | 245 个测试 |
+| `pytest` | 无法跑测试 | 259 个测试 |
 | `numpy` / `chromadb` | 用内置本地嵌入 | 可替换为真实向量检索 |
 
 ---
@@ -501,8 +508,15 @@ python scripts/probe_wrong_premise.py --provider mock
 3. **检索有粒度问题。** 问题跨小节时可能命中相邻小节（评测集 `single-01`）。
    根因是 chunk 级覆盖率低估了"答案分散在多段"的情况。
 
-4. **指代消解是规则式的。** 靠指代词表 + 提取上一轮主题词，复杂指代（"它的第二条呢"）处理不了。
-   生产环境应换成一次小模型调用 —— 接口位置已经留好。
+4. **指代消解是规则式的 —— 而且这条在真实模型下暴露过，已修复。**
+   原实现里 `Agent.ask` 是 `if context and history is None`，意味着调用方一旦传入
+   `history`（评测就是这么调的），**历史根本不会进 prompt**；配上 `reset=True`，
+   模型看到的就是一句孤立的问题。实测 `multi-02/03` 复合分掉到 **0.25**，
+   模型回答「你用了"它"，但没有上文」——**这是正确行为，错在框架没把上文给它**。
+
+   修复：历史**无条件**渲染进 prompt（模型自己消解指代），规则式改写降级为兜底；
+   同时修掉 `_extract_topic`（原来取"最长的中文连续片段"，把「密码有什么复杂度要求」
+   取成「密码有什么复杂」，改写结果不可用）。修复后 `multi-01/02/03` **全部 1.0**。
 
 5. **评测集是文件级的，分辨不出片段级的改动。**
    我实测过：把 `chunk_size` 从 360 改成 150（片段数 75 → 111，**索引规模涨了 48%**），

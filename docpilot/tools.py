@@ -20,6 +20,7 @@ from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Sequence
 
 from .core import ToolDenied, ToolError, ToolNotFound
+from .matching import significant_spans
 from .rag import KnowledgeBase
 
 __all__ = ["ToolResult", "Tool", "ToolRegistry", "build_registry", "validate_args"]
@@ -459,12 +460,22 @@ def _rewrite(question: str, history: Sequence[str]) -> str:
 
 
 def _extract_topic(text: str) -> str:
-    """从上一轮问题里抽出主题词（取最长的中文名词片段或英文关键词）。"""
-    candidates = re.findall(r"[A-Za-z][A-Za-z0-9_\-]{1,20}|[\u4e00-\u9fff]{2,8}", text or "")
-    candidates = [c for c in candidates if c not in {"什么", "怎么", "如何", "可以", "需要", "哪些"}]
-    if not candidates:
+    """从上一轮问题里抽出主题词。
+
+    早先用"最长的中文连续片段"，实测很差：``"密码有什么复杂度要求？"``
+    会取到 8 连字 ``"密码有什么复杂"``，改写结果变成
+    ``"密码有什么复杂的有效期是多久"`` —— 真实模型看到这种改写直接判定
+    "没有上文"，多轮问答当场失败（21 条评测集里 multi-02 掉到 0.25）。
+
+    改用 :func:`significant_spans`（按虚词**断开**，而不是按长度切），
+    并优先取**靠前的短片段**：中文里主语通常出现在句首
+    （"密码…" → "密码"，"年假没休完…" → "年假"）。
+    """
+    spans = [span for span in significant_spans(text or "") if len(span) >= 2]
+    if not spans:
         return ""
-    return max(candidates, key=len)
+    short = [span for span in spans if len(span) <= 6]
+    return (short or spans)[0]
 
 
 def _clean(text: str) -> str:

@@ -1,0 +1,1498 @@
+[
+  {
+    "case_id": "hard-t7f665b-7f66-n2",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "哺乳期每天有几小时哺乳假？",
+    "text": "知识库中没有找到相关依据。\n\n检索到的片段分别来自入职指引、代码评审规范、IT 常见问题、报销制度，均与“哺乳假”无关，无法回答哺乳期每天的哺乳假时长。建议咨询 HR 或查阅员工手册中关于假期的部分。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2846,
+    "latency_ms": 8355.9,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t20fc6f-20fc-n2",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "丧假期间工资怎么算？",
+    "text": "**结论：知识库中没有找到关于“丧假期间工资如何计算”的依据。**\n\n检索到的相关内容均不涉及丧假：\n- 休假与考勤衔接条款只规定“休假期间不计入缺勤”，未涉及薪资计算 [1]\n- 病假工资按当地最低工资标准的 80% 计发 [3]，此条仅适用于病假，不能套用到丧假\n- 其余结果为差旅借款冲销 [2]、出差餐补标准 [4]，与丧假无关\n\n建议向 HR 或薪酬专员确认丧假工资口径，或请其将该条款补充进知识库。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2688,
+    "latency_ms": 9007.0,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t9a69ca-9a69-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "婚假可以分两次休吗？",
+    "text": "**结论：知识库中没有找到关于“婚假能否分两次休”的规定。**\n\n依据检索到的内容，制度里对婚假只说明了两点 [1]：\n- 婚假为 **10 天**；\n- 需提供**结婚证**，**领证后 1 年内有效**。\n\n文档中未涉及婚假是否可以分段、分次使用。如需确认，建议向 HR 咨询。\n\n（其余检索结果均为信息安全相关条款，与婚假无关。）",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2921,
+    "latency_ms": 9105.3,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-td15551-d155-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "独生子女父母住院有护理假吗？",
+    "text": "知识库中没有找到关于“独生子女父母住院护理假”的相关依据。\n\n**检索情况说明：**\n- 得分最高的结果只是《员工休假管理办法》（`hr/leave-policy.md#婚假、产假与陪产假`）中的假期一览表，其中只列出了婚假、产假、陪产假、育儿假，**没有提到护理假或独生子女相关假期** [1]。\n- 其余结果（IT FAQ、代码评审规范、信息安全规定）与这个问题无关 [2][3][4]。\n\n因此，我无法就“是否有护理假、多少天、如何申请”给出答复。建议直接向 HR 咨询，或以当地政策为准；本文档未作规定，我也不会给出个人判断。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3247,
+    "latency_ms": 9595.6,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t20fc6f-20fc-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "直系亲属去世有丧假吗？几天？",
+    "text": "**结论：知识库中没有找到关于丧假的规定。**\n\n入职后检索了员工休假相关文档，其中「婚假、产假与陪产假」的假期对照表只列出婚假、产假、陪产假、育儿假四类，**未包含丧假**，也没有任何关于直系亲属去世可休天数的条款 [1]。\n\n**检索到的相关依据（供参考）：**\n- 假期类型表中，婚假 10 天、产假 158 天、陪产假 15 天、育儿假每年 10 天，无丧假条目 [1]\n- 事后补单的规定仅针对**年假**（如家人突发疾病可事后补单，返岗后 1 个工作日内完成）[2]\n\n**建议：** 该问题涉及休假制度，知识库缺少依据，建议直接向 HR 确认，或请 HR 补充《员工休假管理办法》中的丧假条款。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6847,
+    "latency_ms": 10597.8,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t7f665b-7f66-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "产检假有几天？产检算病假吗？",
+    "text": "**结论：知识库中没有找到关于“产检假”的依据。**\n\n我检索到的两份结果如下：\n\n1. 我们检索了《员工休假管理办法》中假期清单，但它**只列出**婚假 10 天、产假 158 天、陪产假 15 天、育儿假每年 10 天，**其中没有“产检假”这一项**，也没有写明产检所需的请假天数 `[1]`。\n2. 我针对“产检、孕期检查、请假”做了补充检索，但未召回到任何与产检相关的片段，返回结果均为信息安全、IT 相关文档，与问题无关 `[2]`。\n\n**关于“产检算病假吗”**：知识库中也没有把产检归入病假的规定。能查到的相关原文只有病假的定义：病假需提供二级及以上医院的诊断证明或病假条，病假工资按当地最低工资标准的 80% 计发，连续病假超过 3 个工作日需提交正式病假证明 `[3]`。这条规定并未提及产检能否按病假处理，因此无法据此判断。\n\n**建议**：这两项（产检假天数、产检的假别归属）在现有文档中缺失，建议向 HR 确认，或查阅当地生育相关政策。\n\n引用来源：\n- [1] hr/leave-policy.md#婚假、产假与陪产假\n- [2] 补充检索结果（未命中相关内容）\n- [3] hr/leave-policy.md#病假",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6729,
+    "latency_ms": 11752.5,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t44874d-4487-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "产假可以提前多少天开始休？",
+    "text": "**结论：知识库中没有找到关于“产假可以提前多少天开始休”的规定。**\n\n现有文档中与产假相关的内容仅有天数规定：\n\n- 产假为 **158 天**，按当地政策执行，包含法定产假与地方奖励假 [1]（hr/leave-policy.md#婚假、产假与陪产假）\n\n检索结果中没有提到产假从预产期前何时可以开始休，也没有提到提前休假的天数限制。建议向 HR 确认，或查阅更完整的《员工休假管理办法》原文。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6070,
+    "latency_ms": 5005.7,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t4900e9-4900-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "平时加班有餐补吗？",
+    "text": "**结论：知识库中没有找到关于\"加班餐补\"的规定。**\n\n检索到的唯一餐补条款是**出差**期间的餐补，与加班无关：\n\n- 出差期间餐补按 150 元/天发放，无需发票；当天往返按半天计算（75 元）[1]\n\n其余检索结果（住宿标准 [2]、交通标准 [3]、信息安全适用范围 [4]）均与餐补无关。\n\n如需确认加班是否有餐补或夜宵补贴，建议向 HR 或财务确认——知识库现有文档中没有这条依据。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2771,
+    "latency_ms": 4658.2,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tcd3168-cd31-n1",
+    "kind": "synonym_only",
+    "expect_answer": false,
+    "question": "加班有加班费吗？按几倍计算？",
+    "text": "**结论：知识库中没有找到关于加班费及其计算倍数的依据。**\n\n我进行了两轮检索，分别是“加班费计算标准 加班工资倍数”和“加班 加班费 调休 加班审批 工时”，都没有命中任何与加班费、加班工资倍数或加班调休相关的条款；相关度最高的片段（0.38 / 0.28）实际内容为差旅餐补、病假工资、试用期薪资和年假申请流程，与问题无关 [1][2][3][4]。\n\n因此，关于“是否有加班费”和“按几倍计算”，我无法给出答复，也不会依据常识或外部法规推断。建议向 HR 部门确认，或提供相关制度文档后再行检索。\n\n**可参考的相邻条款（均与加班无关）：**\n- 病假工资按当地最低工资标准的 80% 计发 [2]\n- 事假为无薪假，每月累计不超过 3 天 [5]\n- 年假未休完最多结转 5 天，公司不另行折现 [4]\n\n其中 [5] 出自 `hr/leave-policy.md#事假`。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6287,
+    "latency_ms": 6524.4,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t9dc6a5-9dc6-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "加班到晚上十点打车回家能报销吗？",
+    "text": "**结论：知识库中没有找到关于“加班打车费用报销”的相关依据。**\n\n检索到的内容说明：\n\n- 检索结果只涉及**出差场景**下的市内交通标准，规定市内交通实报实销并需提供发票 `[finance/expense-policy.md#交通标准]`；但该条款针对出差，未提及加班或下班通勤的打车费用。\n- 其余检索结果涉及报销的时效与流程、不予报销的情形、出差相关常见问题 `[finance/expense-policy.md#报销时效与流程]` `[finance/expense-policy.md#不予报销的情形]` `[finance/expense-policy.md#常见问题]`，均未涉及加班打车回家的场景。\n- 整体相关性很低，也没有任何片段直接回答该问题。\n\n建议：此类规定通常可能在考勤或加班管理类文档中，但当前知识库未检索到相应内容，建议向财务或 HR 确认。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3337,
+    "latency_ms": 5186.2,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tcd3168-cd31-n2",
+    "kind": "synonym_only",
+    "expect_answer": false,
+    "question": "周末加班可以调休吗？调休有效期多久？",
+    "text": "**结论：知识库中没有找到关于“周末加班能否调休”和“调休有效期”的依据。**\n\n我检索了两次（`周末加班/调休/有效期`、`加班 调休 有效期 休假管理办法`），命中的都是《员工休假管理办法》的其他条款，没有一条涉及加班调休：\n\n- 适用范围说明：本办法适用于全体正式员工与试用期员工，实习生、外包人员的休假按协议执行 [1]\n- 请假与考勤的衔接：休假期间不计入缺勤；休假结束未按时返岗且未办续假，按旷工处理 [2]\n- 婚假、产假、陪产假、育儿假的天数与凭证要求 [3]\n- 年假结转：当年未休完的年假最多结转 5 天，超出部分次年 3 月 31 日作废；结转年假须在次年 6 月 30 日前休完。业务原因导致无法休假的，可由部门负责人书面说明、HR 总监审批后最多再延期 3 个月 [4]\n- 常见问题：试用期年假、年假与法定节假日连休（连休超过 10 个工作日需 HR 总监会签）[5]\n\n以上是**年假**规则，不是加班调休规则，不能据此推断调休政策。建议直接向 HR 确认，或确认知识库中是否已收录考勤与加班管理相关制度。\n\n参考来源：\n[1] hr/leave-policy.md#适用范围\n[2] hr/leave-policy.md#请假与考勤的衔接\n[3] hr/leave-policy.md#婚假、产假与陪产假\n[4] hr/leave-policy.md#年假可以结转到下一年吗\n[5] hr/leave-policy.md#常见问题",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 7591,
+    "latency_ms": 7594.0,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tcf9f99-cf9f-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "P6 的期权授予比例是多少？",
+    "text": "**知识库中没有找到相关依据。**\n\n检索到的内容都不是期权/股权激励方面的规定：\n- 最相关的一条是《员工薪酬与绩效考核办法》中的绩效系数与等级比例分布，讲的是绩效档位（S/A/B/C/D）而非期权 [1]\n- 其余为信息安全权限申请原则 [2]、差旅住宿标准（含 P4-P6 职级）[3]、IT 常见问题 [4][5]、密码轮换 [6]，均与期权授予比例无关\n\n建议：确认公司是否有单独的股权激励/期权计划文件（本次可检索范围内未见）。如需我列出当前知识库的全部文档清单，可以告诉我。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3600,
+    "latency_ms": 5275.3,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t27e013-27e0-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "公积金缴存基数和比例是多少？",
+    "text": "**结论：知识库中未找到关于公积金缴存基数和比例的规定。**\n\n依据与说明：\n- 我检索了薪酬福利相关文档，命中的内容均为**薪酬结构、绩效系数、薪酬保密**等条款（如 `hr/compensation.md#薪酬结构`、`hr/compensation.md#绩效系数`），其中没有涉及住房公积金缴存基数或缴存比例的内容 [1][2]。\n- 其余检索命中结果则分别属于休假、行为规范、IT 等无关主题 [3][4][5][6]。\n\n因此，我不能给出公积金缴存基数或比例的具体数值。建议向 HR 薪酬福利负责人确认该内容的依据；如果你需要，我可以帮你列出知识库中现有的 HR 相关文档清单。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6432,
+    "latency_ms": 4535.1,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tcf9f99-cf9f-n2",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "员工的股权激励什么时候行权？",
+    "text": "**知识库中没有找到相关依据。**\n\n说明：\n- 我用“股权激励行权时间”“行权条件/归属期”等关键词做了检索，返回的片段都是员工行为规范、入职流程、年终奖、代码评审等内容，与股权激励无关，相关性很低，不能作为回答依据。\n- 当前可访问的 8 份文档里没有任何一份涉及股权激励或期权，分别是：code-review、security-policy、conduct-policy、leave-policy、onboarding、expense-policy、it-faq、compensation。\n\n建议你向 HR 或薪酬负责人确认股权激励的具体安排；如果相关制度文档已存在，可以请管理员补充授权后我再查询。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 7468,
+    "latency_ms": 5461.3,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs",
+      "list_documents"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tb6c9b4-b6c9-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "个税专项附加扣除怎么申报？",
+    "text": "知识库中没有找到相关依据。\n\n检索到的最相关片段（分数 0.38 以下）分别涉及差旅借款冲销 [1]、数据分级与流转 [2]、利益冲突申报 [3]、违纪行为分级 [4]，均与\"个税专项附加扣除申报\"无关。\n- [1] finance/expense-policy.md#借款与冲销\n- [2] it/security-policy.md#数据分级与流转\n- [3] legal/conduct-policy.md#利益冲突申报\n- [4] legal/conduct-policy.md#较重违纪（书面警告 + 绩效降档）\n\n建议向 HR 薪酬或财务部门确认。如果你需要，我可以帮你查一下知识库里有哪些文档，看看是否包含薪酬个税相关的制度。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3259,
+    "latency_ms": 4652.3,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t27e013-27e0-n2",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "社保是按什么基数缴纳的？",
+    "text": "知识库中没有找到相关依据。\n\n说明：\n- 检索到的内容与「社保缴纳基数」无实质关联：一条是病假工资按当地最低工资标准的 80% 计发，“具体以当地社保政策为准” [1]；一条是月度总薪酬构成（基本工资 + 绩效工资 + 补贴）[2]；另有婚假/产假天数和代码评审规范，均不涉及社保缴费基数 [3][4]。\n\n建议向 HR 或当地社保经办机构确认。如果知识库中确实有社保相关文档但未被检索到，可以告诉我文档名称，我再查。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2945,
+    "latency_ms": 4982.5,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t03f3a1-03f3-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "年终奖一般几月发放？",
+    "text": "**结论：知识库中没有找到关于\"年终奖几月发放\"的具体时间规定。**\n\n依据：\n- 检索到的《员工薪酬与绩效考核办法》中\"年终奖\"一节只规定了计算方式和发放条件，**未写明发放月份或具体发放日期** [1]。\n- 该节可确认的与\"发放\"相关的原文是：年终奖与公司经营业绩、部门业绩、个人绩效三者挂钩，计算公式为 `月基本工资 × 个人系数 × 部门系数 × 公司系数`；**发放条件**为\"发放日仍在职，且当年在职满 3 个月；年中离职者不享受年终奖，除非因公司原因解除劳动合同\" [1]。\n- 其余检索结果（新员工入职指引、差旅报销制度）与年终奖发放时间无关 [2][3][4]。\n\n如需确认具体发放月份，建议向 HR 咨询，或查阅是否有单独的年度奖金通知类文件。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3039,
+    "latency_ms": 4611.1,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-13-a0b5-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "公司有 13 薪吗？什么时候发？",
+    "text": "## 结论\n\n**知识库中没有“13 薪”的相关规定**，也没有任何“13 薪发放时间”的条款 [1]。\n\n## 依据\n\n- 检索到的薪酬文档中关于年度奖金只有**年终奖**条款，未使用“13 薪”这一说法，也未约定年末双薪 [1]。\n- 年终奖的计算方式：`年终奖 = 月基本工资 × 个人系数 × 部门系数 × 公司系数`；其中个人系数 S=2.0、A=1.5、B=1.0、C=0.5、D=0，部门系数 0.8~1.2，公司系数 0.5~1.5 [1]。\n- 发放条件为“发放日仍在职，且当年在职满 3 个月；年中离职者不享受年终奖，除非因公司原因解除劳动合同” [1]。\n- 该条款**只写了发放条件，没有写具体发放时间（几月几日/哪个季度）**，知识库中未找到时间信息 [1]。\n\n## 补充提示\n\n员工薪酬属于公司机密信息，员工之间不得互相打探或泄露 [2]；薪酬体系本身也在保密信息范围内 [3]。\n\n如需确认是否存在 13 薪安排及发放月份，建议查阅薪酬文档全文或向 HR 薪酬负责人核实——知识库现有片段不足以回答该问题。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3443,
+    "latency_ms": 6530.0,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-te68db9-e68d-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "住房补贴每月多少？",
+    "text": "**知识库中没有找到\"住房补贴每月多少\"的相关依据。** 检索到的片段里没有任何关于住房补贴标准或金额的条款。\n\n补充说明检索到的相关但不同的内容：\n\n- 薪酬结构中只写了\"月度总薪酬 = 基本工资 + 绩效工资（基数 × 绩效系数）+ 补贴\"，但**未列出补贴的具体项目与金额**，也未提及住房补贴 `[1]`。\n- 检索到的其他补贴标准均为非住房类：出差餐补 150 元/天（当天往返按半天 75 元）`[2]`；自驾按 1.2 元/公里补贴 `[3]`。\n- 另有出差住宿标准（按职级与城市分档，如 P1-P3 一线城市 500 元/晚），属于差旅报销，不是住房补贴 `[4]`。\n\n建议直接向 HR 薪酬负责人确认，或以正式发布的薪酬/福利制度文件为准。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6355,
+    "latency_ms": 6191.4,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tf0af24-f0af-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "境外出差的住宿标准是多少一晚？",
+    "text": "**结论：知识库中没有找到境外出差的住宿标准。**\n\n检索到的住宿标准只按境内城市等级（一线/二线/其他城市）和职级划分，**没有对境外城市或国家作出规定**，无法据此推导境外住宿标准。\n\n**依据（仅供参考，适用境内）：**\n- 住宿标准表：P1-P3 为 500/400/300 元/晚，P4-P6 为 700/550/450 元/晚，P7 及以上为 1000/800/600 元/晚；超标部分由个人承担；因会议或展会期间房价上涨导致超标，可凭主办方证明申请一次性特批 [1]\n- 境外出差在知识库中只涉及审批要求：需事业部总经理审批；预计费用超过 2 万元需 CFO 会签 [2]\n\n如需知道境外住宿标准，建议向财务或 HR 确认，或补充境外差旅专项制度文档。\n\n---\n**引用来源**\n[1] finance/expense-policy.md#住宿标准\n[2] finance/expense-policy.md#差旅审批",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3198,
+    "latency_ms": 5277.9,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t44a704-44a7-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "差旅借款最多能借多少？",
+    "text": "**结论：知识库中没有找到差旅借款额度上限的规定。**\n\n检索到的《差旅与费用报销制度》只说明了借款的冲销要求，未提及可借金额上限或额度标准 `[1]`。\n\n**检索到的相关依据（借款管理部分）：**\n- 差旅借款需在借款单中注明预计冲销日期 `[1]`\n- 必须在出差结束后 **15 个工作日内**冲销 `[1]`\n- 未冲销的借款将从当月工资中扣除，直至冲销完成 `[1]`\n\n关于借款金额上限、审批权限等问题，建议向财务部门确认；知识库现有内容中没有相应依据。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2831,
+    "latency_ms": 4192.0,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t3af5b3-3af5-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "发票丢了还能报销吗？怎么处理？",
+    "text": "**结论：知识库中没有“发票丢失后如何补办或替代”的专门规定。** 但制度对发票缺失有明确规定；按现有条款，发票缺失会直接影响报销。\n\n**依据：**\n\n1. **缺少合规发票的费用不在报销范围内**：制度把“缺少合规发票的任何费用”列为不予报销情形之一 [3]。\n2. **报销单必须附发票原件**：出差报销需提交出差申请单、发票原件、行程单（机票/高铁票）[1]。\n3. **电子发票必须提供 PDF 原件**：截图不予受理；发票抬头须为公司全称、纳税人识别号正确，日期须在出差日期区间内，单张超 1000 元需在发票背面签字 [2]。\n\n**建议（非制度依据）：** 对于发票丢失后能否用其他材料替代、由谁审批，知识库中没有可引用的条款，建议直接向财务部门确认。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "finance/expense-policy.md#报销时效与流程",
+      "finance/expense-policy.md#发票要求",
+      "finance/expense-policy.md#不予报销的情形"
+    ],
+    "tokens": 3181,
+    "latency_ms": 5667.1,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 0.75
+  },
+  {
+    "case_id": "hard-te68db9-e68d-n2",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "租房有补贴吗？怎么申请？",
+    "text": "**结论：知识库中没有找到关于\"租房补贴\"的规定，也没有对应的申请流程。**\n\n依据说明：\n- 我检索了\"租房补贴 / 申请流程\"和\"住房补贴 / 员工福利\"两组关键词，返回的片段中均无租房补贴相关内容，相关度都很低，且没有实际匹配到具体内容。\n- 唯一在字面上提到\"补贴\"的片段是薪酬结构说明，但它只写明月度总薪酬由\"基本工资 + 绩效工资 + 补贴\"构成，**未说明该\"补贴\"是否包含租房补贴，也未给出任何申请方式或审批流程** `[hr/compensation.md#薪酬结构]`。\n- 其余返回结果为年假申请、软件安装申请、差旅报销时效、交通标准（自驾 1.2 元/公里补贴）等，均与租房无关 `[hr/leave-policy.md#年假的申请流程]` `[finance/expense-policy.md#报销时效与流程]` `[finance/expense-policy.md#交通标准]`。\n\n建议：该事项可能未纳入知识库，或属于尚未公开的政策。如需准确答案，可向 HR 部门确认；若确认有相关政策，可反馈补充进知识库。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 7169,
+    "latency_ms": 7584.6,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t20c8b4-20c8-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "出差期间的意外险是公司买的吗？",
+    "text": "结论：知识库中**没有找到关于出差意外险的条款**，因此无法确认出差期间意外险是否由公司购买。\n\n依据说明：\n- 我检索了“出差意外险”“员工保障/人身意外”等相关关键词，返回的片段均与保险无关，只涉及差旅审批 `[1]`、报销时效与流程 `[2]`、发票要求、餐补标准、周末住宿费与机票改签费等常见问题 `[3]`。在这些片段中，没有出现“意外险”“保险”“人身意外”的原文表述。\n- 两次检索的匹配度都较低（第二次检索判定为无有效证据），因此不宜据现有片段推断。\n\n建议：如需确认，请向 HR 或财务部门核实，或查阅是否有单独的《员工福利/保险》类制度文档。若需要，我可以先列出当前知识库中的文档清单供你查看。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6031,
+    "latency_ms": 5911.9,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tb5c066-b5c0-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "报销可以加急打款吗？最快多久？",
+    "text": "**结论**\n- 知识库中没有关于“加急打款”的任何规定，因此无法确认是否支持加急。[1]\n- 制度中只规定了常规打款时限：打款周期为审批通过后的 **7 个工作日**内。[1]\n\n**依据**\n- 报销流程：出差结束后 15 个工作日内在 OA 提交报销单；审批链为直属主管 → 部门负责人 → 财务复核 → 打款；打款周期为审批通过后的 7 个工作日内。[1]（finance/expense-policy.md#报销时效与流程）\n- 超过 30 个工作日未提交的，原则上不予受理；如需特殊处理，需由财务总监审批。这属于提交时效的特殊审批，不涉及加急打款。[1]\n\n**说明**\n检索结果中没有出现“加急”“优先打款”“快速通道”等相关表述，其余命中片段（不予报销情形、入职账号、打印机问题、交通标准）与本题无关。[2][3][4][5] 关于能否加急，建议按制度中的审批链向财务复核环节确认。",
+    "refused": false,
+    "refused_wide": true,
+    "looks_like_refusal": false,
+    "citations": [
+      "finance/expense-policy.md#报销时效与流程",
+      "finance/expense-policy.md#不予报销的情形",
+      "hr/onboarding.md#账号与设备",
+      "it/it-faq.md#打印机无法连接",
+      "finance/expense-policy.md#交通标准"
+    ],
+    "tokens": 3342,
+    "latency_ms": 5428.6,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 0.75
+  },
+  {
+    "case_id": "hard-t898fc8-898f-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "出差行程临时变更需要重新审批吗？",
+    "text": "**结论：知识库中没有找到关于\"出差行程临时变更是否需要重新审批\"的规定。**\n\n现有检索结果只涉及出差前的申请与报销要求，均未提及行程变更后的处理方式：\n\n- 出差前须在 OA 提交「出差申请」，注明目的地、起止日期、事由与预算；未经审批产生的差旅费用不予报销；国内出差由部门负责人审批，境外出差需事业部总经理审批，预计费用超 2 万元需 CFO 会签 [1]\n- 报销需附出差申请单、发票原件、行程单；审批链为直属主管 → 部门负责人 → 财务复核 → 打款 [2]\n\n以上两条都无法推出\"变更是否需重新审批\"的答案，建议直接向财务或你的部门负责人确认。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3250,
+    "latency_ms": 5317.0,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t5775bc-5775-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "出差寄快递的费用能报销吗？",
+    "text": "**知识库中没有找到关于“出差寄快递费用能否报销”的明确依据。**\n\n检索到的差旅报销制度片段里，只涉及以下费用类型，未出现快递费、邮寄费的处理规定：\n\n- 出差期间因工作需要周末停留产生的住宿费可正常报销，需在出差申请中说明 `[1]`\n- 机票改签费：公司原因可报，个人原因不可报 `[1]`\n- 餐补 150 元/天，无需发票，当天往返按半天（75 元）`[2]`\n- 未经审批产生的差旅费用不予报销 `[3]`\n- 报销单需附出差申请单、发票原件、行程单 `[4]`\n\n建议直接咨询财务部门确认快递费的处理方式。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2942,
+    "latency_ms": 5981.9,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-vpn-049d-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "VPN 支持 Linux 系统吗？",
+    "text": "**结论：知识库中没有找到关于 VPN 是否支持 Linux 系统的说明。**\n\n检索到的 VPN 相关片段只涉及以下内容，均未提及支持的操作系统或 Linux 客户端：\n\n- VPN 连不上时的排查步骤（MFA 口令时效、本机时间偏差、切换网络、重启客户端、清 DNS 缓存），其中清 DNS 缓存只给了 Windows 和 macOS 的命令 `[1]`\n- MFA 绑定是访问 VPN 的前提 `[2]`；VPN 远程接入必须开启 MFA `[3]`\n- 远程办公必须通过公司 VPN 接入，不得用第三方远程桌面工具直连内网 `[4]`\n\n因此，对于客户端是否支持 Linux，建议直接提交 IT 工单确认，或查阅 IT 部门发布的客户端安装说明原文。\n\n**依据：**\n1. `it/it-faq.md#VPN 连不上怎么办`\n2. `hr/onboarding.md#账号与设备`\n3. `it/security-policy.md#多因素认证（MFA）`\n4. `it/security-policy.md#远程办公安全`",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3088,
+    "latency_ms": 5592.4,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t360b1c-360b-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "可以用 1Password 这类工具保存公司密码吗？",
+    "text": "**结论：知识库中没有关于\"是否可以用 1Password 等第三方密码管理工具保存公司密码\"的直接规定，无法据此给出肯定或否定的答复。**\n\n检索到的相邻条款（可作参考，但均未直接提及密码管理工具）：\n\n- 公司设备**不得安装未授权的远程控制软件**；不得使用第三方远程桌面工具直连内网 `[1]`\n- 公司电脑**不能安装个人软件**，个人软件可能带来安全风险，\"需通过软件安装申请流程评估\" `[2]`\n- 所有接入公司内网或使用公司系统的设备均受信息安全规定约束 `[3]`\n\n与密码本身相关的要求（若有涉及，仍需遵守）：\n\n- 公司账号密码每 90 天强制更换一次，新密码不得与前 5 次使用过的密码相同 `[4]`\n- 密码长度不少于 12 位，需包含大写字母、小写字母、数字、特殊符号中的至少三类，且不得包含姓名拼音、工号、连续数字或常见弱口令 `[5]`\n- VPN 远程接入、生产跳板机、代码仓库、财务与 HR 系统必须开启 MFA `[6]`\n\n**建议**：由于文档未明确覆盖此类工具，是否可用需按\"软件安装申请流程\"向 IT 确认 `[2]`；如涉及其中的密码存储细节（是否允许外部托管），知识库中无依据。",
+    "refused": false,
+    "refused_wide": true,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/security-policy.md#远程办公安全",
+      "it/security-policy.md#密码有效期与轮换",
+      "it/security-policy.md#多因素认证（MFA）",
+      "it/security-policy.md#适用范围",
+      "it/security-policy.md#密码复杂度要求",
+      "it/it-faq.md#常见问题"
+    ],
+    "tokens": 7748,
+    "latency_ms": 7663.0,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 0.75
+  },
+  {
+    "case_id": "hard-t786c5d-786c-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "MFA 硬件令牌去哪里申请？",
+    "text": "知识库中没有找到关于“MFA 硬件令牌去哪里申请”的明确规定，也没有说明具体申请入口或审批渠道。\n\n以下是检索到的相关条款，供参考：\n\n- **MFA 方式优先级**：优先使用企业认证 App 的动态口令，其次为硬件令牌；短信验证码仅作为备用方式，不作为首选 `[1]`\n- **必须开启 MFA 的系统**：VPN 远程接入、生产环境跳板机、代码仓库（含 CI/CD 后台）、财务与 HR 系统 `[1]`\n- **MFA 设备丢失**：需本人携带工牌到 IT 服务台重置，**不接受线上申请**（防冒用） `[3]`\n- **新员工报到当天**：11:00-12:00 由 IT 负责“账号开通、MFA 绑定、邮箱配置” `[2]`\n\n说明：上述 [3] 仅涉及 MFA 设备“丢失后重置”的场景，[2] 仅涉及入职当天的 MFA 绑定安排，均未直接说明硬件令牌的申领渠道。建议直接向 IT 服务台确认。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3174,
+    "latency_ms": 5109.9,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tb48bc9-b48b-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "软件安装申请被拒绝可以申诉吗？",
+    "text": "**结论：知识库中没有找到关于“软件安装申请被拒绝后能否申诉”的规定。**\n\n**检索到的相关内容（均未涉及申诉或复核流程）：**\n\n- 公司设备安装软件需走申请流程，按软件类型区分审批人：办公类由直属主管审批；开发工具由直属主管 + IT 审批（均 1 个工作日）；涉及网络代理/抓包类工具由 IT 安全负责人审批（3 个工作日）；**未授权远程控制类软件一律不批** [1]\n- 公司电脑不可以安装个人软件，个人软件可能带来安全风险，需通过软件安装申请流程评估 [2]\n- 公司设备不得安装未授权的远程控制软件 [3]\n\n**说明：**上述片段只说明了申请与审批规则，没有提及拒绝后的申诉、复议或再次提交申请的途径，因此该问题无法依据现有知识库回答。建议向 IT 或人力资源部门确认正式渠道。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2954,
+    "latency_ms": 4876.2,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tbb41c0-bb41-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "提交 IT 工单后多久必须响应？",
+    "text": "**结论：知识库中没有找到\"IT 工单响应时限\"的规定。**\n\n我检索了 IT FAQ、信息安全规定等文档，均未发现针对工单响应的具体要求（例如多少小时内必须响应）。相关度最高的结果中虽有\"1 个工作日\",但那是**代码评审**的时限，与 IT 工单无关，不能套用：\n\n- 代码评审：收到评审请求后，评审人应在 **1 个工作日**内给出首轮意见 `[1]`\n\n知识库中关于 IT 工单的内容只涉及\"怎么提交\"和\"找谁\"，没有承诺响应时长：\n\n- 提交工单需包含现象、影响范围、发生时间、已尝试操作、紧急程度（只有\"完全无法工作且无替代方案\"才选\"阻塞\"）`[2]`\n- 工单系统：内网 `http://intranet.it/ticket`；服务台电话分机 8888（工作日 9:00-18:00）；生产环境紧急故障走安全热线 7×24 小时 `[3]`\n\n如需确认具体响应时限，建议直接向 IT 服务台核实（分机 8888），以他们的答复为准。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6886,
+    "latency_ms": 6065.8,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t6d8f81-6d8f-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "入职需要提交体检报告吗？",
+    "text": "**结论：知识库中未检索到“入职体检报告”的明确规定。**\n\n依据：\n- 唯一与入职材料相关的片段是《新员工入职指引 > 报到当天流程》。该片段的**必带材料**仅列出：身份证、学历学位证、离职证明（社招）、银行卡、一寸照片 2 张，**未提及体检报告** [1]。\n- 其余检索结果（邮箱收不到外部邮件、VPN 排查、设备与终端管理）与入职体检无关 [2][3][4]。\n\n说明：材料清单中未出现体检报告，并**不等于**公司不要求体检报告；文档本身没有对体检作出规定。建议直接向 HR 确认，因为该文档未覆盖此事项。",
+    "refused": false,
+    "refused_wide": true,
+    "looks_like_refusal": false,
+    "citations": [
+      "hr/onboarding.md#报到当天流程",
+      "it/it-faq.md#邮箱收不到外部邮件",
+      "it/it-faq.md#VPN 连不上怎么办",
+      "it/security-policy.md#设备与终端"
+    ],
+    "tokens": 3156,
+    "latency_ms": 5261.7,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 0.75
+  },
+  {
+    "case_id": "hard-t3cdafc-3cda-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "试用期延长后薪资还是 90% 吗？",
+    "text": "**结论：知识库只说明了试用期薪资标准，但没有对“延长期间的薪资”单独作规定，因此无法确认延长后是否仍为 90%。**\n\n**文档中有的依据：**\n- 试用期时长为 3 个月（P7 及以上为 6 个月）`[1]`\n- 试用期薪资为转正后的 **90%**（不低于当地最低工资标准）`[1]`\n- 转正评估未通过的，可延长试用期一次（不超过原试用期的 50%），或依法解除劳动合同 `[1]`\n\n**文档中没有的：**\n- 关于“延长后的试用期薪资按什么比例发放”，检索到的片段均未涉及；我没有找到任何条款说明延长期间是否继续按 90% 执行。\n\n**建议：** 如果这一点会影响你的实际收入，建议向 HR 或薪酬负责人书面确认，并以劳动合同约定为准。\n\n*（引用 [1] = hr/onboarding.md#试用期与转正）*",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 4323,
+    "latency_ms": 6122.0,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tf7b28a-f7b2-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "P7 的 6 个月试用期可以提前转正吗？",
+    "text": "**结论：知识库中没有找到关于“试用期提前转正”的规定**，因此无法确认 P7 是否可以提前转正。\n\n依据检索到的文档，明确规定的内容只有以下几条：\n\n- 试用期时长为 **3 个月**（P7 及以上为 **6 个月**）[1]\n- 试用期薪资为转正后的 **90%**（不低于当地最低工资标准）[1]\n- 转正评估在**试用期结束前 10 个工作日**发起 [1]\n- 转正材料包括试用期工作总结、导师评价、主管评价 [1]\n- 转正评估未通过的，可延长试用期一次（不超过原试用期的 50%），或依法解除劳动合同 [1]\n\n另外，试用期请假可能影响转正评估的是：累计事假不宜超过 3 天 [3]。\n\n这说明文档中所述的转正流程只有“试用期结束前发起评估”，**没有提到提前转正的申请条件或审批流程**。如需确认是否存在此类特殊安排，建议咨询 HR。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 7438,
+    "latency_ms": 5669.5,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t648473-6484-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "代码覆盖率要求达到多少百分比？",
+    "text": "## 结论\n\n知识库中**没有规定具体的覆盖率百分比**（如 80% 或 90%）。能找到的唯一相关要求是相对标准：\n\n- 新增或修改的逻辑必须有对应的单元测试，**覆盖率不得低于改动前的水平** [1]\n\n## 依据\n\n`engineering/code-review.md` > 提交前自检（作者责任）中列为作者提交 PR 前必须完成的第 2 项 [1]。同一节还提到：本地测试全部通过、自查 diff 删除调试代码、PR 描述写清“改了什么、为什么改、怎么验证” [1]。\n\n在评审人职责一节中，对测试的要求表述为\"是否覆盖了关键分支与失败路径\" [2]，同样没有给出量化阈值。\n\n## 说明\n\n以上仅为文档原文，文档未给出具体百分比数值，我无法提供一个确切的门槛数字。如需确定阈值，建议向研发规范负责人确认制度原文。",
+    "refused": false,
+    "refused_wide": true,
+    "looks_like_refusal": false,
+    "citations": [
+      "engineering/code-review.md#提交前自检（作者责任）",
+      "engineering/code-review.md#评审关注点（按优先级）"
+    ],
+    "tokens": 3359,
+    "latency_ms": 5178.5,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 0.75
+  },
+  {
+    "case_id": "hard-t8ffafe-8ffa-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "实习生实习期满可以直接转正吗？",
+    "text": "**结论：知识库中没有找到关于\"实习生实习期满能否直接转正\"的规定依据。** 以下是我检索到的相关内容，但都不涉及实习生转正问题：\n\n- 知识库中只有**试用期员工转正**的规定（试用期 3 个月，P7 及以上 6 个月；转正评估在试用期结束前 10 个工作日发起；材料为试用期工作总结、导师评价、主管评价；评估未通过可延长一次不超过原试用期 50%，或依法解除劳动合同）——适用于正式员工的试用期，未提及实习生 [1]。\n- 涉及\"实习生\"的条款仅出现在其他制度的**适用范围**中：休假办法不适用于实习生，实习生休假按签订的协议执行 [2]；差旅报销制度适用于正式员工，实习生出差需由导师发起并附说明 [3]；信息安全规定适用于含实习生在内的全体人员 [4]。\n\n建议向 HR 确认实习生转正的具体口径。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6305,
+    "latency_ms": 6951.7,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t09fc60-09fc-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "单元测试必须在几分钟内跑完？",
+    "text": "**结论：知识库中没有找到关于“单元测试必须在几分钟内跑完”的依据。**\n\n检索到的相关内容仅涉及单元测试的**其他要求**，未涉及时长：\n\n- 提交 PR 前须本地测试全部通过，新增/修改的逻辑有对应单元测试，覆盖率不得低于改动前水平 [1]\n- 评审验证方式中包含“单元测试”勾选项 [2]\n\n其余两条检索结果分别关于安全事件 30 分钟内上报 [3] 和差旅借款冲销时限 [4]，与单元测试时长无关。\n\n建议确认该规定是否存在于其他未纳入知识库的文档中。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2782,
+    "latency_ms": 3875.0,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-pr-23b6-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "一个 PR 最多可以评审几轮？",
+    "text": "**知识库中没有找到\"PR 最多评审几轮\"的相关规定。**\n\n两次检索都没有命中任何关于评审轮数上限的条款，返回的片段与问题无关（多为合并规则、年假结转、密码轮换等），相关度也很低。\n\n代码评审规范中**与评审流程相关的、有明确原文的条款**如下，供参考（这些都不是\"轮数上限\"）：\n\n- 评审人应在 **1 个工作日**内给出首轮意见；超过 1 天未响应的，作者可以换人评审或在群里提醒 [3]\n- 至少 1 位评审人 Approve 才可合并；核心模块（支付、权限、数据管道）需 2 位 [1]\n- 评审意见全部 Resolved 或明确回复\"暂不处理 + 原因\"后才可合并 [1]\n- 评审人与作者无法达成一致时的处理路径：先线下沟通 → 引入模块负责人做技术裁决 → 裁决结论记录在 PR 里 [4]\n- 单个 PR 建议不超过 400 行有效改动，超过应拆分 [2]\n\n如果您需要确切的轮数限制，建议直接向研发规范维护方确认，或查看是否有未纳入知识库的补充说明。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6726,
+    "latency_ms": 6578.9,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t113039-1130-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "代码评审有积分或奖励吗？",
+    "text": "**结论：知识库中没有找到\"代码评审有积分或奖励\"的相关依据。**\n\n- 检索到的《代码评审规范》只规定了评审目的、作者自检、合并规则、冲突处理等内容，全文未提及任何积分、奖励或其他物质激励安排。\n- 该规范中与\"激励\"最接近的表述是评审定位：代码评审的目标是提高代码质量与知识共享，而不是挑错或显示水平，评审意见应当对事不对人 `[1]`。\n- 另检索了\"积分/奖励/激励制度\"\"技术贡献/表彰/评优\"等关键词，命中的均为差旅报销、休假、试用期转正等无关制度条目，与代码评审激励无关。\n\n如需确认是否存在未入库的激励政策，建议向 HR 或研发管理部门核实。\n\n**依据**\n[1] `engineering/code-review.md#目的`",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 9807,
+    "latency_ms": 7964.0,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs",
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t87d70e-87d7-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "竞业限制的补偿金每月多少钱？",
+    "text": "**知识库中没有找到具体的补偿金金额。**\n\n依据：\n- 只有一条相关记录，说明「若签有竞业限制协议，公司会按月支付补偿金，员工需在约定期限内（通常 1 年）履行限制义务」[1]；该条文**未写明每月金额**，也未给出计算方式（如按离职前工资的百分比）。\n- 其余检索结果（餐补标准 [2]、住宿标准 [3]、事假规定 [4]）与竞业限制无关。\n\n如果你想了解具体数额，建议直接查阅你本人的竞业限制协议文本，或向 HR 确认；知识库中现有的制度文档没有这项标准。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2822,
+    "latency_ms": 4814.5,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tfce41a-fce4-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "接受供应商宴请的人均标准是多少元？",
+    "text": "**结论：知识库中没有“接受供应商宴请的人均标准（元）”这一金额规定。**\n\n检索到的相关制度只涉及以下几方面：\n\n**1. 宴请属于必须申报的利益**\n- 接受供应商或客户的礼品、宴请、旅游等利益，**必须主动申报**；申报时填写《利益冲突申报表》，提交给 HR 与法务，由合规委员会评估是否构成冲突。[1]\n- 未申报被发现的，按隐瞒处理，从重处分。[1]\n\n**2. 制度中只有“礼品”的金额界限，且不适用于宴请**\n- 价值 200 元以内的纪念品：可以收受，无需申报\n- 200–1000 元：需申报，原则上应上交或退回\n- 超过 1000 元：不得收受，必须退回并申报\n- 现金、购物卡、有价证券：一律不得收受，无论金额[1]\n\n上述金额界限仅针对礼品，原文未对宴请设定人均标准。\n\n**3. 公司方向（我方宴请客户）的相关规定**\n- 未经审批的商务宴请不予报销[2]；但制度中未列出人均消费上限。\n\n**4. 严重违纪的定性**\n- 收受供应商回扣或贿赂属于严重违纪，可解除劳动合同且无经济补偿[3]。\n\n如需明确宴请的人均标准，知识库现有文档中没有依据，建议直接向法务/合规委员会确认。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "finance/expense-policy.md#不予报销的情形",
+      "finance/expense-policy.md#交通标准",
+      "finance/expense-policy.md#餐补标准"
+    ],
+    "tokens": 7641,
+    "latency_ms": 6666.6,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "list_documents",
+      "search_docs"
+    ],
+    "composite": 0.75
+  },
+  {
+    "case_id": "hard-tdc9cf2-dc9c-p1",
+    "kind": "wrong_premise",
+    "expect_answer": true,
+    "question": "公司密码要求 8 位以上就行吧？",
+    "text": "不是。公司密码要求的长度下限是 **12 位**，比 8 位更严格。\n\n**具体要求（密码复杂度）：**\n- 长度不少于 **12 位** [3]\n- 必须包含大写字母、小写字母、数字、特殊符号中的**至少三类** [3]\n- 不得包含姓名拼音、工号、连续数字（如 `123456`）或常见弱口令 [3]\n\n**另外两点相关要求：**\n- 密码**每 90 天强制更换一次**，系统会提前 7 天开始提醒；新密码不得与前 5 次使用过的密码相同 [1]\n- 连续输错 5 次密码会锁定 30 分钟；急用可通过 IT 服务台人工解锁 [4]\n\n依据：`it/security-policy.md`（信息安全与账号权限管理规定 > 账号与密码）、`it/it-faq.md`（IT 常见问题与自助排查）。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/security-policy.md#密码有效期与轮换",
+      "it/security-policy.md#密码复杂度要求",
+      "it/it-faq.md#密码忘记或账号被锁定"
+    ],
+    "tokens": 3164,
+    "latency_ms": 4174.5,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t7a39ab-7a39-p1",
+    "kind": "wrong_premise",
+    "expect_answer": true,
+    "question": "年假结转上限是 10 天吧？",
+    "text": "**不是 10 天，而是 5 天。** 制度规定未休年假结转上限是 **5 天**。[1]\n\n依据 `hr/leave-policy.md#年假可以结转到下一年吗`：\n\n- 当年未休完的年假**最多可结转 5 天**到下一年度；超出 5 天的部分在**次年 3 月 31 日**自动作废，公司不另行折现。[1]\n- 结转的年假必须在**次年 6 月 30 日前**休完，逾期作废。[1]\n- 因业务原因（如重大项目冲刺、连续出差）导致无法休假的员工，可由部门负责人发起书面说明，经人力资源总监审批后**最多再延期 3 个月**。[1]\n\n补充说明：10 天在制度里对应的是另一项规定——连续休假后总天数超过 10 个工作日，或一次性休假超过 10 个工作日，需人力资源总监会签。[3][4] 这与结转上限不是同一件事。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "hr/leave-policy.md#年假可以结转到下一年吗",
+      "hr/leave-policy.md#常见问题",
+      "hr/leave-policy.md#年假的申请流程"
+    ],
+    "tokens": 3359,
+    "latency_ms": 5475.5,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t266868-2668-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "利益冲突申报多久能审批完？",
+    "text": "**结论：知识库中没有找到关于利益冲突申报审批时限的规定。**\n\n检索到的《员工行为规范与违纪处理办法》只写明了申报流程，没有写明审批需要多久。\n\n**依据（流程原文）**\n- 需要申报的情形包括：本人或直系亲属在供应商、客户、竞争对手公司持股或任职；与公司发生业务往来；在外兼职（含自由职业、开网店、担任顾问）；接受供应商或客户的礼品、宴请、旅游等利益 [1]。\n- 申报流程：填写《利益冲突申报表》并提交给 HR 与法务，由**合规委员会**评估是否构成冲突 [1]。\n- 未申报被发现的，按隐瞒处理，从重处分 [1]。\n\n**礼品金额界限（原文）**\n| 情形 | 处理 |\n|---|---|\n| 200 元以内纪念品 | 可收，无需申报 |\n| 200–1000 元 | 需申报，原则上应上交或退回 |\n| 超过 1000 元 | 不得收受，必须退回并申报 |\n| 现金、购物卡、有价证券 | 一律不得收受，无论金额 |\n\n以上表格内容同样来自 [1]。\n\n关于审批时限（例如几个工作日），建议直接向 HR 或法务确认；知识库内没有该信息，我不做推测。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3573,
+    "latency_ms": 6252.9,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t64205a-6420-p1",
+    "kind": "wrong_premise",
+    "expect_answer": true,
+    "question": "报销单是一个月内提交就行吧？",
+    "text": "**结论：不是“一个月内提交就行”，知识库的规定比这更严格。**\n\n依据《差旅与费用报销制度》「报销时效与流程」[1]：\n\n- 出差结束后应在 **15 个工作日内**在 OA 系统提交报销单 [1]\n- **超过 30 个工作日**未提交的，原则上不予受理；特殊情况需财务总监审批 [1]\n- 报销单需附：出差申请单、发票原件、行程单（机票/高铁票）[1]\n- 审批链：直属主管 → 部门负责人 → 财务复核 → 打款 [1]\n- 打款周期为审批通过后的 **7 个工作日**内 [1]\n\n**说明**：以上是“差旅费用”的时效条款 [1]；知识库中未检索到其他类别费用（如日常费用、招待费等）单独的提交时限规定，如需确认建议以财务口径为准。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "finance/expense-policy.md#报销时效与流程"
+    ],
+    "tokens": 3460,
+    "latency_ms": 4943.1,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-s-0e93-n1",
+    "kind": "permission",
+    "expect_answer": false,
+    "question": "S 级绩效的年度调薪幅度是多少？",
+    "text": "知识库中没有找到相关依据。\n\n说明：\n- 检索返回的片段均为年假额度、年假结转、病假、报销时效等内容，与“S 级绩效年度调薪幅度”无关，相关性很低（最高相关度 0.22，未达到可用证据标准）。\n- 我无法据此推测具体调薪比例或幅度。\n\n建议：确认是否有可访问的薪酬制度类文档，或向 HR 薪酬负责人直接确认。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3034,
+    "latency_ms": 4344.0,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-p4-c919-n1",
+    "kind": "permission",
+    "expect_answer": false,
+    "question": "P4 的年终奖个人系数是多少？",
+    "text": "## 结论\n\n知识库中没有找到“P4 年终奖个人系数”的相关依据。\n\n## 依据与说明\n\n1. 检索返回的结果相关性都很低（最高 0.39，且仅为“P4-P6”这一职级字样的住宿标准巧合匹配），内容与年终奖、个人系数无关 `[1]` `[2]`，因此我无法据此作答。\n2. 检索中存在一份与“薪酬”相关的文档，但当前账号**没有访问权限**，所以其内容我无法读取，也不能据此给出任何数值。\n\n## 建议\n\n年终奖个人系数属于薪酬类信息，建议直接向 HR 或你的直属主管确认；如有需要，也可以走内部流程申请该薪酬文档的访问权限。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3587,
+    "latency_ms": 5551.7,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t90feb7-90fe-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "能把公司代码贴到公开的 AI 工具里问问题吗？",
+    "text": "**结论：不可以。**\n\n- **明确禁止**：源代码属于**机密级**数据，禁止上传至任何公有云 AI 服务。把代码贴到公开的 AI 对话工具里提问，是不被允许的 [1]。\n- **数据分级依据**：源代码在数据分级中列为“机密”，流转要求为“需审批，禁止使用个人网盘/邮箱”；并明确“**禁止**将机密及以上数据上传至任何公有云 AI 服务（含对话式 AI 工具）” [2]。\n- **替代做法**：公司内部提供合规的代码助手，请使用内部工具 [1]。\n\n依据：`it/security-policy.md#常见问题` [1]、`it/security-policy.md#数据分级与流转` [2]。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/security-policy.md#常见问题",
+      "it/security-policy.md#数据分级与流转"
+    ],
+    "tokens": 3292,
+    "latency_ms": 4530.4,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tdd37cd-dd37-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "年假没休完可以折现吗？",
+    "text": "**结论：不能折现。** 按现行《员工休假管理办法》，未休完的年假超过结转限额的部分自动作废，公司不另行折现 [1]。\n\n**依据要点**\n- 当年未休完的年假最多可结转 **5 天**到下一年度；超出 5 天的部分在**次年 3 月 31 日自动作废，公司不另行折现** [1]。\n- 结转的年假必须在**次年 6 月 30 日前休完**，逾期作废 [1]。\n- 因业务原因（如重大项目冲刺、连续出差）确实无法休假的，可由部门负责人发起书面说明，经 **HR 总监审批**后最多再延期 **3 个月** [1]。\n- 年假天数按入职年限确定，并按当年在职月份折算 [2]：\n\n| 入职年限 | 年假天数 |\n|---|---|\n| 满 1 年不满 3 年 | 5 天 |\n| 满 3 年不满 5 年 | 10 天 |\n| 满 5 年不满 10 年 | 15 天 |\n| 满 10 年以上 | 20 天 |\n\n**补充说明**\n- 知识库中的休假制度全文未出现任何“未休年假折现、折算工资”的条款；仅明确“不另行折现”这一处理方式 [1]。\n- 涉及离职结算等特殊情形时未休年假如何处理，检索到的制度片段中**没有相关依据**，建议直接向 HR 确认。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 4584,
+    "latency_ms": 6605.1,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 0.5
+  },
+  {
+    "case_id": "hard-tcb651a-cb65-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "可以用自己的电脑办公吗？",
+    "text": "**结论：原则上要用公司配发的设备。确实需要用自己的电脑时，必须安装公司 MDM 客户端并通过合规检查。** [1]\n\n依据：\n- 制度 FAQ 明确：“原则上需使用公司配发设备。确需使用个人设备时，必须安装公司 MDM 客户端并通过合规检查。” [1]\n- 适用范围覆盖全体员工、实习生及外包人员；所有接入公司内网或使用公司系统的设备都受该规定约束 [4]。\n\n补充提示：个人软件不得安装在公司电脑上，需要走软件安装申请流程评估 [3]；机密级及以上数据（如源代码、财务数据、用户数据）禁止上传至任何公有云 AI 服务，也禁止使用个人网盘或邮箱 [2]。\n\n以上仅为文档原文陈述，具体审批要求请按制度流程确认。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/security-policy.md#常见问题",
+      "it/security-policy.md#数据分级与流转",
+      "it/it-faq.md#常见问题",
+      "it/security-policy.md#适用范围"
+    ],
+    "tokens": 2794,
+    "latency_ms": 4196.8,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t378065-3780-n1",
+    "kind": "permission",
+    "expect_answer": false,
+    "question": "收受供应商 300 元购物卡该怎么处理？",
+    "text": "**结论：知识库中没有找到相关依据，无法给出处理方式。**\n\n**检索情况说明**\n- 本次检索命中分数均很低（最高相关度约 0.29），且返回片段与问题主题无关，分别是住宿标准 `[1]`、病假规定 `[2]`、年假结转 `[3]`、账号权限申请 `[4]`、安全事件上报 `[5]`，均不涉及收受供应商购物卡、礼品礼金或廉洁纪律。\n- 系统提示存在一份与合规行为相关的文档（`legal/conduct-policy.md`），但你当前的访问权限不足，因此我无法读取其内容，也不能据此推测具体条款 `[1][2]`。\n\n**建议**\n- 如需明确处理口径（是否需上交、登记、报备及相应责任），请向合规部或员工关系负责人申请该合规行为文档的阅读权限，或直接咨询合规部。\n- 涉及是否构成违纪、金额界限、处理时限等问题，我不会凭常识作判断，一律以公司正式文件原文为准。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 4925,
+    "latency_ms": 7387.6,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tc04dc3-c04d-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "服务台周末上班吗？",
+    "text": "**结论：知识库只标注了服务台电话的工作日时间，未说明周末是否上班。**\n\n**依据：**\n- 服务台电话：分机 8888，服务时间为**工作日 9:00-18:00** `[1]`\n- 工单系统（推荐，可跟踪进度）：内网 `http://intranet.it/ticket`，文档未标注该系统的可用时间 `[1]`\n- 若遇到生产环境紧急故障，可拨打安全热线，**7×24 小时**可用 `[1]`\n\n关于周末的服务台安排，知识库中没有相关依据；建议直接拨打分机 8888 确认。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2990,
+    "latency_ms": 4140.8,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 0.5
+  },
+  {
+    "case_id": "hard-pr-63c1-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "可以自己 approve 自己的 PR 吗？",
+    "text": "**结论：不可以。作者不得自己 Approve 自己的 PR。**\n\n依据来自《代码评审规范》的合并规则：\n\n- **作者不得自己 Approve 自己的 PR** [1]\n- 至少 **1 位**评审人 Approve 才可合并；核心模块（支付、权限、数据管道）需要 **2 位** [1]\n- CI 必须全部通过：单元测试、lint、构建 [1]\n- 评审意见全部解决（Resolved），或明确回复“暂不处理 + 原因”后，才可合并 [1]\n\n来源：`engineering/code-review.md#合并规则`",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "engineering/code-review.md#合并规则"
+    ],
+    "tokens": 3065,
+    "latency_ms": 4214.4,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t1ccfa6-1ccf-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "P6 出差飞行 6 小时可以坐公务舱吗？",
+    "text": "**结论：文档没有支持\"P6 飞行 6 小时可以坐公务舱\"的依据。**\n\n**依据（交通标准原文）** [1]：\n- 飞机：飞行时间 **4 小时以内原则上乘坐经济舱**；**P7 及以上可乘坐公务舱** [1]\n- 高铁/动车：P1-P6 可乘坐二等座；P7 及以上可乘坐一等座 [1]\n\n**说明：**\n- 在可乘坐公务舱的职级中，制度只写明了\"P7 及以上\"，P6 不在其中 [1]。\n- 制度对\"飞行时间超过 4 小时\"时 P1-P6 的舱位标准没有作规定，知识库中没有找到相关条款；如果需要确认，建议向财务部门确认。\n\n补充参考（住宿标准，与舱位无关）：P4-P6 一线城市 700 元/晚、二线 550、其他 450，超标部分个人承担 [2]。\n\n*以上仅为制度原文摘录，不含个人判断。*",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3442,
+    "latency_ms": 5801.6,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 0.5
+  },
+  {
+    "case_id": "hard-tdfd02a-dfd0-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "职场骚扰举报后多久出结论？",
+    "text": "**结论：** 所有举报都将在 5 个工作日内启动调查，并在 30 个工作日内给出结论。[1]\n\n**依据：**\n\n- 公司对职场骚扰采取零容忍政策，涵盖言语、肢体和网络形式。[1]\n- 举报渠道包括：HR 部门（hr@example.com）、合规举报邮箱（compliance@example.com，可匿名）、员工关爱热线。[1]\n- 举报人信息严格保密；对举报人实施报复的，按严重违纪处理。[1]\n- 对同事实施职场骚扰或暴力行为属于严重违纪，可解除劳动合同、无经济补偿。[2]\n\n以上时限为《员工行为规范与违纪处理办法》原文规定，具体个案进展建议通过上述官方渠道询问。[1]",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "legal/conduct-policy.md#职场骚扰零容忍",
+      "legal/conduct-policy.md#严重违纪（可解除劳动合同，无经济补偿）"
+    ],
+    "tokens": 2793,
+    "latency_ms": 4233.7,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tea56f0-ea56-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "丧假需要提供什么证明材料？",
+    "text": "**结论：知识库中没有找到关于丧假证明材料的依据。**\n\n我检索了《员工休假管理办法》等相关文档，均未出现\"丧假\"的规定。\n\n检索到的相关片段只覆盖其他假期类型：\n- 病假：需提供二级及以上医院的诊断证明或病假条；连续病假超过 3 个工作日的，需提交医院开具的正式病假证明，无法提供的按事假处理 [1]。\n- 婚假 10 天需提供结婚证（领证后 1 年内有效）；产假 158 天按当地政策执行；陪产假 15 天需提供配偶生育证明；育儿假每年 10 天 [2]。\n\n以上都不涉及丧假。如确需确认丧假材料要求，建议直接咨询 HR，或查看《员工休假管理办法》原文中是否有未纳入知识库的章节。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6833,
+    "latency_ms": 5877.5,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t24e8d5-24e8-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "年终奖要交多少个税？",
+    "text": "**结论：知识库中没有找到关于年终奖个人所得税的规定。**\n\n- 检索到的唯一相关资料，是年终奖的计算与发放规则；其中没有涉及个税起征点、税率、计税方式等内容 `[1]`。\n- 其余检索结果分别涉及 IT 权限、年假、报销范围和信息安全，与个税无关。\n\n**知识库中查到、可供参考的相关内容（仅限年终奖的计算与发放）** `[1]`：\n- 计算公式：年终奖 = 月基本工资 × 个人系数 × 部门系数 × 公司系数\n- 个人系数：S=2.0，A=1.5，B=1.0，C=0.5，D=0\n- 部门系数：0.8~1.2，由事业部根据目标达成率确定；公司系数：0.5~1.5，由董事会根据年度经营情况确定\n- 发放条件：发放日仍在职，且当年在职满 3 个月；年中离职者不享受年终奖，但因公司原因解除劳动合同的情形除外\n\n个税的具体税率、计算方式，建议直接咨询财务部门或人力资源部门；知识库内目前没有这方面的制度依据。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3404,
+    "latency_ms": 4485.9,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tcb7e80-cb7e-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "护理假期间工资怎么算？",
+    "text": "**结论：知识库中没有找到\"护理假\"工资计算的相关依据。**\n\n依据说明：\n- 检索到的休假政策只列出了假期天数表，其中涉及生育相关的假期有：产假 158 天（按当地政策执行）、陪产假 15 天（需提供配偶生育证明）、育儿假每年 10 天（子女满 3 周岁前）[1]，**但表中没有\"护理假\"这一项，也没有写明陪产假或育儿假期间的工资计发标准**。\n- 文档中唯一明确工资计发规则的是病假：病假工资按当地最低工资标准的 80% 计发，具体以当地社保政策为准 [2]，与护理假无关。\n- 其余检索结果（差旅报销、年假折算、信息安全等）与问题无关。\n\n建议：确认公司制度里\"护理假\"是否以\"陪产假/育儿假\"的口径表述，或直接向 HR 咨询该假期的工资待遇；现有文档未作规定，我不做推测。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6316,
+    "latency_ms": 6436.1,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tc0a365-c0a3-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "产假期间的工资怎么发？",
+    "text": "**结论：知识库中没有找到产假工资发放标准的具体规定。**\n\n目前只检索到产假的天数规定，没有涉及产假期间的工资或生育津贴如何计发的条款。\n\n**找到的相关依据：**\n- 产假为 **158 天**，按当地政策执行，含法定产假与地方奖励假；陪产假 15 天，需提供配偶生育证明；育儿假每年 10 天，子女满 3 周岁前可享 `[1]`（hr/leave-policy.md#婚假、产假与陪产假）\n\n**需要说明的边界：**\n- 制度中另有**病假**工资规定（按当地最低工资标准的 80% 计发，以当地社保政策为准）`[2]`，但该条针对病假，不能套用于产假。\n- 其余检索结果（餐补 `[3]`、试用期薪资、差旅借款冲销）与产假工资无关。\n\n建议向 HR 薪酬或员工关系同事确认产假期间工资的具体计发方式；若确有制度文件，可补充到知识库后再查。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 5723,
+    "latency_ms": 6425.0,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t46c99d-46c9-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "电子发票原件丢了可以重新下载吗？",
+    "text": "**结论：知识库中没有找到“电子发票丢失后能否重新下载”的相关依据。**\n\n知识库中只有与电子发票形式要求有关的原文，供参考：\n\n- 电子发票需下载 PDF 原件，**截图不予受理** `[1]`\n- 报销单需附：出差申请单、**发票原件**、行程单（机票/高铁票）`[2]`\n\n至于“原件丢失后如何补救、能否重新下载”，检索结果中没有相应条款，我无法给出结论。建议直接向财务（或按流程中的财务复核环节）确认。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3249,
+    "latency_ms": 4944.0,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t178b41-178b-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "境外出差住宿的报销上限是多少？",
+    "text": "## 结论\n\n**知识库中没有找到“境外”出差住宿报销上限的具体规定。** 检索到的《差旅与费用报销制度》只列出了一张按职级和城市等级划分的住宿标准表，没有单独列出境外城市或外币标准。\n\n## 检索到的相关内容（供参考，不等同于境外标准）\n\n**住宿标准表**（按职级和城市等级，单位为元/晚）：\n\n| 职级 | 一线城市 | 二线城市 | 其他城市 |\n|---|---|---|---|\n| P1-P3 | 500 | 400 | 300 |\n| P4-P6 | 700 | 550 | 450 |\n| P7 及以上 | 1000 | 800 | 600 |\n\n表中同时写明：超标部分由个人承担；因会议或展会期间房价上涨导致超标的，可凭主办方证明申请一次性特批 [1]。\n\n**境外出差的审批要求**：出差前必须在 OA 提交「出差申请」，注明目的地、起止日期、事由与预算；未经审批产生的差旅费用公司不予报销；其中境外出差需事业部总经理审批，预计费用超过 2 万元需 CFO 会签 [2]。\n\n## 提示\n\n- 上述住宿标准表的表头只按“一线、二线、其他城市”区分，**没有说明是否适用于境外城市，也没有给出外币或折算规则**，因此无法据此推断境外住宿上限。\n- 如需确认，建议查看制度原文全文中是否有境外出差的附加条款，或向财务部门确认。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 7168,
+    "latency_ms": 7805.3,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-tfa6595-fa65-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "差旅借款需要谁审批？",
+    "text": "**结论：知识库中未检索到\"差旅借款（预支/借款单）\"的专门规定。** 现有文档只有\"出差申请\"和\"报销单\"的审批规则，与借款流程不是同一事项，不能直接套用。\n\n**检索到的相关原文（仅供参考，非借款规定）**\n\n1. 出差申请审批 [3]（`finance/expense-policy.md#差旅审批`）\n   - 出差前必须在 OA 系统提交「出差申请」，注明目的地、起止日期、事由与预算\n   - 国内出差：部门负责人审批\n   - 境外出差：需事业部总经理审批\n   - 预计费用超过 2 万元：需 CFO 会签\n   - 未经审批产生的差旅费用，公司不予报销\n\n2. 报销单审批链 [1]（`finance/expense-policy.md#报销时效与流程`）\n   - 审批链：直属主管 → 部门负责人 → 财务复核 → 打款\n   - 出差结束后 15 个工作日内提交；超 30 个工作日原则上不予受理，特殊情况需财务总监审批\n\n**建议**：若需确认借款审批权限，请向财务部核实，或查阅是否有单独的《借款/预支管理办法》文档（当前检索结果中未出现）。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "finance/expense-policy.md#报销时效与流程",
+      "finance/expense-policy.md#差旅审批"
+    ],
+    "tokens": 3245,
+    "latency_ms": 5811.7,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 0.75
+  },
+  {
+    "case_id": "hard-t7eee2e-7eee-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "入职体检的费用公司报销吗？",
+    "text": "**结论：知识库中没有找到关于“入职体检费用是否报销”的依据。**\n\n依据说明：\n- 检索到的《新员工入职指引》只涉及入职通知、需携带材料、账号与设备开通、入职材料补交和试用期请假等内容，未提及体检或体检费用 [1][2][3]。\n- 《差旅与费用报销制度》中的报销条款针对出差申请审批、发票要求等，也未涉及入职体检费用 [4]。\n\n建议直接向 HR 确认。如果你需要，我还可以帮你查一下入职需携带的材料清单或费用报销的通用规则。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 5678,
+    "latency_ms": 4790.7,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-te6716a-e671-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "出差期间生病住院的费用能报销吗？",
+    "text": "## 结论\n\n**知识库中没有找到关于“出差期间生病住院费用能否报销”的明确依据。** 现有《差旅与费用报销制度》未包含医疗、住院相关条款，我不能据常识替公司制度作判断。\n\n## 检索到的相关内容（均不直接回答该问题）\n\n- 制度中的「不予报销的情形」列举了与出差无关的个人消费、因个人原因产生的改签费或退票费、未经审批的商务宴请、罚款或赔偿金、缺少合规发票的费用等，**但其中没有提到医疗或住院费用** `[finance/expense-policy.md#不予报销的情形]`\n- 差旅审批要求：出差前须在 OA 提交出差申请；未经审批产生的差旅费用公司不予报销；境外出差需事业部总经理审批 `[finance/expense-policy.md#差旅审批]`\n- 报销需在出差结束后 15 个工作日内提交，附出差申请单、发票原件、行程单 `[finance/expense-policy.md#报销时效与流程]`\n- 制度常见问题只回答了周末住宿费、机票改签费，没有医疗费用相关问答 `[finance/expense-policy.md#常见问题]`\n\n## 建议\n\n该问题涉及费用范围认定，建议向财务部门书面确认，并留存医院票据。若需要，我可以帮你查一下知识库里有没有其他与医疗、保险或员工福利相关的文档。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 4140,
+    "latency_ms": 7152.4,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-vpn-5308-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "VPN 客户端在哪里下载？",
+    "text": "**结论：知识库中没有找到 VPN 客户端下载地址的相关依据。**\n\n以下内容均来自检索结果，仅供参考：\n\n- 知识库只提到打印机驱动的内网下载地址为 `http://intranet.it/printers`，其中没有关于 VPN 客户端下载地址的说明。[1]\n- VPN 相关的文档只涉及“连不上怎么办”的排查步骤。具体包括：确认 MFA 动态口令在 30 秒内有效、本机时间偏差不超过 60 秒、切换网络、完全退出并重启 VPN 客户端、清除 DNS 缓存；以上方法都无效时，提交 IT 工单并附上客户端日志。这些内容没有提到客户端的获取途径。[2]\n- 公司设备安装软件需要走申请流程，不同类型软件的审批人和时长不同，例如办公类软件由直属主管审批，所需时长为 1 个工作日；涉及网络代理或抓包类工具由 IT 安全负责人审批，所需时长为 3 个工作日。[3]\n- 如果有需要，你可以联系 IT 服务台：工单系统为 `http://intranet.it/ticket`（推荐），服务台电话分机为 8888（工作日 9:00-18:00）。[4]\n\n建议直接向 IT 服务台确认客户端的下载方式。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 6948,
+    "latency_ms": 7153.3,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t13d456-13d4-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "工单提交后一直没人处理该怎么办？",
+    "text": "## 结论\n\n知识库中**没有找到**关于\"工单处理时限（SLA）、超时未处理如何催办/升级\"的依据。以下只是文档中确实记载的相关内容，请勿理解为超时处理流程。\n\n## 依据\n\n**1. 文档中记载的联系方式与服务时间**（可用于进一步联系 IT）：\n- 工单系统：内网 `http://intranet.it/ticket`，文档注明\"推荐，可跟踪进度\" `[6]`\n- 服务台电话：分机 8888，工作日 9:00-18:00 `[6]`\n- 紧急故障（生产环境）：安全热线，7×24 小时 `[6]`\n\n**2. 文档中关于\"紧急程度\"的说明**（若工单迟迟未处理，可能与提交时选择的紧急程度有关）：\n- 选填项包含\"紧急程度：阻塞工作 / 影响效率 / 可以等\" `[2]`\n- 原文明确：\"只有'完全无法工作且无替代方案'才选'阻塞'。选错紧急程度会降低你在工单队列中的可信度。\" `[2]`\n\n**3. 提交规范的完整要求**（若工单信息不全，IT 可能需要回问，影响处理效率）：\n需包含现象（具体报错截图或文字）、影响范围、发生时间（精确到分钟）、已尝试的操作、紧急程度 `[2]`\n\n## 建议（非文档内容，仅供参考）\n\n如需了解排队规则或催办渠道，建议直接拨服务台分机 8888 询问；文档未约定这部分制度，我不做推测。\n\n> 检索说明：本次检索最高相关度仅 0.46，且各片段均未正面回答\"工单长期未处理\"，请以 8888 服务台的答复为准。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3860,
+    "latency_ms": 7104.1,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t13edc8-13ed-n1",
+    "kind": "half_answer",
+    "expect_answer": false,
+    "question": "生产环境只读权限申请要多久审批完？",
+    "text": "知识库中**没有找到关于“生产环境只读权限申请多久审批完成”的时限规定**，现有文档只规定了审批人和有效期。\n\n依据检索到的内容：\n\n- 权限申请需在 OA 系统提交，注明用途与使用期限 `[1]`\n- **生产环境只读**：审批人为**直属主管 + 运维负责人**，有效期**最长 6 个月** `[1]`\n- 文档中出现的审批时长数据仅针对其他事项，例如软件安装申请（办公类、开发工具 1 个工作日，网络代理/抓包类 3 个工作日）`[5]`，以及离职、转岗等情形的权限**回收**须在 1 个工作日内完成 `[4]`，均不适用于“只读权限审批时长”这一问题。\n\n建议：具体审批时效可向 IT 服务台确认（工单系统内网 `http://intranet.it/ticket`，服务台分机 8888，工作日 9:00-18:00）`[3]`。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3276,
+    "latency_ms": 4434.5,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t531e6b-531e-n1",
+    "kind": "sibling_slot",
+    "expect_answer": false,
+    "question": "实习生有试用期吗？多久？",
+    "text": "**结论：知识库中没有找到关于“实习生试用期”的直接规定。**\n\n已检索到的相关内容如下：\n\n- 知识库中的试用期规则写在《新员工入职指引》里：“试用期时长为 **3 个月**（P7 及以上为 6 个月）”，同时还有试用期薪资、转正评估等条款，但**并未说明该条款是否适用于实习生** [3]。\n- 《员工休假管理办法》在适用范围中明确区分了两类人员：本办法“适用于公司全体正式员工与试用期员工。实习生、外包人员的休假按签订的协议执行”，也就是说实习生的相关事项按所签协议处理，但**未涉及试用期问题** [1]。\n\n因此，关于实习生是否有试用期、期限多久，知识库中没有依据。建议查阅本人实习协议，或向 HR 确认。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2943,
+    "latency_ms": 5172.7,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t1c54f2-1c54-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "P1 出差可以坐高铁一等座吗？",
+    "text": "**结论：不可以。** 按现行制度，P1 出差不能乘坐高铁一等座。\n\n**依据**\n- 高铁和动车：P1–P6 可乘坐二等座；P7 及以上可乘坐一等座 [2]（finance/expense-policy.md#交通标准）。\n\n**补充信息**\n- 同一条款还规定飞机出行标准：飞行时间 4 小时以内原则上乘坐经济舱，P7 及以上可乘坐公务舱 [2]。\n- 住宿标准另有规定：P1–P3 在一线城市为 500 元/晚、二线城市为 400 元/晚、其他城市为 300 元/晚，超标部分由个人承担 [1]。\n\n以上仅为文档原文陈述；如需特殊情形下的例外，制度中未在该条款说明，建议向财务或直属主管确认。",
+    "refused": false,
+    "refused_wide": true,
+    "looks_like_refusal": false,
+    "citations": [
+      "finance/expense-policy.md#住宿标准",
+      "finance/expense-policy.md#交通标准"
+    ],
+    "tokens": 3115,
+    "latency_ms": 4559.6,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t4c0c30-4c0c-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "MFA 可以用短信验证码吗？",
+    "text": "**结论**：可以，但短信验证码只作为**备用**方式，不是首选。[1]\n\n**依据**（`it/security-policy.md` 多因素认证（MFA））：\n- MFA 方式优先使用**企业认证 App 的动态口令**，其次为**硬件令牌**。[1]\n- **短信验证码仅作为备用方式**，不作为首选。[1]\n- 必须开启 MFA 的系统包括：VPN 远程接入、生产环境跳板机、代码仓库（含 CI/CD 后台）、财务与 HR 系统。[1]\n\n**补充**：如果遇到 MFA 校验失败，可先确认动态口令的 30 秒有效期、检查本机时间偏差是否超过 60 秒等。[2] 若 MFA 设备丢失，需本人携带工牌到 IT 服务台重置，不接受线上申请。[4]",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/security-policy.md#多因素认证（MFA）",
+      "it/it-faq.md#VPN 连不上怎么办",
+      "it/it-faq.md#密码忘记或账号被锁定"
+    ],
+    "tokens": 3101,
+    "latency_ms": 4736.5,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t6aa747-6aa7-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "试用期员工有年假吗？",
+    "text": "**结论：试用期员工享有年假，但额度折算、且须转正后才能申请使用。**\n\n依据：\n- 试用期员工同样享有年假，额度按当年在职月份折算，但需转正后方可申请使用 `[1]`。\n- 《员工休假管理办法》适用于公司全体正式员工与试用期员工；实习生、外包人员按签订的协议执行，不适用本办法中的年假累计条款 `[2]`。\n\n补充（同一条目下的相关规定）：年假可与法定节假日连休，但若连休后总天数超过 10 个工作日，需 HR 总监会签 `[1]`。\n\n（另：试用期请假累计事假不宜超过 3 天，以免影响转正评估 `[4]`。）",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "hr/leave-policy.md#常见问题",
+      "hr/leave-policy.md#适用范围",
+      "hr/onboarding.md#常见问题"
+    ],
+    "tokens": 2747,
+    "latency_ms": 4600.4,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t5dab35-5dab-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "打印机驱动在哪里下载？",
+    "text": "**结论：打印机驱动下载地址是内网 `http://intranet.it/printers`** [1]\n\n**依据：** IT 常见问题「打印机无法连接」条目中列出的排查要点 [1]：\n- 驱动下载地址：内网 `http://intranet.it/printers` [1]\n- 需确认连接的无线网络为 `OFFICE-PRINT`，而不是访客网络 [1]\n- 若提示“无法找到打印机”，先确认机器是否处于休眠状态，并按一下面板唤醒 [1]\n\n其余检索结果（代码评审规范、发票要求、权限回收）与打印机驱动无关，未采用。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/it-faq.md#打印机无法连接"
+    ],
+    "tokens": 2831,
+    "latency_ms": 3727.0,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-ta97769-a977-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "报销单需要经过哪些人审批？",
+    "text": "**结论：知识库里的《差旅与费用报销制度》规定，报销单的审批链为：直属主管 → 部门负责人 → 财务复核 → 打款。** [1]\n\n**依据与细节**\n- 审批链原文：「直属主管 → 部门负责人 → 财务复核 → 打款」[1]\n- 超过 30 个工作日未提交的报销单，原则上不予受理，特殊情况需**财务总监**审批 [1]\n- 打款周期为审批通过后的 7 个工作日内 [1]\n- 另需注意：出差前的「出差申请」是另一套审批，国内出差由部门负责人审批，境外出差需事业部总经理审批，预计费用超过 2 万元需 CFO 会签；**未经审批产生的差旅费用不予报销** [2]\n\n**说明**\n- 以上审批链出自「差旅与费用报销制度」，适用于差旅费用报销；知识库中没有检索到其他类型报销单的审批规定，因此无法回答这类问题。\n\n引用：[1] finance/expense-policy.md#报销时效与流程；[2] finance/expense-policy.md#差旅审批",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3384,
+    "latency_ms": 5924.5,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs",
+      "list_documents"
+    ],
+    "composite": 0.5
+  },
+  {
+    "case_id": "hard-t1f9b94-1f9b-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "忘记密码了怎么重置？",
+    "text": "**结论：密码遗忘时，在 SSO 登录页点击「忘记密码」，通过企业邮箱重置。** [1]\n\n**相关依据：**\n\n1. **密码遗忘**：在 SSO 登录页点击「忘记密码」，通过企业邮箱重置。[1]\n2. **账号锁定**：连续输错 5 次密码会锁定 30 分钟；如果急用，可通过 IT 服务台人工解锁。[1]\n3. **MFA 设备丢失**：需本人携带工牌到 IT 服务台重置，**不接受线上申请**，以防冒用。[1]\n\n**重置后的密码要求**（供参考）：\n- 长度不少于 12 位 [3]；必须包含大写字母、小写字母、数字、特殊符号中的至少三类 [3]；不得包含姓名拼音、工号、连续数字（如 `123456`）或常见弱口令 [3]\n- 新密码不得与前 5 次使用过的密码相同；密码每 90 天强制更换一次，系统提前 7 天提醒 [2]\n\n**引用来源：**\n[1] it/it-faq.md#密码忘记或账号被锁定\n[2] it/security-policy.md#密码有效期与轮换\n[3] it/security-policy.md#密码复杂度要求",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/it-faq.md#密码忘记或账号被锁定",
+      "it/security-policy.md#密码有效期与轮换",
+      "it/security-policy.md#密码复杂度要求"
+    ],
+    "tokens": 2889,
+    "latency_ms": 4001.6,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-t9da4a2-9da4-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "转正评估什么时候发起？",
+    "text": "**结论：转正评估在试用期结束前 10 个工作日发起，依据是《新员工入职指引》[1]。**\n\n相关依据 [1]：\n- 试用期时长为 **3 个月**，P7 及以上员工为 **6 个月**\n- 转正评估在试用期结束前 **10 个工作日**发起\n- 转正材料包括：试用期工作总结、导师评价、主管评价\n- 转正评估未通过时，可延长试用期一次，延长期限不超过原试用期的 50%，也可以依法解除劳动合同\n\n另有提示 [2]：试用期可以请假，但累计事假不宜超过 3 天，以免影响转正评估。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "hr/onboarding.md#试用期与转正",
+      "hr/onboarding.md#常见问题"
+    ],
+    "tokens": 2985,
+    "latency_ms": 3414.5,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  },
+  {
+    "case_id": "hard-mfa-cefe-p1",
+    "kind": "positive_control",
+    "expect_answer": true,
+    "question": "MFA 设备丢了可以线上申请重置吗？",
+    "text": "**结论：不能线上申请。**\n\n依据：\n- MFA 设备丢失后，**须本人携带工牌到 IT 服务台重置，不接受线上申请**（防冒用）[1]。\n- 相关要求：如果涉及设备遗失或被盗，须**在 30 分钟内**上报安全团队（安全热线或 security@example.com），主动上报可免责 [5]。\n\n补充（非 MFA 重置，供区分）：密码遗忘可在线自助重置，在 SSO 登录页点「忘记密码」，通过企业邮箱重置；账号锁定连续输错 5 次密码后锁 30 分钟，急用可找 IT 服务台人工解锁 [1]。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/it-faq.md#密码忘记或账号被锁定",
+      "it/security-policy.md#安全事件上报"
+    ],
+    "tokens": 3390,
+    "latency_ms": 4900.2,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0
+  }
+]

@@ -1,0 +1,682 @@
+[
+  {
+    "case_id": "single-02",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "年假没休完可以结转到明年吗？最多能结转多少天？",
+    "text": "**结论：可以结转，但最多结转 5 天。**\n\n- 当年未休完的年假**最多可结转 5 天**到下一年度；超出 5 天的部分会在**次年 3 月 31 日自动作废**，公司不另行折现 [1]。\n- 结转的年假必须在**次年 6 月 30 日前休完**，逾期作废 [1]。\n- 因业务原因（如重大项目冲刺、连续出差）无法休假的员工，可由部门负责人发起书面说明，经 HR 总监审批后，最多再延期 3 个月 [1]。\n\n依据：`hr/leave-policy.md > 员工休假管理办法 > 年假可以结转到下一年吗` [1]。\n\n补充说明：该政策的适用范围是全体正式员工与试用期员工；实习生、外包人员的休假按签订协议执行，不适用本办法中的年假累计条款 [5]。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "hr/leave-policy.md#年假可以结转到下一年吗",
+      "hr/leave-policy.md#适用范围"
+    ],
+    "tokens": 3534,
+    "latency_ms": 7883.7,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "single-02",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 3534,
+      "latency_ms": 7883.7
+    }
+  },
+  {
+    "case_id": "single-04",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "公司密码要求多少位？多久必须更换一次？",
+    "text": "**结论**\n- 密码长度：不少于 **12 位** `[2]`\n- 更换周期：每 **90 天** 强制更换一次，系统会提前 7 天开始提醒 `[1]`\n\n**依据**\n1. 《信息安全与账号权限管理规定 > 账号与密码 > 密码有效期与轮换》：公司账号密码每 90 天强制更换一次，系统会提前 7 天开始提醒；新密码不得与前 5 次使用过的密码相同 `[1]`\n2. 《信息安全与账号权限管理规定 > 账号与密码 > 密码复杂度要求》`[2]`：\n   - 长度不少于 12 位\n   - 必须包含大写字母、小写字母、数字、特殊符号中的至少三类\n   - 不得包含姓名拼音、工号、连续数字（如 `123456`）或常见弱口令\n\n补充：VPN 远程接入、生产环境跳板机、代码仓库（含 CI/CD 后台）、财务与 HR 系统必须开启 MFA `[4]`。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/security-policy.md#密码有效期与轮换",
+      "it/security-policy.md#密码复杂度要求",
+      "it/security-policy.md#多因素认证（MFA）"
+    ],
+    "tokens": 3123,
+    "latency_ms": 7886.1,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "single-04",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 3123,
+      "latency_ms": 7886.1
+    }
+  },
+  {
+    "case_id": "single-03",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "出差回来后多久必须提交报销单？",
+    "text": "**结论：出差结束后 15 个工作日内提交报销单。** 超过 30 个工作日未提交的，原则上不予受理；特殊情况需要财务总监审批 [1]。\n\n**依据（《差旅与费用报销制度》“报销时效与流程”）[1]**\n- 出差结束后 **15 个工作日内**在 OA 系统提交报销单。\n- 报销单需要附：出差申请单、发票原件、行程单（机票或高铁票）。\n- 审批链：直属主管 → 部门负责人 → 财务复核 → 打款；打款周期为审批通过后的 7 个工作日内。\n\n**相关提醒**\n- 如果出差前借了差旅款，也必须在出差结束后 15 个工作日内冲销；未冲销的借款会从当月工资中扣除 [3]。\n- 未经审批产生的差旅费用，公司不予报销 [2]。\n\n引用：`finance/expense-policy.md#报销时效与流程` [1]、`finance/expense-policy.md#差旅审批` [2]、`finance/expense-policy.md#借款与冲销` [3]",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "finance/expense-policy.md#报销时效与流程",
+      "finance/expense-policy.md#差旅审批",
+      "finance/expense-policy.md#借款与冲销"
+    ],
+    "tokens": 3122,
+    "latency_ms": 7974.9,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "single-03",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 3122,
+      "latency_ms": 7974.9
+    }
+  },
+  {
+    "case_id": "single-01",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "新员工入职第一年年假有几天？怎么折算的？",
+    "text": "## 结论\n\n知识库中有年假折算的明确规则，但**“第一年全年额度是多少天”这一档位，文档中并未列出**（表格中最低档是“满 1 年不满 3 年 = 5 天”，没有“不满 1 年”这一行）。因此无法直接回答“第一年一共几天”，只能给出折算方法和已知规则。\n\n## 折算规则（原文）\n\n- 当年新入职员工的年假按剩余自然月折算，公式为：\n  `当年度年假 = 全年额度 × 当年剩余自然月数 ÷ 12` [1]\n- 折算结果不足 0.5 天的部分不予计算，满 0.5 天按 0.5 天计算 [1]\n- 年假基础天数按**入职年限**确定：满 1 年不满 3 年 5 天；满 3 年不满 5 年 10 天；满 5 年不满 10 年 15 天；满 10 年以上 20 天 [1]\n\n## 试用期相关\n\n- 试用期员工同样享有年假，额度按当年在职月份折算，但**需转正后方可申请使用** [2]\n- 本办法适用于全体正式员工与试用期员工；实习生、外包人员按签订的协议执行 [3]\n\n## 需要确认的点\n\n公式里的“全年额度”对入职不满 1 年的员工取哪个数值，文档未明确说明。建议在申请前向 HR 核实这一档位的具体天数来源。另外：未休完年假最多结转 5 天，超出部分次年 3 月 31 日作废，不折现 [4]。\n\n**依据**：[1] hr/leave-policy.md#年假额度与计算方式；[2] hr/leave-policy.md#常见问题；[3] hr/leave-policy.md#适用范围；[4] hr/leave-policy.md#年假可以结转到下一年吗",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "hr/leave-policy.md#年假额度与计算方式",
+      "hr/leave-policy.md#常见问题",
+      "hr/leave-policy.md#年假可以结转到下一年吗",
+      "hr/leave-policy.md#适用范围"
+    ],
+    "tokens": 7471,
+    "latency_ms": 12041.1,
+    "steps": 3,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "single-01",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 7471,
+      "latency_ms": 12041.1
+    }
+  },
+  {
+    "case_id": "colloquial-01",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "我攒的年假能留到明年用吗？",
+    "text": "**结论：可以，但有上限。**\n\n- 当年没休完的年假**最多可结转 5 天**到下一年度 `[1]`。\n- 超出 5 天的部分，会在**次年 3 月 31 日自动作废**，公司不另行折现 `[1]`。\n- 结转的年假必须在**次年 6 月 30 日前休完**，逾期作废 `[1]`。\n- 如果因业务原因（如重大项目冲刺、连续出差）导致无法休假，可由部门负责人发起书面说明，并经 HR 总监审批后**最多再延期 3 个月** `[1]`。\n\n依据：`hr/leave-policy.md` 的「年假可以结转到下一年吗」一节 `[1]`。\n\n补充相关的年假规则：年假天数按入职年限确定，并按当年在职月份折算 `[3]`。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "hr/leave-policy.md#年假可以结转到下一年吗",
+      "hr/leave-policy.md#年假额度与计算方式"
+    ],
+    "tokens": 3379,
+    "latency_ms": 4355.7,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "colloquial-01",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 3379,
+      "latency_ms": 4355.7
+    }
+  },
+  {
+    "case_id": "single-05",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "出差住宿一线城市 P4 职级的标准是多少？",
+    "text": "**结论：P4 职级出差一线城市，住宿标准为 700 元/晚。**\n\n依据：\n- 住宿标准表中，**P4-P6 职级一线城市为 700 元/晚**（二线 550 元/晚，其他城市 450 元/晚）[1]\n- 超标部分由个人承担；因会议或展会期间房价上涨导致超标的，可凭主办方证明申请一次性特批 [1]\n\n如果你还需要了解交通或餐补标准，可以继续问我。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "finance/expense-policy.md#住宿标准"
+    ],
+    "tokens": 3289,
+    "latency_ms": 4466.3,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "single-05",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 3289,
+      "latency_ms": 4466.3
+    }
+  },
+  {
+    "case_id": "single-06",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "试用期是多久？转正评估什么时候发起？",
+    "text": "结论如下：\n\n**1. 试用期时长**\n- 试用期为 **3 个月**；P7 及以上职级为 **6 个月** `[1]`\n- 试用期薪资为转正后的 90%，且不低于当地最低工资标准 `[1]`\n\n**2. 转正评估发起时间**\n- 在**试用期结束前 10 个工作日**发起 `[1]`\n- 转正材料包括：试用期工作总结、导师评价和主管评价 `[1]`\n\n**3. 补充说明**\n- 如果转正评估未通过，可以延长试用期一次，延长期限不超过原试用期的 50%；或者依法解除劳动合同 `[1]`\n- 试用期内可以请假，但累计事假不宜超过 3 天，以免影响转正评估 `[2]`\n\n依据：`hr/onboarding.md#试用期与转正` `[1]`、`hr/onboarding.md#常见问题` `[2]`。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "hr/onboarding.md#试用期与转正",
+      "hr/onboarding.md#常见问题"
+    ],
+    "tokens": 3554,
+    "latency_ms": 4642.8,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "single-06",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 3554,
+      "latency_ms": 4642.8
+    }
+  },
+  {
+    "case_id": "colloquial-04",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "能把公司代码贴到外面的AI工具上问问题吗？",
+    "text": "**结论：不可以。公司代码不能贴到外部 AI 工具上提问。**\n\n依据：\n- 制度里对这个问题有明确的问答：把代码粘贴到公开的 AI 对话工具里提问，答案是**不可以**；原因是源代码属于**机密级数据**，禁止上传至任何公有云 AI 服务。公司内部提供了合规的代码助手，请使用内部工具 [2]。\n- 数据分级表也把「源代码」列为**机密**级，要求为需审批、且禁止使用个人网盘或邮箱；并明确：**禁止**将机密及以上数据上传至任何公有云 AI 服务（含对话式 AI 工具）[1]。\n\n建议做法：改用公司内部的代码助手工具；如果确有必要对外处理，需要按机密级数据的审批流程进行 [1][2]。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/security-policy.md#数据分级与流转",
+      "it/security-policy.md#常见问题"
+    ],
+    "tokens": 3444,
+    "latency_ms": 4481.2,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "colloquial-04",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 3444,
+      "latency_ms": 4481.2
+    }
+  },
+  {
+    "case_id": "colloquial-03",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "公司的VPN连不上，我自己能怎么排查？",
+    "text": "**结论：VPN 连不上可以按以下 5 步自助排查 [1]**\n\n1. **确认 MFA 是否正常**：动态口令有 30 秒有效期；如果刚跨过时间窗，就等下一个口令再试 [1]\n2. **检查本机时间是否准确**：时间偏差超过 60 秒会导致 MFA 校验失败，开启系统自动同步时间后重试 [1]\n3. **切换网络**：部分公共网络会封锁 VPN 端口，可以用手机热点验证 [1]\n4. **重启 VPN 客户端**：完全退出客户端（不是最小化）后重新启动 [1]\n5. **清除 DNS 缓存**：Windows 执行 `ipconfig /flushdns`；macOS 执行 `sudo dscacheutil -flushcache` [1]\n\n**以上方法都无效时**：提交 IT 工单，并附上客户端日志（导出路径：设置 → 高级 → 导出日志）[1]\n\n**补充依据**：\n- VPN 远程接入必须开启 MFA，MFA 优先使用企业认证 App 的动态口令，其次使用硬件令牌；短信验证码仅作备用 [3]\n- 如果尚未完成 MFA 绑定，将无法访问 VPN [5]\n\n引用：`it/it-faq.md#VPN 连不上怎么办` [1]；`it/security-policy.md#多因素认证（MFA）` [3]；`hr/onboarding.md#账号与设备` [5]",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/it-faq.md#VPN 连不上怎么办",
+      "it/security-policy.md#多因素认证（MFA）",
+      "hr/onboarding.md#账号与设备"
+    ],
+    "tokens": 3644,
+    "latency_ms": 4936.8,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "colloquial-03",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 3644,
+      "latency_ms": 4936.8
+    }
+  },
+  {
+    "case_id": "multi-01",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "那最多能结转到下一年多少天？",
+    "text": "**结论：最多可结转 5 天。** [1]\n\n依据《员工休假管理办法》：「当年未休完的年假最多可结转 **5 天**到下一年度」[1]\n\n补充要点（同一条款）[1]：\n- 超出 5 天的部分在**次年 3 月 31 日**自动作废，公司不另行折现。\n- 结转的年假必须在**次年 6 月 30 日前**休完，逾期作废。\n- 因业务原因（如重大项目冲刺、连续出差）导致无法休假，可由部门负责人发起书面说明，经 **HR 总监审批**后最多再延期 3 个月。\n\n如果申请延期，需要先提交书面说明，再由 HR 总监审批；具体是否获批由审批环节决定，文档中未规定其他条件。[1]\n\n另：实习生、外包人员的休假按协议执行，不适用本办法中的年假累计条款。[5]",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "hr/leave-policy.md#年假可以结转到下一年吗",
+      "hr/leave-policy.md#适用范围"
+    ],
+    "tokens": 4050,
+    "latency_ms": 4864.4,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "multi-01",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 4050,
+      "latency_ms": 4864.4
+    }
+  },
+  {
+    "case_id": "colloquial-02",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "出差住酒店超预算了怎么办？",
+    "text": "**结论：超标部分需个人承担；特殊情况（会议/展会房价上涨）可凭主办方证明申请一次性特批。**\n\n**依据：**\n\n1. **住宿标准（元/晚）** [3]\n\n| 职级 | 一线城市 | 二线城市 | 其他城市 |\n|---|---|---|---|\n| P1-P3 | 500 | 400 | 300 |\n| P4-P6 | 700 | 550 | 450 |\n| P7 及以上 | 1000 | 800 | 600 |\n\n2. **超标处理** [3]\n   - 超标部分**由个人承担**；\n   - 因**会议或展会期间房价上涨**导致超标的，可**凭主办方证明申请一次性特批**。\n\n3. **前置条件**：出差前须在 OA 提交「出差申请」，注明目的地、起止日期、事由与预算；未经审批产生的差旅费用公司不予报销；国内出差由部门负责人审批 [4]。\n\n4. **报销时间与材料**：出差结束后 15 个工作日内在 OA 提交报销单，需附出差申请单、发票原件、行程单；超过 30 个工作日原则上不予受理 [5]。\n\n> 特批是否通过、由谁审批，制度原文未明确说明，建议向财务或文档负责人确认。",
+    "refused": false,
+    "refused_wide": true,
+    "looks_like_refusal": false,
+    "citations": [
+      "finance/expense-policy.md#住宿标准",
+      "finance/expense-policy.md#差旅审批",
+      "finance/expense-policy.md#报销时效与流程"
+    ],
+    "tokens": 3606,
+    "latency_ms": 5803.1,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "colloquial-02",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 3606,
+      "latency_ms": 5803.1
+    }
+  },
+  {
+    "case_id": "multi-02",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "它的有效期是多久？",
+    "text": "**结论：公司账号密码有效期为 90 天，到期必须更换。**\n\n依据（来自《信息安全与账号权限管理规定》）：\n\n- 账号密码**每 90 天强制更换一次**，系统会**提前 7 天开始提醒** [1]。\n- 新密码**不得与前 5 次使用过的密码相同** [1]。\n\n补充说明：若忘记密码，可在 SSO 登录页点击「忘记密码」通过企业邮箱重置；连续输错 5 次会锁定 30 分钟 [2]。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/security-policy.md#密码有效期与轮换",
+      "it/it-faq.md#密码忘记或账号被锁定"
+    ],
+    "tokens": 3246,
+    "latency_ms": 4031.7,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "multi-02",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 3246,
+      "latency_ms": 4031.7
+    }
+  },
+  {
+    "case_id": "refuse-01",
+    "kind": "legacy",
+    "expect_answer": false,
+    "question": "公司的股票代码是多少？",
+    "text": "**结论：知识库中没有找到相关依据。**\n\n检索到的内容都与“公司股票代码”无关，只是匹配到了“代码”这个词，实际内容分别是信息安全规定和代码评审规范：\n\n- [1]、[2] 讲的是数据分级与个人设备、AI 工具的使用限制（`it/security-policy.md`）\n- [3]、[4] 讲的是代码评审的目的与意见分级（`engineering/code-review.md`）\n\n相关性分数都很低（最高 0.29），没有任何片段涉及公司股票代码或上市信息。建议向财务或证券事务部门确认。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3196,
+    "latency_ms": 4563.7,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "refuse-01",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": true,
+      "over_refusal": false,
+      "tokens": 3196,
+      "latency_ms": 4563.7
+    }
+  },
+  {
+    "case_id": "refuse-02",
+    "kind": "legacy",
+    "expect_answer": false,
+    "question": "公司附近哪家餐厅比较好吃？",
+    "text": "知识库中没有找到相关依据。\n\n检索到的都是 IT 安全与运维类文档，与“附近餐厅推荐”无关，最高相关度仅 0.3，内容为远程办公安全、服务台联系方式等 [1][2][3][4]。企业知识库只收录公司制度与流程文档，不含餐饮/生活类信息。\n\n建议改为询问公司行政或同事。如需我帮忙查公司差旅餐饮报销标准、加班餐补等制度，可以告诉我。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 2993,
+    "latency_ms": 4127.8,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "refuse-02",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": true,
+      "over_refusal": false,
+      "tokens": 2993,
+      "latency_ms": 4127.8
+    }
+  },
+  {
+    "case_id": "multi-03",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "这个审批要多久？",
+    "text": "**审批时长取决于软件类型，并非统一固定值：**\n\n| 软件类型 | 审批人 | 时长 |\n|---|---|---|\n| 办公类（如 PDF 工具） | 直属主管 | 1 个工作日 |\n| 开发工具（IDE、数据库客户端） | 直属主管 + IT | 1 个工作日 |\n| 涉及网络代理/抓包类工具 | IT 安全负责人 | 3 个工作日 |\n| 未授权远程控制类软件 | 一律不批 | — |\n\n以上内容来自 [1]《IT 常见问题与自助排查 > 软件安装申请》。\n\n补充：公司设备不得安装未授权的远程控制软件 [3]，个人软件也不可以直接安装，需要通过软件安装申请流程评估 [2]。\n\n如果需要你这一单的具体时长，需要先确认你要安装的软件属于上表哪一类；文档中没有其他审批时限规定。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "it/it-faq.md#软件安装申请",
+      "it/it-faq.md#常见问题",
+      "it/security-policy.md#远程办公安全"
+    ],
+    "tokens": 3780,
+    "latency_ms": 5200.8,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "multi-03",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 3780,
+      "latency_ms": 5200.8
+    }
+  },
+  {
+    "case_id": "perm-02",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "P4 职级的绩效工资占比是多少？",
+    "text": "**P4 职级的绩效工资占比为 30%** [1]\n\n依据：\n- 绩效工资基数占月度总薪酬的比例按职级确定：P1–P3 为 20%，**P4–P6 为 30%**，P7 及以上为 35% [1]\n- 月度总薪酬 = 基本工资 + 绩效工资（基数 × 绩效系数）+ 补贴 [1]\n\n补充：绩效工资的实际发放金额还需要乘以绩效系数（S=1.5、A=1.2、B=1.0、C=0.8、D=0.6）[4]\n\n来源：`hr/compensation.md`《员工薪酬与绩效考核办法》[1][4]",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [
+      "hr/compensation.md#薪酬结构",
+      "hr/compensation.md#绩效系数"
+    ],
+    "tokens": 3269,
+    "latency_ms": 3519.5,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "perm-02",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 3269,
+      "latency_ms": 3519.5
+    }
+  },
+  {
+    "case_id": "refuse-03",
+    "kind": "legacy",
+    "expect_answer": false,
+    "question": "竞争对手的核心算法怎么实现的？",
+    "text": "**结论：知识库中没有找到相关依据。**\n\n检索了\"竞争对手 核心算法 实现方式\"，返回的最高相关度仅 0.42，且返回的片段与该问题无关，都是考勤、账号权限、代码评审等内容，没有任何关于竞争对手算法实现的文档 `[1][2][3]`。\n\n补充说明（仅供参考，不构成答案）：\n- 唯一出现\"核心算法\"字样的片段是信息安全规定中的数据分级表，其中把\"核心算法\"列为**绝密**级数据，要求\"需专项审批，禁止导出到任何外部介质\" `[1]`。这说的是我司自有核心算法的管理要求，并不涉及竞争对手的技术实现。\n\n如果需要了解竞品技术情况，建议联系对应的产品/战略负责人确认是否有可查阅的分析材料；我这边无法凭现有知识库作答，也不做推测。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3735,
+    "latency_ms": 5460.6,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "refuse-03",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": true,
+      "over_refusal": false,
+      "tokens": 3735,
+      "latency_ms": 5460.6
+    }
+  },
+  {
+    "case_id": "perm-01",
+    "kind": "legacy",
+    "expect_answer": false,
+    "question": "P4 职级的绩效工资占比是多少？",
+    "text": "**结论：无法回答。你当前角色没有访问《薪酬制度》文档（`hr/compensation.md`）的权限，因此我查不到 P4 职级绩效工资占比。**\n\n依据与说明：\n- 检索结果中存在 `hr/compensation.md`，但它被标记为**受限来源**，不在你的访问范围内——这是权限问题，不是知识库里没有这份内容。\n- 其余返回的片段（试用期薪资、差旅住宿标准里出现 P4-P6、病假工资等）与\"绩效工资占比\"无关，不能作为答案依据。\n\n建议：联系该文档的负责人（HR / 薪酬福利负责人）申请 `hr/compensation.md` 的阅读权限，或直接向 HR 咨询具体比例。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3576,
+    "latency_ms": 4904.8,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "perm-01",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": true,
+      "over_refusal": false,
+      "tokens": 3576,
+      "latency_ms": 4904.8
+    }
+  },
+  {
+    "case_id": "refuse-04",
+    "kind": "legacy",
+    "expect_answer": false,
+    "question": "公司明年会不会裁员？",
+    "text": "**结论：无法回答。** 知识库中没有找到与该问题相关的依据，因此我不能判断公司明年是否会裁员。\n\n**依据说明：**\n- 我检索了“公司明年裁员计划”“人员优化／组织调整／编制”等相关内容，返回的片段只涉及信息安全、休假适用范围、差旅报销等通用条款，与裁员问题无关 [1][2][3][4]。\n- 检索结果中，最高相关度只有约 0.37，且没有与“裁员”相关的实质内容；按回答纪律，我不做推测，也不根据常识补充。\n\n**补充（非文档内容）：** 这类未公开的经营与人事安排，即使存在也不会写在知识库文档中；如需确切信息，请以公司正式通知或向 HR 部门确认为准。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 4129,
+    "latency_ms": 5217.5,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs",
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "refuse-04",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": true,
+      "over_refusal": false,
+      "tokens": 4129,
+      "latency_ms": 5217.5
+    }
+  },
+  {
+    "case_id": "meta-01",
+    "kind": "legacy",
+    "expect_answer": true,
+    "question": "知识库里都有哪些文档？",
+    "text": "你当前角色可访问的文档共 6 份：\n\n| # | 文档 | 路径 | 章节数 |\n|---|------|------|--------|\n| 1 | code-review（代码评审） | engineering/code-review.md | 12 |\n| 2 | security-policy（安全策略） | it/security-policy.md | 11 |\n| 3 | leave-policy（休假制度） | hr/leave-policy.md | 9 |\n| 4 | onboarding（入职指引） | hr/onboarding.md | 7 |\n| 5 | expense-policy（报销制度） | finance/expense-policy.md | 10 |\n| 6 | it-faq（IT 常见问题） | it/it-faq.md | 8 |\n\n以上清单来自 `list_documents` 的检索结果，均为 public 可见范围。如需了解某一份的具体内容，告诉我文档名即可。",
+    "refused": false,
+    "refused_wide": false,
+    "looks_like_refusal": false,
+    "citations": [],
+    "tokens": 2321,
+    "latency_ms": 3305.5,
+    "steps": 2,
+    "tool_calls": [
+      "list_documents"
+    ],
+    "composite": 0.75,
+    "score": {
+      "case_id": "meta-01",
+      "retrieval_hit": 1.0,
+      "citation_valid": 0.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 0.75,
+      "refused": false,
+      "over_refusal": false,
+      "tokens": 2321,
+      "latency_ms": 3305.5
+    }
+  },
+  {
+    "case_id": "perm-03",
+    "kind": "legacy",
+    "expect_answer": false,
+    "question": "收受供应商价值500元的礼品要怎么处理？",
+    "text": "**结论：我无法给出处理方式，因为与这个问题直接相关的文档，你当前的角色没有访问权限。**\n\n具体说明：\n\n1. 检索结果中出现了受限文档 `legal/conduct-policy.md`，属于“商业行为准则”这一类文档，正是规定“收受供应商礼品如何处理”的依据所在。你当前角色（public）无权访问该文档，因此我拿不到条款原文。[1]\n2. 对于这个访问受限的问题，请联系该文档的负责人开通权限或直接咨询；我不能用别的材料凑一个答案。\n3. 本次检索命中的其余内容全部来自《信息安全与账号权限管理规定》，涉及安全事件上报、权限回收、密码有效期等，与“收受供应商礼品”无关，不足以作为依据。[2][3]\n\n补充：一旦你拿到该文档的访问权限，还可以直接查证两种常见关键点：金额门槛是否有明确申报上限，以及是否需要在规定时限内向合规部门主动申报。这两点必须以该文档原文为准，请勿自行推断。",
+    "refused": true,
+    "refused_wide": true,
+    "looks_like_refusal": true,
+    "citations": [],
+    "tokens": 3505,
+    "latency_ms": 5831.6,
+    "steps": 2,
+    "tool_calls": [
+      "search_docs"
+    ],
+    "composite": 1.0,
+    "score": {
+      "case_id": "perm-03",
+      "retrieval_hit": 1.0,
+      "citation_valid": 1.0,
+      "refusal_correct": 1.0,
+      "answer_coverage": 1.0,
+      "composite": 1.0,
+      "refused": true,
+      "over_refusal": false,
+      "tokens": 3505,
+      "latency_ms": 5831.6
+    }
+  }
+]

@@ -1,0 +1,79 @@
+{"_meta": {"fingerprint": "e8df9d2561d4", "documents": 8, "chunks": 75, "updated_at": "2026-10-27 15:54:34", "cases": 78}}
+{"case_id": "hard-13-a0b5-n1", "question": "公司有 13 薪吗？什么时候发？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-mfa-cefe-p1", "question": "MFA 设备丢了可以线上申请重置吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-p4-c919-n1", "question": "P4 的年终奖个人系数是多少？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-pr-23b6-n1", "question": "一个 PR 最多可以评审几轮？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-pr-63c1-p1", "question": "可以自己 approve 自己的 PR 吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-s-0e93-n1", "question": "S 级绩效的年度调薪幅度是多少？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t03f3a1-03f3-n1", "question": "年终奖一般几月发放？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t09fc60-09fc-n1", "question": "单元测试必须在几分钟内跑完？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t113039-1130-n1", "question": "代码评审有积分或奖励吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t13d456-13d4-n1", "question": "工单提交后一直没人处理该怎么办？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t13edc8-13ed-n1", "question": "生产环境只读权限申请要多久审批完？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t178b41-178b-n1", "question": "境外出差住宿的报销上限是多少？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t1c54f2-1c54-p1", "question": "P1 出差可以坐高铁一等座吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t1ccfa6-1ccf-p1", "question": "P6 出差飞行 6 小时可以坐公务舱吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t1f9b94-1f9b-p1", "question": "忘记密码了怎么重置？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t20c8b4-20c8-n1", "question": "出差期间的意外险是公司买的吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t20fc6f-20fc-n1", "question": "直系亲属去世有丧假吗？几天？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t20fc6f-20fc-n2", "question": "丧假期间工资怎么算？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t24e8d5-24e8-n1", "question": "年终奖要交多少个税？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t266868-2668-n1", "question": "利益冲突申报多久能审批完？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t27e013-27e0-n1", "question": "公积金缴存基数和比例是多少？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t27e013-27e0-n2", "question": "社保是按什么基数缴纳的？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t2faac5-2faa-n1", "question": "境外出差餐补一天多少？", "reviewed": true, "verdict": "drop", "reason": "原文提到餐补 150 元/天，没说境内境外，那就是默认统一标准，应回答为：餐补统一为150元/天，未区分境内境外。而不应该据答"}
+{"case_id": "hard-t360b1c-360b-n1", "question": "可以用 1Password 这类工具保存公司密码吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t378065-3780-n1", "question": "收受供应商 300 元购物卡该怎么处理？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t3af5b3-3af5-n1", "question": "发票丢了还能报销吗？怎么处理？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t3cdafc-3cda-n1", "question": "试用期延长后薪资还是 90% 吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t44874d-4487-n1", "question": "产假可以提前多少天开始休？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t44a704-44a7-n1", "question": "差旅借款最多能借多少？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t46c99d-46c9-n1", "question": "电子发票原件丢了可以重新下载吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t4900e9-4900-n1", "question": "平时加班有餐补吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t4c0c30-4c0c-p1", "question": "MFA 可以用短信验证码吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t531e6b-531e-n1", "question": "实习生有试用期吗？多久？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t5775bc-5775-n1", "question": "出差寄快递的费用能报销吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t5dab35-5dab-p1", "question": "打印机驱动在哪里下载？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t64205a-6420-p1", "question": "报销单是一个月内提交就行吧？", "reviewed": true, "verdict": "keep", "reason": "（已用 deepseek 验证会纠正，保留）应纠正，已用deepseek验证过，会纠正"}
+{"case_id": "hard-t648473-6484-n1", "question": "代码覆盖率要求达到多少百分比？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t6aa747-6aa7-p1", "question": "试用期员工有年假吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t6d8f81-6d8f-n1", "question": "入职需要提交体检报告吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t786c5d-786c-n1", "question": "MFA 硬件令牌去哪里申请？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t7a39ab-7a39-p1", "question": "年假结转上限是 10 天吧？", "reviewed": true, "verdict": "keep", "reason": "（已用 deepseek 验证会纠正，保留）应纠正，已用deepseek验证过，会纠正"}
+{"case_id": "hard-t7eee2e-7eee-n1", "question": "入职体检的费用公司报销吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t7f665b-7f66-n1", "question": "产检假有几天？产检算病假吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t7f665b-7f66-n2", "question": "哺乳期每天有几小时哺乳假？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t87d70e-87d7-n1", "question": "竞业限制的补偿金每月多少钱？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t898fc8-898f-n1", "question": "出差行程临时变更需要重新审批吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t8ffafe-8ffa-n1", "question": "实习生实习期满可以直接转正吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t90feb7-90fe-p1", "question": "能把公司代码贴到公开的 AI 工具里问问题吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t9a69ca-9a69-n1", "question": "婚假可以分两次休吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t9da4a2-9da4-p1", "question": "转正评估什么时候发起？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-t9dc6a5-9dc6-n1", "question": "加班到晚上十点打车回家能报销吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-ta97769-a977-p1", "question": "报销单需要经过哪些人审批？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tb48bc9-b48b-n1", "question": "软件安装申请被拒绝可以申诉吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tb5c066-b5c0-n1", "question": "报销可以加急打款吗？最快多久？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tb6c9b4-b6c9-n1", "question": "个税专项附加扣除怎么申报？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tbb41c0-bb41-n1", "question": "提交 IT 工单后多久必须响应？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tc04dc3-c04d-p1", "question": "服务台周末上班吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tc0a365-c0a3-n1", "question": "产假期间的工资怎么发？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tcb651a-cb65-p1", "question": "可以用自己的电脑办公吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tcb7e80-cb7e-n1", "question": "护理假期间工资怎么算？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tcd3168-cd31-n1", "question": "加班有加班费吗？按几倍计算？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tcd3168-cd31-n2", "question": "周末加班可以调休吗？调休有效期多久？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tcf9f99-cf9f-n1", "question": "P6 的期权授予比例是多少？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tcf9f99-cf9f-n2", "question": "员工的股权激励什么时候行权？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-td15551-d155-n1", "question": "独生子女父母住院有护理假吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tdc9cf2-dc9c-p1", "question": "公司密码要求 8 位以上就行吧？", "reviewed": true, "verdict": "keep", "reason": "（已用 deepseek 验证会纠正，保留）应纠正，已用deepseek验证过，会纠正"}
+{"case_id": "hard-tdd37cd-dd37-p1", "question": "年假没休完可以折现吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tdfd02a-dfd0-p1", "question": "职场骚扰举报后多久出结论？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-te6716a-e671-n1", "question": "出差期间生病住院的费用能报销吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-te68db9-e68d-n1", "question": "住房补贴每月多少？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-te68db9-e68d-n2", "question": "租房有补贴吗？怎么申请？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tea56f0-ea56-n1", "question": "丧假需要提供什么证明材料？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tf0af24-f0af-n1", "question": "境外出差的住宿标准是多少一晚？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tf7b28a-f7b2-n1", "question": "P7 的 6 个月试用期可以提前转正吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tfa6595-fa65-n1", "question": "差旅借款需要谁审批？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-tfce41a-fce4-n1", "question": "接受供应商宴请的人均标准是多少元？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-vpn-049d-n1", "question": "VPN 支持 Linux 系统吗？", "reviewed": true, "verdict": "keep", "reason": ""}
+{"case_id": "hard-vpn-5308-n1", "question": "VPN 客户端在哪里下载？", "reviewed": true, "verdict": "keep", "reason": ""}

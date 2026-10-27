@@ -45,6 +45,26 @@ def _emit(payload: Any, as_json: bool) -> None:
         print(payload)
 
 
+def _llm_cli(args: argparse.Namespace) -> Dict[str, str]:
+    """把 ``--provider`` / ``--model`` 变成**优先级最高**的配置层。
+
+    为什么不用 `load_config(overrides=...)`：overrides 进的是 YAML 层，
+    会被 `.env` 和真实环境变量压过 —— 而命令行必须赢。所以单独走 `cli=`。
+    只影响本次进程：既不改 `.env`，也不改 shell 里的变量。
+    """
+    pairs = {"provider": "DOCPILOT_PROVIDER", "model": "DOCPILOT_MODEL"}
+    return {env: getattr(args, key) for key, env in pairs.items() if getattr(args, key, None)}
+
+
+def _add_llm_args(parser: argparse.ArgumentParser) -> None:
+    """给子命令加上"只对这次生效"的模型开关。"""
+    parser.add_argument(
+        "--provider",
+        help="本次运行使用的提供方：mock / deepseek / openai / openai_compat（优先级高于 .env 与环境变量）",
+    )
+    parser.add_argument("--model", help="本次运行使用的模型名（如 deepseek-chat）")
+
+
 # --------------------------------------------------------------------------- #
 # 子命令
 # --------------------------------------------------------------------------- #
@@ -52,7 +72,7 @@ def _emit(payload: Any, as_json: bool) -> None:
 
 def cmd_demo(args: argparse.Namespace) -> int:
     """跑 5 个典型场景，覆盖这个项目的全部卖点。"""
-    config = load_config(root=args.root)
+    config = load_config(root=args.root, cli=_llm_cli(args))
     agent = _build_agent(config)
 
     scenarios: List[Dict[str, Any]] = [
@@ -114,7 +134,7 @@ def cmd_demo(args: argparse.Namespace) -> int:
 
 def cmd_ask(args: argparse.Namespace) -> int:
     """单次问答（支持多轮历史）。"""
-    config = load_config(root=args.root)
+    config = load_config(root=args.root, cli=_llm_cli(args))
     agent = _build_agent(config)
     history = list(args.history or [])
     answer = agent.ask(args.question, role=args.role, history=history or None, reset=not history)
@@ -127,7 +147,7 @@ def cmd_ask(args: argparse.Namespace) -> int:
 
 def cmd_ingest(args: argparse.Namespace) -> int:
     """重建索引并打印统计（可视作"知识库体检"）。"""
-    config = load_config(root=args.root)
+    config = load_config(root=args.root, cli=_llm_cli(args))
     kb = KnowledgeBase(config)
     stats = kb.build(force=True)
     docs = kb.documents(role=args.role)
@@ -147,7 +167,7 @@ def cmd_ingest(args: argparse.Namespace) -> int:
 
 def cmd_eval(args: argparse.Namespace) -> int:
     """跑评测并检查质量门禁。"""
-    config = load_config(root=args.root)
+    config = load_config(root=args.root, cli=_llm_cli(args))
     cases_path = Path(args.cases) if args.cases else config.path_of(str(config.get("eval.cases_path")))
     cases = load_cases(cases_path)
     if not cases:
@@ -182,7 +202,7 @@ def cmd_eval(args: argparse.Namespace) -> int:
 
 def cmd_info(args: argparse.Namespace) -> int:
     """环境与配置自检。"""
-    config = load_config(root=args.root)
+    config = load_config(root=args.root, cli=_llm_cli(args))
     checks: List[Dict[str, Any]] = []
 
     def check(name: str, ok: bool, detail: str, hint: str = "") -> None:
@@ -197,12 +217,25 @@ def cmd_info(args: argparse.Namespace) -> int:
         except Exception:
             check(f"optional:{module}", True, "未安装（可降级）", hint)
 
+    # `.env` 到底有没有被读到 —— 这一行就是为"文档说有、代码没读"那个坑加的
+    dotenv_keys = config.dotenv_keys()
+    if dotenv_keys:
+        check("dotenv", True, f".env 已加载（{', '.join(dotenv_keys)}）")
+    else:
+        check("dotenv", True, "未发现 .env（可选）", "要接真实模型：复制 .env.example 为 .env 并填入 Key")
+
     provider = config.provider
+    provider_from = config.source_of("DOCPILOT_PROVIDER")
     has_key = bool(config.api_key())
     if provider == "mock":
-        check("llm", True, "Mock 模式（离线确定性，可完整演示与跑评测）")
+        check("llm", True, f"Mock 模式（provider 来自{provider_from}）")
     else:
-        check("llm", has_key, f"provider={provider} model={config.model}", "未检测到 API Key，将自动降级为 Mock")
+        check(
+            "llm",
+            has_key,
+            f"provider={provider}（来自{provider_from}） model={config.model} · key={config.api_key_source()}",
+            "未检测到 API Key，将自动降级为 Mock",
+        )
 
     try:
         kb = KnowledgeBase(config)
@@ -230,7 +263,7 @@ def cmd_web(args: argparse.Namespace) -> int:
     """启动 Web 演示界面。"""
     from .web import serve
 
-    config = load_config(root=args.root)
+    config = load_config(root=args.root, cli=_llm_cli(args))
     return serve(config, host=args.host, port=args.port, open_browser=not args.no_browser)
 
 
@@ -242,7 +275,7 @@ def cmd_mcp(args: argparse.Namespace) -> int:
     """
     from .mcp import main as run_mcp
 
-    config = load_config(root=args.root)
+    config = load_config(root=args.root, cli=_llm_cli(args))
     return run_mcp(config, role=args.role)
 
 
@@ -263,6 +296,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_demo = sub.add_parser("demo", help="一键演示 6 个典型场景")
     p_demo.add_argument("--json", action="store_true")
+    _add_llm_args(p_demo)
     p_demo.set_defaults(func=cmd_demo)
 
     p_ask = sub.add_parser("ask", help="单次问答")
@@ -270,6 +304,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_ask.add_argument("--role", default="public", help="用户角色（public/hr/finance/legal）")
     p_ask.add_argument("--history", action="append", help="历史问题，可重复传入以模拟多轮")
     p_ask.add_argument("--json", action="store_true")
+    _add_llm_args(p_ask)
     p_ask.set_defaults(func=cmd_ask)
 
     p_ingest = sub.add_parser("ingest", help="重建索引并查看可见文档")
@@ -281,16 +316,19 @@ def build_parser() -> argparse.ArgumentParser:
     p_eval.add_argument("--cases", help="评测集路径")
     p_eval.add_argument("--report", help="把 Markdown 报告写入指定路径")
     p_eval.add_argument("--json", action="store_true")
+    _add_llm_args(p_eval)
     p_eval.set_defaults(func=cmd_eval)
 
     p_info = sub.add_parser("info", help="环境与配置自检")
     p_info.add_argument("--json", action="store_true")
+    _add_llm_args(p_info)
     p_info.set_defaults(func=cmd_info)
 
     p_web = sub.add_parser("web", help="启动 Web 演示界面")
     p_web.add_argument("--host", default=None)
     p_web.add_argument("--port", type=int, default=None)
     p_web.add_argument("--no-browser", action="store_true")
+    _add_llm_args(p_web)
     p_web.set_defaults(func=cmd_web)
 
     p_mcp = sub.add_parser("mcp", help="以 MCP 协议(stdio)对外暴露检索能力")
@@ -299,6 +337,7 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="服务端绑定的角色（优先级：本参数 > DOCPILOT_MCP_ROLE > 配置 mcp.role）",
     )
+    _add_llm_args(p_mcp)
     p_mcp.set_defaults(func=cmd_mcp)
 
     return parser

@@ -29,23 +29,32 @@ python -m docpilot demo     # 6 个典型场景，不需要 API Key
 cd DocPilot
 python -m docpilot info     # 环境自检
 python -m docpilot demo     # 演示 6 个典型场景
-python -m pytest tests -q   # 205 个测试
+python -m pytest tests -q   # 245 个测试
 python -m docpilot eval     # 跑评测 + 质量门禁
 ```
 
 **不需要 API Key，不需要向量数据库，不需要 `pip install` 任何东西。**
 核心运行时只用 Python 标准库（3.9+）。
 
-想接真实模型：
+想接真实模型：把 Key 写进 `.env`，用命令行只切换这一次。
 
 ```bash
-export DOCPILOT_PROVIDER=deepseek
-export DEEPSEEK_API_KEY=sk-xxxx
-python -m docpilot ask "年假可以结转到明年吗"
+cp .env.example .env          # 然后只填一行 DEEPSEEK_API_KEY=sk-xxxx
+python -m docpilot info       # 会告诉你 provider / key 分别来自哪一层
+python -m docpilot ask "年假可以结转到明年吗" --provider deepseek
 ```
+
+配置优先级是 **命令行 > 真实环境变量 > `.env` > `configs/docpilot.yaml`**，所以：
+
+- `.env` 里保持 `DOCPILOT_PROVIDER=mock` 时，`pytest` / `eval` / `demo` / `mcp` 全部离线；
+- 只有加了 `--provider deepseek` 的那一条命令会调真实接口 —— **默认不联网是硬约束**；
+- 反过来，把 `.env` 的 provider 改成 `deepseek` 就是"全局切真实模型"，`eval` 也会真花钱。
 
 > 没配 Key 时系统会**自动降级为 Mock 并提示**，而不是直接报错 ——
 > "环境不全也能跑起来"是刻意设计的体验。
+>
+> `.env` 的解析器是手写的（约 40 行，零依赖），只支持 `KEY=VALUE` / 注释 / 引号 /
+> `export` 前缀；**不支持多行值与变量插值** —— 需要就走真实环境变量。
 
 ---
 
@@ -105,7 +114,18 @@ python -m docpilot ask "年假可以结转到明年吗"
 | 平均 token | 2,196 | — | 每次问答 |
 | P95 延迟 | 67 ms | — | 纯本地检索 |
 
-**其它**：205 个单元测试全绿；检索 top-1 命中率 8/8（人工标注的"该命中哪一篇"回归测试）。
+**其它**：245 个单元测试全绿；检索 top-1 命中率 8/8（人工标注的"该命中哪一篇"回归测试）。
+
+> ⚠ **`hallucination_rate = 0.143` 需要加一句限定：这 21 条里只有 6 条负例，而且大多是
+> easy negative（"今天天气怎么样"这种零字面重合的）。** 我另做了一套
+> **60 条 hard negative**（与文档里真实存在的事实同构、但文档恰好没答），
+> 同一套判定逻辑在它上面的误答率是 **90.0%**（[79.9%, 95.3%]），而正例误拒仍是 **0%**。
+> 所以 0.143 的真实含义是"**简单负例上的**幻觉率"，不是系统整体水平。
+> 复现：`python scripts/build_hard_negatives.py` + `python scripts/eval_stratified.py`。
+> 复核结论写在 `data/eval/hard_negatives.review_state.jsonl`（**独立文件**）：
+> 生成器每次都会重写 candidates/dev/test，但**永远不写掉这个文件**，
+> 所以重跑生成器不会丢掉人工复核结果。状态文件里带语料指纹，
+> 语料一改就会警告"复核可能已过期"。
 
 ### 为什么 `over_refusal_rate = 0` 值得单独说
 
@@ -124,30 +144,35 @@ python -m docpilot ask "年假可以结转到明年吗"
 ```
 DocPilot/
 ├── docpilot/
-│   ├── core.py        类型契约、配置、mini-YAML、错误体系      (466 行代码)
+│   ├── core.py        类型契约、配置、mini-YAML、错误体系      (538 行代码)
 │   ├── matching.py    文本匹配：实义片段切分、覆盖率测量        ( 78 行)
-│   ├── rag.py         切块 → BM25 + 本地嵌入 → RRF → 重排     (562 行)
+│   ├── rag.py         切块 → BM25 + 本地嵌入 → RRF → 重排     (569 行)
 │   ├── tools.py       工具注册表、schema 校验、证据判定         (290 行)
 │   ├── llm.py         Mock 引擎 / OpenAI 兼容网关（双模式）     (375 行)
 │   ├── agent.py       单文件 ReAct 主循环 + 引用映射 + 多轮会话  (219 行)
 │   ├── eval.py        评测指标与质量门禁                       (264 行)
 │   ├── web.py         标准库 HTTP 演示服务                     (109 行)
 │   ├── mcp.py         MCP 服务端（stdio，零依赖手写协议）        (179 行)
-│   └── cli.py         命令行入口                               (232 行)
+│   └── cli.py         命令行入口                               (258 行)
 ├── data/
 │   ├── docs/          8 篇示例文档（含权限标注），75 个片段
 │   └── eval/          评测集
-├── tests/             205 个测试
+├── tests/             245 个测试
 ├── scripts/
 │   ├── calibrate_thresholds.py      拒答阈值标定（可复现的标定证据）
+│   ├── build_hard_negatives.py      生成 60 条 hard negative 候选（只产候选，标签由人定）
+│   ├── eval_stratified.py           分层评测 + Wilson 区间
+│   ├── probe_wrong_premise.py       探查"错误前提"题：真实模型是纠正还是附和
+│   ├── eval_stratified.py           按题型分层评测 + Wilson 区间
 │   ├── experiment_dense_channel.py  通道消融（稠密通道到底贡献了多少）
+│   ├── experiment_bm25_params.py    BM25 四参数敏感度（16 组单变量 + 正对照）
 │   ├── experiment_chunk_size.py     切块粒度实验（含一次推翻自身假设的实验）
 │   └── count_lines.py               规模统计
 ├── configs/docpilot.yaml         所有可调参数集中在此
 └── docs/              系统工作流程 / 架构说明 / 上手计划 / 简历描述 / 面试问答
 ```
 
-**规模**：源码 4,439 行（其中**有效代码 2,798 行**，其余是解释"为什么这么做"的注释），测试 1,941 行。
+**规模**：源码 4,641 行（其中**有效代码 2,903 行**，其余是解释"为什么这么做"的注释），测试 2,379 行。
 
 > **关于上手时间，我需要说实话**：你原本希望 2~3 天读透，实际是 **4~5 天**。
 > 多出来的部分主要在两处，都是"通用且值得讲"的能力：**权限隔离**与**拒答标定**。
@@ -235,6 +260,13 @@ fused(d) = Σ_r  w_r / (k + rank_r(d))
 得到的会是"改了很多、指标没动"，然后误以为是自己做错了。反面证据也在这份数据里：
 单开稠密时幻觉率反而降到 0.0952，但检索命中掉到 0.9048、误拒从 0 升到 0.0476 ——
 **指标对"候选池的组成"敏感，而不是对"语义能力"敏感。**
+
+**同样的机制也解释了 BM25 参数为什么"调了没反应"。** 我把 k1/b/delta 做了 16 组单变量
+敏感度实验（`python scripts/experiment_bm25_params.py`）：**top-1 chunk 一次没变，
+端到端指标一个字没动**，连 `delta=50`、`min_len=4` 这种荒谬值都一样。
+原因完全相同 —— 最终排序主键是 `relevance`，BM25 与稠密通道都只决定"谁能进候选池"。
+**重排层才是真正的老板。** 这也是我保留 `k1=1.5 / b=0.75 / delta=0.5` 这三个
+文献默认值的依据：不是懒得调，是实测证明它们在这条链路上没有发挥余地。
 
 ### 2. 重排里那个"文件名先验"
 
@@ -364,6 +396,8 @@ mini-YAML 自己解析（约 120 行，覆盖配置文件用到的语法子集�
 | **PowerShell 验证接口时中文变乱码** | 所有问题都被拒答，一度以为是服务端 bug | 请求体没显式转 UTF-8 字节，按本地代码页编码了。**是客户端问题** |
 | **`chunk_size` 超过段落长度后失效** | `800` 与 `360` 产出的片段数完全相同（都是 75） | 示例文档单段最长 247 字符，`len(candidate) <= chunk_size` 恒成立。**参数有适用区间，不是 bug** |
 | **接上管道，评测就崩** | `python -m docpilot eval` 在 Windows 上以退出码 1 结束并报 `UnicodeEncodeError`；同一命令直接跑却完全正常 | 接管道后 Python 不再走控制台的宽字符接口，改按 GBK（cp936）编码输出，`✓`/`✗` 编不出来 —— **崩在最后一行输出上，而不是评测本身**。修复：`core.ensure_utf8_stdio()` 把 stdout 切成 UTF-8 + `errors="replace"` |
+| **BM25 换什么参数指标都不动** | 我把 k1/b/delta 从 0.9 扫到 2.4、`delta` 甚至试到 50，复合分、检索命中、幻觉率**一个字没变**，一度以为实验写错了 | 最终排序主键是 `relevance`（词面覆盖率），BM25 **只决定谁能进候选池**。top-1 在 16 个变体里一次没变，只有 `b=0` 会换掉 top-2~4 里约 15% 的片段。**"参数没反应"要分层排查**：先看检索层的 top-1/top-4 集合，再看端到端 |
+| **`.env` 写了却完全没生效** | 文档写着"复制 `.env` 并填入真实值"，可填完还是 Mock，而且**一点也不报错** | 代码只读**进程环境变量**，从来没读过 `.env` 这个文件 —— `.env.example` 承诺了一件没实现的事。修复：手写 40 行 `parse_dotenv`，并把优先级定成**命令行 > 环境变量 > `.env` > YAML**，`info` 里显示每一项来自哪一层 |
 
 > 上面倒数第二条尤其值得记住：**症状在服务端，根因在客户端**。
 > 当时我差点去改服务端代码，幸好先用进程内调用做了隔离验证。
@@ -383,7 +417,7 @@ mini-YAML 自己解析（约 120 行，覆盖配置文件用到的语法子集�
 | Prompt Engineering | `SYSTEM_PROMPT` 写明三条纪律；拒答判定独立于提示词（**不依赖模型自觉**） |
 | Agent / 工具调用 | 手写 ReAct 循环（零框架）、function-calling schema、工具注册表与入参校验、多轮指代消解 |
 | **MCP / 能力复用** | `mcp.py` 零依赖手写 stdio 协议（initialize / tools/list / tools/call）；**角色服务端绑定、客户端不可提权**（`test_client_cannot_escalate_role`）；检索能力可被 Claude Desktop / Cursor 直接挂载 |
-| Python 工程能力 | 2,798 行有效代码、205 个测试、类型注解、零核心依赖、模块边界清晰 |
+| Python 工程能力 | 2,903 行有效代码、245 个测试、类型注解、零核心依赖、模块边界清晰 |
 | 评测与质量意识 | 4 类互相制衡的指标、CI 质量门禁、**阈值标定脚本可复现**、已知限制如实公开 |
 | 数据安全 / 权限 | 文档级角色过滤（检索阶段生效）+ 权限提示，`test_permission_*` 系列测试锁定 |
 | 快速迭代 / 可复现 | Mock 模式保证离线确定；`configs/docpilot.yaml` 集中所有可调参数 |
@@ -399,6 +433,9 @@ python -m docpilot ask "年假能结转到明年吗"     # 单次问答
 python -m docpilot ask "那最多多少天" \
        --history "年假能结转到明年吗"            # 多轮追问（自动改写）
 python -m docpilot ask "P4 绩效占比" --role hr # 指定角色（权限隔离）
+python -m docpilot ask "年假能结转吗" --provider deepseek
+                                              # 只这一次用真实模型（其余命令仍离线）
+python -m docpilot eval --provider mock       # 强制离线跑评测（.env 配了真实模型时用）
 python -m docpilot ingest --role hr           # 查看某角色可见的文档
 python -m docpilot eval --report evals/reports/latest.md
 python -m docpilot web                        # Web 演示界面
@@ -406,6 +443,11 @@ python -m docpilot mcp --role public          # MCP 服务端（stdio，挂到 C
 python -m pytest tests -q                     # 跑测试
 python scripts/calibrate_thresholds.py        # 复核拒答阈值（改检索后必跑）
 python scripts/experiment_dense_channel.py    # 通道消融：稠密通道贡献了多少
+python scripts/experiment_bm25_params.py      # BM25 四参数：在本语料上敏不敏感
+python scripts/build_hard_negatives.py        # 生成 hard negative 候选（60 负 + 18 正）
+python scripts/eval_stratified.py             # 分层评测：按题型看误答/误拒
+python scripts/probe_wrong_premise.py --provider mock
+                                              # ⚠ 不加 --provider mock 会调真实 API（约 1 万 token）
 ```
 
 ---
@@ -416,7 +458,7 @@ python scripts/experiment_dense_channel.py    # 通道消融：稠密通道贡�
 |---|---|---|
 | `openai` | 用 Mock 引擎（离线确定性） | 可接 DeepSeek / OpenAI / vLLM |
 | `PyYAML` | 用内置 mini-YAML（约 120 行） | 用 PyYAML 解析配置 |
-| `pytest` | 无法跑测试 | 205 个测试 |
+| `pytest` | 无法跑测试 | 245 个测试 |
 | `numpy` / `chromadb` | 用内置本地嵌入 | 可替换为真实向量检索 |
 
 ---
@@ -442,8 +484,14 @@ python scripts/experiment_dense_channel.py    # 通道消融：稠密通道贡�
    残余 `hallucination_rate = 0.143`（3/21）。典型失败："公司的股票代码是多少"——
    它与《信息安全规定》里讲"代码"的段落有字面重合（覆盖率 0.58、连续命中 2 字），
    系统分辨不出"文档提到了这个话题"与"文档回答了这个问题"。
-   **修它需要真实 embedding 或一次模型判定，而不是继续调阈值** ——
+   **修它需要语义判定或一次模型判定，而不是继续调阈值** ——
    继续调就是对这 21 条评测集过拟合，换一份文档就失效。
+
+   **这条限制比 0.143 看起来严重得多。** 我另造了 60 条 hard negative
+   （与真实事实同构、但文档没答，例如"P6 的期权授予比例"、"加班有加班费吗"），
+   同一套逻辑在上面**误答 90.0%**（[79.9%, 95.3%]），而正例误拒仍为 0%。
+   也就是说：`0.143` 只代表"简单负例"上的表现；真正的短板是"话题相近但没答案"这一整类。
+   分类型的数字见 [docs/架构说明.md 8.5 节](docs/架构说明.md)，复现命令见「常用命令」。
 
 2. **本地嵌入没有语义泛化能力。** 它靠词面哈希，同义改写（"年假"↔"带薪年休假"）依赖手工同义词表。
    表里没有的说法就召回不到。

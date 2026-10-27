@@ -111,6 +111,63 @@ class TestBM25:
         assert [doc_id for doc_id, _ in hits] == ["d2"]
 
 
+class TestBM25Params:
+    """BM25 四个参数的**语义**与**生效路径**。
+
+    为什么要专门测这个：本项目的参数大多有实验背书（拒答阈值、chunk_size、
+    通道开关），唯独 k1/b/delta 是文献默认值。而默认值最容易出两种事故：
+
+    1. **配置写了但没传进去** —— 参数成了摆设，"调了没反应"会被误读成"参数没用"
+       （本项目在 `chunk_size` 上踩过这个坑）；
+    2. **注释写错了语义** —— 比如 `min_len` 的注释是"最短 token 长度"，
+       但它只过滤**非中文** token，中文 token 本来就是 bigram 起步。
+
+    所以这里一条断言"值真的落到了索引上"，一条断言"参数的物理效果对"，
+    一条把 `min_len` 的真实语义写成可执行的注释。
+    """
+
+    def test_defaults_are_the_documented_literature_values(self, kb: KnowledgeBase):
+        """默认值必须与 configs / 文档里写的一致，否则"文献默认"这个说法就是假的。"""
+        assert (kb.bm25.k1, kb.bm25.b, kb.bm25.delta, kb.bm25.min_len) == (1.5, 0.75, 0.5, 2)
+
+    def test_config_params_reach_the_index(self, project_root):
+        config = load_config(
+            root=project_root,
+            overrides={"rag": {"bm25": {"k1": 2.0, "b": 0.0, "delta": 1.0}, "min_token_len": 3}},
+        )
+        kb = KnowledgeBase(config)
+        kb.build(force=True)
+        assert (kb.bm25.k1, kb.bm25.b, kb.bm25.delta, kb.bm25.min_len) == (2.0, 0.0, 1.0, 3)
+        # stats() 是给实验脚本看的"实际生效值"，也必须一致
+        assert kb.stats()["bm25"] == {"k1": 2.0, "b": 0.0, "delta": 1.0, "min_len": 3}
+
+    def test_b_zero_removes_length_normalization(self):
+        """b=0 时长度归一化应当完全消失：同词频、不同长度的两篇文档得分相等。
+
+        这是 b 的物理意义，也是"参数确实在起作用"的证据。
+        """
+
+        def index_with(b: float) -> BM25Index:
+            index = BM25Index(k1=1.5, b=b, delta=0.0)  # delta 归零以隔离长度项
+            index.add("short", "年假 年假")
+            index.add("long", "年假 年假" + " 其他" * 20)
+            return index
+
+        flat = index_with(0.0)
+        assert flat.score("年假", "short") == pytest.approx(flat.score("年假", "long"))
+
+        normalized = index_with(0.75)
+        # 关掉归一化后长文档不再被罚，打开后短文档必须更高分
+        assert normalized.score("年假", "short") > normalized.score("年假", "long")
+
+    def test_min_len_only_filters_latin_tokens(self):
+        """`min_len` 不是"最短 token 长度"，而是"最短**非中文** token 长度"。"""
+        assert "p4" in tokenize("P4 职级", min_len=2)
+        assert "p4" not in tokenize("P4 职级", min_len=3), "2 字符英文词应当被 min_len=3 过滤"
+        # 中文 token 是 bigram 起步，min_len 再大也不生效 —— 这条反直觉，必须锁住
+        assert tokenize("年假", min_len=5)
+
+
 # --------------------------------------------------------------------------- #
 # 本地嵌入
 # --------------------------------------------------------------------------- #

@@ -9,12 +9,13 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import sys
 import time
 import uuid
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 # --------------------------------------------------------------------------- #
 # 错误体系（区分"可重试"与"不可重试"，工具层据此决定是否重试）
@@ -261,17 +262,45 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "min_token_len": 2,
         "enable_dense": True,          # 通道开关：仅供消融实验，正常使用保持 True
         "enable_sparse": True,
+        # BM25 打分参数：文献/主流实现的通用默认值，未在本语料标定
+        # （敏感度实验见 scripts/experiment_bm25_params.py）
+        "bm25": {"k1": 1.5, "b": 0.75, "delta": 0.5},
     },
     "web": {"host": "127.0.0.1", "port": 8020},
 }
 
 
 class Config:
-    """点号访问的配置对象，支持 YAML 覆盖与环境变量覆盖。"""
+    """点号访问的配置对象。
 
-    def __init__(self, data: Dict[str, Any], root: Optional[Path] = None) -> None:
+    配置有**四层**，优先级从高到低：
+
+    ==============  ====================================================================
+    来源            用途
+    ==============  ====================================================================
+    命令行          ``--provider deepseek`` 这种"只对这一次生效"的临时切换
+    真实环境变量    CI / 容器注入；也能在 shell 里一句话盖掉 .env
+    ``.env``        本地开发默认值（Key 放这里，别进 git）
+    YAML/内置默认   项目默认：``llm.provider: mock``，即**默认离线**
+    ==============  ====================================================================
+
+    为什么真实环境变量要压过 ``.env``：否则"本地 .env 悄悄盖掉 CI 注入的变量"
+    这类事故就防不住。这也是"测试永不联网"能靠一句
+    ``monkeypatch.setenv("DOCPILOT_PROVIDER", "mock")`` 保住的原因。
+    """
+
+    def __init__(
+        self,
+        data: Dict[str, Any],
+        root: Optional[Path] = None,
+        dotenv: Optional[Dict[str, str]] = None,
+        cli: Optional[Dict[str, str]] = None,
+    ) -> None:
         self._data = data
         self.root = root or Path.cwd()
+        self._dotenv = dict(dotenv or {})
+        # 空字符串一律当作"没给"：命令行传 None / "" 时不该把已有配置清成空
+        self._cli = {key: value for key, value in (cli or {}).items() if value not in (None, "")}
 
     # -- 读取 ----------------------------------------------------------- #
     def get(self, path: str, default: Any = None) -> Any:
@@ -286,32 +315,72 @@ class Config:
         path = Path(relative)
         return path if path.is_absolute() else (self.root / path)
 
+    # -- 四层覆盖 ------------------------------------------------------- #
+    def _layers(self) -> List[tuple[str, Dict[str, str]]]:
+        """按优先级返回三层（命令行 > 真实环境变量 > ``.env``）。"""
+        return [("命令行", self._cli), ("环境变量", dict(os.environ)), (".env", self._dotenv)]
+
+    def _lookup(self, names: Sequence[str]) -> Optional[tuple[str, str, str]]:
+        """按"先层级、后变量名"的顺序找第一个有值的键。
+
+        **层级优先于变量名**是有意设计。反例：``.env`` 里留着旧的
+        ``DEEPSEEK_API_KEY``，你在 shell 里显式导出了 ``OPENAI_API_KEY`` ——
+        如果按变量名优先，系统会用 ``.env`` 里的旧 Key 去请求，而你以为换 Key 了。
+        这类"我明明改了"的问题最难查，所以层级必须赢。
+        """
+        for source, layer in self._layers():
+            for name in names:
+                value = layer.get(name)
+                if value:
+                    return name, str(value), source
+        return None
+
+    def _setting(self, name: str, default: Any = None) -> Optional[str]:
+        """按 命令行 > 环境变量 > .env 的顺序取值（都没有时返回 ``default``）。"""
+        found = self._lookup((name,))
+        return found[1] if found else default
+
+    def source_of(self, name: str) -> str:
+        """某个环境风格键**来自哪一层** —— 排查"为什么还是 Mock"时最有用。"""
+        found = self._lookup((name,))
+        return found[2] if found else "配置/默认值"
+
+    def dotenv_keys(self) -> List[str]:
+        """``.env`` 里出现的键名（**不含值**，可以安全打印）。"""
+        return sorted(self._dotenv)
+
     @property
     def provider(self) -> str:
-        return str(os.environ.get("DOCPILOT_PROVIDER") or self.get("llm.provider", "mock")).lower()
+        return str(self._setting("DOCPILOT_PROVIDER") or self.get("llm.provider", "mock")).lower()
 
     @property
     def model(self) -> str:
-        return str(os.environ.get("DOCPILOT_MODEL") or self.get("llm.model", "deepseek-chat"))
+        return str(self._setting("DOCPILOT_MODEL") or self.get("llm.model", "deepseek-chat"))
 
     def api_key(self) -> Optional[str]:
-        for env in ("DOCPILOT_API_KEY", "DEEPSEEK_API_KEY", "OPENAI_API_KEY"):
-            if os.environ.get(env):
-                return os.environ[env]
-        return None
+        found = self._lookup(("DOCPILOT_API_KEY", "DEEPSEEK_API_KEY", "OPENAI_API_KEY"))
+        return found[1] if found else None
+
+    def api_key_source(self) -> str:
+        """Key 来自哪个变量、哪一层（**只报名字，不打印 Key 本身**）。"""
+        found = self._lookup(("DOCPILOT_API_KEY", "DEEPSEEK_API_KEY", "OPENAI_API_KEY"))
+        return f"{found[0]}（{found[2]}）" if found else "未配置"
 
     def base_url(self) -> Optional[str]:
-        explicit = os.environ.get("DOCPILOT_BASE_URL")
+        explicit = self._setting("DOCPILOT_BASE_URL")
         if explicit:
             return explicit
         if self.provider == "deepseek":
             return "https://api.deepseek.com/v1"
         if self.provider == "openai":
-            return os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")
-        return os.environ.get("OPENAI_BASE_URL")
+            return self._setting("OPENAI_BASE_URL", "https://api.openai.com/v1")
+        return self._setting("OPENAI_BASE_URL")
 
     def describe(self) -> str:
-        return f"provider={self.provider} model={self.model} max_steps={self.get('agent.max_steps')}"
+        return (
+            f"provider={self.provider}（{self.source_of('DOCPILOT_PROVIDER')}） "
+            f"model={self.model} max_steps={self.get('agent.max_steps')}"
+        )
 
 
 def _deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
@@ -324,8 +393,25 @@ def _deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any
     return out
 
 
-def load_config(path: Optional[str | Path] = None, root: Optional[str | Path] = None, overrides: Optional[Dict[str, Any]] = None) -> Config:
-    """加载配置：内置默认值 ← configs/docpilot.yaml ← configs/docpilot.local.yaml ← overrides。"""
+def load_config(
+    path: Optional[str | Path] = None,
+    root: Optional[str | Path] = None,
+    overrides: Optional[Dict[str, Any]] = None,
+    cli: Optional[Dict[str, str]] = None,
+    use_dotenv: bool = True,
+) -> Config:
+    """加载配置：内置默认值 ← YAML ← local.yaml ← overrides；再叠加 `.env` 与命令行。
+
+    数据层（前三项）与"环境层"（``.env`` / 真实环境变量 / ``cli``）是分开的：
+    数据层写进 ``Config._data``，环境层由 :meth:`Config._setting` 按
+    命令行 > 环境变量 > ``.env`` 的优先级实时解析 —— 所以改 ``.env`` 不需要重启，
+    而命令行永远能压过文件。
+
+    Args:
+        use_dotenv: 是否读取 ``<root>/.env``。**测试里必须传 False**，
+            否则开发者本机的真实 Key 会漏进测试（`test_api_key_resolution_order`
+            这类"没有 Key 时应当是 None"的断言会莫名其妙失败）。
+    """
     base_root = Path(root).resolve() if root else Path(__file__).resolve().parents[1]
     data = json.loads(json.dumps(DEFAULT_CONFIG))  # 深拷贝
 
@@ -339,7 +425,70 @@ def load_config(path: Optional[str | Path] = None, root: Optional[str | Path] = 
 
     if overrides:
         data = _deep_merge(data, overrides)
-    return Config(data, base_root)
+
+    dotenv_data = read_dotenv(base_root / ".env") if use_dotenv else {}
+    return Config(data, base_root, dotenv=dotenv_data, cli=cli)
+
+
+# --------------------------------------------------------------------------- #
+# .env：零依赖迷你解析器（为什么不用 python-dotenv 见下）
+# --------------------------------------------------------------------------- #
+
+_ENV_KEY_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
+
+
+def parse_dotenv(text: str) -> Dict[str, str]:
+    """解析 ``.env`` 文本为字典（项目用到的语法子集）。
+
+    支持：``KEY=VALUE``、``#`` 注释（整行或行内）、空行、``export KEY=VALUE``、
+    成对的单/双引号、值里出现 ``=``。不支持多行值与变量插值
+    （真需要就用真实环境变量）。
+
+    为什么手写而不装 ``python-dotenv``：本项目的立身之本就是"零核心依赖、
+    clone 完就能跑"，而这点语法用二十行就够了 —— 和 BM25、mini-YAML 是同一个取舍。
+    代价是不支持复杂语法，所以**边界写在文档里**，而不是假装支持。
+    """
+    result: Dict[str, str] = {}
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line[:7].lower() == "export ":
+            line = line[7:].lstrip()
+        if "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        if not key or not _ENV_KEY_RE.fullmatch(key):
+            continue
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+            value = value[1:-1]  # 成对引号：原样保留内部内容（含 # 和空格）
+        else:
+            # 未加引号时，把"空白 + #"之后当注释 —— 这是最符合直觉的写法，
+            # 也让 `DOCPILOT_PROVIDER=deepseek  # 备注` 这种行不会把备注吃进值里
+            hash_index = value.find(" #")
+            if hash_index >= 0:
+                value = value[:hash_index].rstrip()
+        result[key] = value
+    return result
+
+
+def read_dotenv(path: Optional[str | Path]) -> Dict[str, str]:
+    """读取 ``.env`` 文件。不存在或读不了就返回空字典 —— **绝不抛异常**。
+
+    配置读取不该让任何入口起不来：这和"没配 Key 时自动降级为 Mock"是同一条原则。
+    ``utf-8-sig`` 用来吃掉 BOM（Windows 上写字本文件很容易带，踩过一次）。
+    """
+    if not path:
+        return {}
+    file = Path(path)
+    try:
+        if not file.is_file():
+            return {}
+        return parse_dotenv(file.read_text(encoding="utf-8-sig"))
+    except OSError:
+        return {}
 
 
 # --------------------------------------------------------------------------- #

@@ -919,11 +919,22 @@ class KnowledgeBase:
         self.rrf_k = int(rag.get("rrf_k", 60))
         self.weights = tuple(rag.get("rrf_weights", [1.0, 1.2]))[:2]
         self.embedder = LocalEmbedder(int(rag.get("embed_dim", 256)), int(rag.get("min_token_len", 2)))
+        # BM25 的三个打分参数（k1 / b / delta）。默认值是**文献/主流实现的通用值**，
+        # 不是在本语料上调出来的 —— 依据与实测见 configs/docpilot.yaml 的注释。
+        # 之所以把它们提到配置里：本项目"参数不得硬编码"的规矩，以及让
+        # `scripts/experiment_bm25_params.py` 能走**真实构造路径**做敏感度实验
+        # （之前的实验只能在脚本里重建索引替换，等于绕过了生产代码）。
+        bm25_cfg = rag.get("bm25", {}) or {}
+        self.bm25_params: Dict[str, float] = {
+            "k1": float(bm25_cfg.get("k1", 1.5)),
+            "b": float(bm25_cfg.get("b", 0.75)),
+            "delta": float(bm25_cfg.get("delta", 0.5)),
+        }
         # 通道开关（默认都开）。只为消融实验准备：正常使用不要关，
         # 关掉任一通道都会让检索从"混合"退化成单路。
         self.enable_dense = bool(rag.get("enable_dense", True))
         self.enable_sparse = bool(rag.get("enable_sparse", True))
-        self.bm25 = BM25Index(min_len=int(rag.get("min_token_len", 2)))
+        self.bm25 = BM25Index(min_len=int(rag.get("min_token_len", 2)), **self.bm25_params)
         self.chunks: Dict[str, RetrievedChunk] = {}
         self.vectors: Dict[str, List[float]] = {}
         self.retriever = HybridRetriever(
@@ -950,7 +961,7 @@ class KnowledgeBase:
 
         self.chunks.clear()
         self.vectors.clear()
-        self.bm25 = BM25Index(min_len=self.embedder.min_len)
+        self.bm25 = BM25Index(min_len=self.embedder.min_len, **self.bm25_params)
 
         files = sorted(self.docs_dir.rglob("*.md")) if self.docs_dir.exists() else []
         for path in files:
@@ -1071,6 +1082,9 @@ class KnowledgeBase:
             "bm25_terms": len(self.bm25.postings),
             # 索引里**实际**建了哪些通道（关掉的通道不会留下任何数据）
             "channels": {"sparse": bool(self.enable_sparse), "dense": bool(self.enable_dense)},
+            # 实际生效的 BM25 参数：调参实验必须能看到"真的传进去了"，
+            # 否则"参数没生效"和"参数没用"分不清（本项目在 chunk_size 上踩过）。
+            "bm25": {**self.bm25_params, "min_len": self.bm25.min_len},
         }
 
 

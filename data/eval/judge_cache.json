@@ -1,0 +1,1560 @@
+{
+  "2e42cf4635ce5bbf": {
+    "verdict": false,
+    "raw": "",
+    "question": "直系亲属去世有丧假吗？几天？",
+    "chunk_id": "ck_f194640cd2"
+  },
+  "82014bac5eb5bf67": {
+    "verdict": false,
+    "raw": "",
+    "question": "丧假期间工资怎么算？",
+    "chunk_id": "ck_2705e6c7d9"
+  },
+  "2fb31a072756a7e5": {
+    "verdict": false,
+    "raw": "",
+    "question": "哺乳期每天有几小时哺乳假？",
+    "chunk_id": "ck_85519a4152"
+  },
+  "7fd19aa22b0f7507": {
+    "verdict": false,
+    "raw": "",
+    "question": "婚假可以分两次休吗？",
+    "chunk_id": "ck_c71f2c806c"
+  },
+  "670731eaaff6419e": {
+    "verdict": false,
+    "raw": "",
+    "question": "产假可以提前多少天开始休？",
+    "chunk_id": "ck_530973c782"
+  },
+  "e36b0d60d6b2cd60": {
+    "verdict": false,
+    "raw": "",
+    "question": "加班有加班费吗？按几倍计算？",
+    "chunk_id": "ck_f187477c4c"
+  },
+  "948d7fb882a32175": {
+    "verdict": false,
+    "raw": "",
+    "question": "周末加班可以调休吗？调休有效期多久？",
+    "chunk_id": "ck_e9fb927817"
+  },
+  "549335d551b33640": {
+    "verdict": false,
+    "raw": "",
+    "question": "平时加班有餐补吗？",
+    "chunk_id": "ck_f187477c4c"
+  },
+  "082d0578f8efd912": {
+    "verdict": false,
+    "raw": "",
+    "question": "加班到晚上十点打车回家能报销吗？",
+    "chunk_id": "ck_80b5960004"
+  },
+  "22458ad99101498c": {
+    "verdict": false,
+    "raw": "",
+    "question": "P6 的期权授予比例是多少？",
+    "chunk_id": "ck_c4f3e63fe1"
+  },
+  "8b743789804c7326": {
+    "verdict": false,
+    "raw": "",
+    "question": "个税专项附加扣除怎么申报？",
+    "chunk_id": "ck_ac1c991699"
+  },
+  "692f73fa83d4f073": {
+    "verdict": false,
+    "raw": "",
+    "question": "公司有 13 薪吗？什么时候发？",
+    "chunk_id": "ck_a3e82f68b1"
+  },
+  "e35d5523063cf0ca": {
+    "verdict": false,
+    "raw": "",
+    "question": "年终奖一般几月发放？",
+    "chunk_id": "ck_a3e82f68b1"
+  },
+  "c250ddb92d5e6034": {
+    "verdict": false,
+    "raw": "",
+    "question": "住房补贴每月多少？",
+    "chunk_id": "ck_f8288969da"
+  },
+  "72827314fb1094fd": {
+    "verdict": false,
+    "raw": "",
+    "question": "出差期间的意外险是公司买的吗？",
+    "chunk_id": "ck_80b5960004"
+  },
+  "c2895b0e49c8fc1a": {
+    "verdict": false,
+    "raw": "",
+    "question": "报销可以加急打款吗？最快多久？",
+    "chunk_id": "ck_36038de0bf"
+  },
+  "03294684d3ca783a": {
+    "verdict": false,
+    "raw": "",
+    "question": "出差寄快递的费用能报销吗？",
+    "chunk_id": "ck_99671c4a32"
+  },
+  "23596f7ea3c62e1f": {
+    "verdict": false,
+    "raw": "",
+    "question": "出差行程临时变更需要重新审批吗？",
+    "chunk_id": "ck_36038de0bf"
+  },
+  "33fcdf4d308ca1a9": {
+    "verdict": false,
+    "raw": "",
+    "question": "VPN 支持 Linux 系统吗？",
+    "chunk_id": "ck_ffeb0c897a"
+  },
+  "30c7e9d0469e1416": {
+    "verdict": false,
+    "raw": "",
+    "question": "可以用 1Password 这类工具保存公司密码吗？",
+    "chunk_id": "ck_7f25cc5a8e"
+  },
+  "e7127b380aa07b95": {
+    "verdict": false,
+    "raw": "",
+    "question": "MFA 硬件令牌去哪里申请？",
+    "chunk_id": "ck_fce87c0151"
+  },
+  "9a0185ce78e4c37e": {
+    "verdict": false,
+    "raw": "",
+    "question": "入职需要提交体检报告吗？",
+    "chunk_id": "ck_d8b3feb9e7"
+  },
+  "be30bcd78485432d": {
+    "verdict": false,
+    "raw": "",
+    "question": "试用期延长后薪资还是 90% 吗？",
+    "chunk_id": "ck_1ef69509b5"
+  },
+  "a3a5dfdabfaaba7f": {
+    "verdict": false,
+    "raw": "",
+    "question": "P7 的 6 个月试用期可以提前转正吗？",
+    "chunk_id": "ck_1ef69509b5"
+  },
+  "01d43922c2713f8b": {
+    "verdict": false,
+    "raw": "",
+    "question": "实习生实习期满可以直接转正吗？",
+    "chunk_id": "ck_671cbafd20"
+  },
+  "6c1da49be537497d": {
+    "verdict": false,
+    "raw": "",
+    "question": "代码覆盖率要求达到多少百分比？",
+    "chunk_id": "ck_0200ace185"
+  },
+  "b320f3ab840a2e32": {
+    "verdict": false,
+    "raw": "",
+    "question": "一个 PR 最多可以评审几轮？",
+    "chunk_id": "ck_0200ace185"
+  },
+  "2985bf6d0fb2b93c": {
+    "verdict": false,
+    "raw": "",
+    "question": "代码评审有积分或奖励吗？",
+    "chunk_id": "ck_b5053cb294"
+  },
+  "4bb7cb9518277140": {
+    "verdict": false,
+    "raw": "",
+    "question": "单元测试必须在几分钟内跑完？",
+    "chunk_id": "ck_0200ace185"
+  },
+  "f9737bc4d175feb9": {
+    "verdict": false,
+    "raw": "",
+    "question": "接受供应商宴请的人均标准是多少元？",
+    "chunk_id": "ck_a4d4cbdbe2"
+  },
+  "86ff1b6ead01b430": {
+    "verdict": false,
+    "raw": "",
+    "question": "年假结转上限是 10 天吧？",
+    "chunk_id": "ck_6cc22a0f41"
+  },
+  "a56d4086915e4fbd": {
+    "verdict": false,
+    "raw": "",
+    "question": "收受供应商 300 元购物卡该怎么处理？",
+    "chunk_id": "ck_c179eb2b61"
+  },
+  "4f1a5b653e7ee92d": {
+    "verdict": false,
+    "raw": "",
+    "question": "年假没休完可以折现吗？",
+    "chunk_id": "ck_6cc22a0f41"
+  },
+  "4b2f8b0be44a6516": {
+    "verdict": false,
+    "raw": "",
+    "question": "职场骚扰举报后多久出结论？",
+    "chunk_id": "ck_c9513425cb"
+  },
+  "c857c3375e1d6358": {
+    "verdict": false,
+    "raw": "",
+    "question": "产假期间的工资怎么发？",
+    "chunk_id": "ck_2705e6c7d9"
+  },
+  "89f2c64c5d3b02b0": {
+    "verdict": false,
+    "raw": "",
+    "question": "年终奖要交多少个税？",
+    "chunk_id": "ck_a3e82f68b1"
+  },
+  "67f4950bf79bb195": {
+    "verdict": false,
+    "raw": "",
+    "question": "差旅借款需要谁审批？",
+    "chunk_id": "ck_ac1c991699"
+  },
+  "3bded9a5dd8f2aae": {
+    "verdict": false,
+    "raw": "",
+    "question": "出差期间生病住院的费用能报销吗？",
+    "chunk_id": "ck_80b5960004"
+  },
+  "61bdc4a16f12a11b": {
+    "verdict": false,
+    "raw": "",
+    "question": "VPN 客户端在哪里下载？",
+    "chunk_id": "ck_ffeb0c897a"
+  },
+  "2aa8b30654dda908": {
+    "verdict": false,
+    "raw": "",
+    "question": "实习生有试用期吗？多久？",
+    "chunk_id": "ck_5287008ea5"
+  },
+  "46c23367d6c823dc": {
+    "verdict": false,
+    "raw": "",
+    "question": "生产环境只读权限申请要多久审批完？",
+    "chunk_id": "ck_e9fb927817"
+  },
+  "c9e3f2bd61bc682f": {
+    "verdict": false,
+    "raw": "",
+    "question": "MFA 可以用短信验证码吗？",
+    "chunk_id": "ck_fce87c0151"
+  },
+  "e2d5ff07a106fe2a": {
+    "verdict": false,
+    "raw": "",
+    "question": "试用期员工有年假吗？",
+    "chunk_id": "ck_fb61964c8f"
+  },
+  "cc98c8789bcefdf8": {
+    "verdict": false,
+    "raw": "",
+    "question": "报销单需要经过哪些人审批？",
+    "chunk_id": "ck_36038de0bf"
+  },
+  "68a01c8087ebdfda": {
+    "verdict": false,
+    "raw": "",
+    "question": "转正评估什么时候发起？",
+    "chunk_id": "ck_1ef69509b5"
+  },
+  "c34f490d7bfd721a": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "直系亲属去世有丧假吗？几天？",
+    "chunk_id": "ck_f194640cd2",
+    "model": "deepseek-chat"
+  },
+  "eceee44371e46206": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "丧假期间工资怎么算？",
+    "chunk_id": "ck_2705e6c7d9",
+    "model": "deepseek-chat"
+  },
+  "beb3cf70df8dce05": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "哺乳期每天有几小时哺乳假？",
+    "chunk_id": "ck_85519a4152",
+    "model": "deepseek-chat"
+  },
+  "abf2eb84d404726a": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "婚假可以分两次休吗？",
+    "chunk_id": "ck_c71f2c806c",
+    "model": "deepseek-chat"
+  },
+  "9bb0208f2fae009c": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "产假可以提前多少天开始休？",
+    "chunk_id": "ck_530973c782",
+    "model": "deepseek-chat"
+  },
+  "558b966352d49a68": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "加班有加班费吗？按几倍计算？",
+    "chunk_id": "ck_f187477c4c",
+    "model": "deepseek-chat"
+  },
+  "f4f21da95c70215d": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "周末加班可以调休吗？调休有效期多久？",
+    "chunk_id": "ck_e9fb927817",
+    "model": "deepseek-chat"
+  },
+  "e2a2ea8cabd6456b": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "平时加班有餐补吗？",
+    "chunk_id": "ck_f187477c4c",
+    "model": "deepseek-chat"
+  },
+  "d244661ecf8340cb": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "加班到晚上十点打车回家能报销吗？",
+    "chunk_id": "ck_80b5960004",
+    "model": "deepseek-chat"
+  },
+  "79c483adb8e26bb9": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "P6 的期权授予比例是多少？",
+    "chunk_id": "ck_c4f3e63fe1",
+    "model": "deepseek-chat"
+  },
+  "6f445ec448238522": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "个税专项附加扣除怎么申报？",
+    "chunk_id": "ck_ac1c991699",
+    "model": "deepseek-chat"
+  },
+  "22b7c1db165d4369": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "公司有 13 薪吗？什么时候发？",
+    "chunk_id": "ck_a3e82f68b1",
+    "model": "deepseek-chat"
+  },
+  "6ca8fb6d46c6b5b5": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "年终奖一般几月发放？",
+    "chunk_id": "ck_a3e82f68b1",
+    "model": "deepseek-chat"
+  },
+  "b580b41c8d6238bb": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "住房补贴每月多少？",
+    "chunk_id": "ck_f8288969da",
+    "model": "deepseek-chat"
+  },
+  "7e41ecca2b516551": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "出差期间的意外险是公司买的吗？",
+    "chunk_id": "ck_80b5960004",
+    "model": "deepseek-chat"
+  },
+  "e20772ab49e0fba8": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "报销可以加急打款吗？最快多久？",
+    "chunk_id": "ck_36038de0bf",
+    "model": "deepseek-chat"
+  },
+  "e94896a1ec330729": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "出差寄快递的费用能报销吗？",
+    "chunk_id": "ck_99671c4a32",
+    "model": "deepseek-chat"
+  },
+  "61a4dabedeaa7807": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "出差行程临时变更需要重新审批吗？",
+    "chunk_id": "ck_36038de0bf",
+    "model": "deepseek-chat"
+  },
+  "cc9fd30686025087": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "VPN 支持 Linux 系统吗？",
+    "chunk_id": "ck_ffeb0c897a",
+    "model": "deepseek-chat"
+  },
+  "048fb7a5936a6822": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "可以用 1Password 这类工具保存公司密码吗？",
+    "chunk_id": "ck_7f25cc5a8e",
+    "model": "deepseek-chat"
+  },
+  "93ba6b7262a54330": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "MFA 硬件令牌去哪里申请？",
+    "chunk_id": "ck_fce87c0151",
+    "model": "deepseek-chat"
+  },
+  "8a66047658450075": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "入职需要提交体检报告吗？",
+    "chunk_id": "ck_d8b3feb9e7",
+    "model": "deepseek-chat"
+  },
+  "1e6ebb00b1bab20c": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "试用期延长后薪资还是 90% 吗？",
+    "chunk_id": "ck_1ef69509b5",
+    "model": "deepseek-chat"
+  },
+  "944dae47f733af2e": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "P7 的 6 个月试用期可以提前转正吗？",
+    "chunk_id": "ck_1ef69509b5",
+    "model": "deepseek-chat"
+  },
+  "c502fbf0a81e87bb": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "实习生实习期满可以直接转正吗？",
+    "chunk_id": "ck_671cbafd20",
+    "model": "deepseek-chat"
+  },
+  "6821baac5f5ca713": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "代码覆盖率要求达到多少百分比？",
+    "chunk_id": "ck_0200ace185",
+    "model": "deepseek-chat"
+  },
+  "baa0a3bd6f4ca83a": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "一个 PR 最多可以评审几轮？",
+    "chunk_id": "ck_0200ace185",
+    "model": "deepseek-chat"
+  },
+  "6f6f715e54a27319": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "代码评审有积分或奖励吗？",
+    "chunk_id": "ck_b5053cb294",
+    "model": "deepseek-chat"
+  },
+  "92cac57fe31382b8": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "单元测试必须在几分钟内跑完？",
+    "chunk_id": "ck_0200ace185",
+    "model": "deepseek-chat"
+  },
+  "582dfab6456c6cef": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "接受供应商宴请的人均标准是多少元？",
+    "chunk_id": "ck_a4d4cbdbe2",
+    "model": "deepseek-chat"
+  },
+  "d7087be54ff496fe": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "年假结转上限是 10 天吧？",
+    "chunk_id": "ck_6cc22a0f41",
+    "model": "deepseek-chat"
+  },
+  "90807e2a48ea1c28": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "收受供应商 300 元购物卡该怎么处理？",
+    "chunk_id": "ck_c179eb2b61",
+    "model": "deepseek-chat"
+  },
+  "6b0af5abb8dbfd5b": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "年假没休完可以折现吗？",
+    "chunk_id": "ck_6cc22a0f41",
+    "model": "deepseek-chat"
+  },
+  "e948fe68b3994108": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "职场骚扰举报后多久出结论？",
+    "chunk_id": "ck_c9513425cb",
+    "model": "deepseek-chat"
+  },
+  "ed324dfbb8b8fce6": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "产假期间的工资怎么发？",
+    "chunk_id": "ck_2705e6c7d9",
+    "model": "deepseek-chat"
+  },
+  "968381897880215f": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "年终奖要交多少个税？",
+    "chunk_id": "ck_a3e82f68b1",
+    "model": "deepseek-chat"
+  },
+  "9f4eb80b3512b329": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "差旅借款需要谁审批？",
+    "chunk_id": "ck_ac1c991699",
+    "model": "deepseek-chat"
+  },
+  "01c15e50ef009f2c": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "出差期间生病住院的费用能报销吗？",
+    "chunk_id": "ck_80b5960004",
+    "model": "deepseek-chat"
+  },
+  "15406a532e0ab154": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "VPN 客户端在哪里下载？",
+    "chunk_id": "ck_ffeb0c897a",
+    "model": "deepseek-chat"
+  },
+  "bb4884052d400983": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "实习生有试用期吗？多久？",
+    "chunk_id": "ck_5287008ea5",
+    "model": "deepseek-chat"
+  },
+  "c0d206e70f309564": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "生产环境只读权限申请要多久审批完？",
+    "chunk_id": "ck_e9fb927817",
+    "model": "deepseek-chat"
+  },
+  "25cd5f4d0f294dd5": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "MFA 可以用短信验证码吗？",
+    "chunk_id": "ck_fce87c0151",
+    "model": "deepseek-chat"
+  },
+  "0e942f02bca5099e": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "试用期员工有年假吗？",
+    "chunk_id": "ck_fb61964c8f",
+    "model": "deepseek-chat"
+  },
+  "0718063d0ff96668": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "报销单需要经过哪些人审批？",
+    "chunk_id": "ck_36038de0bf",
+    "model": "deepseek-chat"
+  },
+  "ab8c7516f4cb132b": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "转正评估什么时候发起？",
+    "chunk_id": "ck_1ef69509b5",
+    "model": "deepseek-chat"
+  },
+  "dcb047e6b79dd7f4": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "直系亲属去世有丧假吗？几天？",
+    "chunk_id": "ck_f194640cd2",
+    "model": "deepseek-chat"
+  },
+  "387d510841e7e619": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "丧假期间工资怎么算？",
+    "chunk_id": "ck_2705e6c7d9",
+    "model": "deepseek-chat"
+  },
+  "1d5b46379d749fca": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "哺乳期每天有几小时哺乳假？",
+    "chunk_id": "ck_85519a4152",
+    "model": "deepseek-chat"
+  },
+  "127acf22edc4c6ad": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "婚假可以分两次休吗？",
+    "chunk_id": "ck_c71f2c806c",
+    "model": "deepseek-chat"
+  },
+  "d65ca52db355b3df": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "产假可以提前多少天开始休？",
+    "chunk_id": "ck_530973c782",
+    "model": "deepseek-chat"
+  },
+  "ed4b6d02fdc1ee91": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "加班有加班费吗？按几倍计算？",
+    "chunk_id": "ck_f187477c4c",
+    "model": "deepseek-chat"
+  },
+  "3e916923bd968b2c": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "周末加班可以调休吗？调休有效期多久？",
+    "chunk_id": "ck_e9fb927817",
+    "model": "deepseek-chat"
+  },
+  "0c6ba208d91a4855": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "平时加班有餐补吗？",
+    "chunk_id": "ck_f187477c4c",
+    "model": "deepseek-chat"
+  },
+  "2a36913f27b312a5": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "加班到晚上十点打车回家能报销吗？",
+    "chunk_id": "ck_80b5960004",
+    "model": "deepseek-chat"
+  },
+  "93ccbb17483fc58f": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "P6 的期权授予比例是多少？",
+    "chunk_id": "ck_c4f3e63fe1",
+    "model": "deepseek-chat"
+  },
+  "8c7c70d924e83af1": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "个税专项附加扣除怎么申报？",
+    "chunk_id": "ck_ac1c991699",
+    "model": "deepseek-chat"
+  },
+  "f5751c2c9ae3c722": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "公司有 13 薪吗？什么时候发？",
+    "chunk_id": "ck_a3e82f68b1",
+    "model": "deepseek-chat"
+  },
+  "267bb6ae0cd6b849": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "年终奖一般几月发放？",
+    "chunk_id": "ck_a3e82f68b1",
+    "model": "deepseek-chat"
+  },
+  "72169747bf9e325f": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "住房补贴每月多少？",
+    "chunk_id": "ck_f8288969da",
+    "model": "deepseek-chat"
+  },
+  "24148f19f6a9e712": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "出差期间的意外险是公司买的吗？",
+    "chunk_id": "ck_80b5960004",
+    "model": "deepseek-chat"
+  },
+  "35fb14be6aee8512": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "报销可以加急打款吗？最快多久？",
+    "chunk_id": "ck_36038de0bf",
+    "model": "deepseek-chat"
+  },
+  "7286a412957bf0f5": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "出差寄快递的费用能报销吗？",
+    "chunk_id": "ck_99671c4a32",
+    "model": "deepseek-chat"
+  },
+  "4cc413be198b5255": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "出差行程临时变更需要重新审批吗？",
+    "chunk_id": "ck_36038de0bf",
+    "model": "deepseek-chat"
+  },
+  "22919adf8d0fe712": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "VPN 支持 Linux 系统吗？",
+    "chunk_id": "ck_ffeb0c897a",
+    "model": "deepseek-chat"
+  },
+  "c26b47c237411647": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "可以用 1Password 这类工具保存公司密码吗？",
+    "chunk_id": "ck_7f25cc5a8e",
+    "model": "deepseek-chat"
+  },
+  "c8d4ce1d17cf40e8": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "MFA 硬件令牌去哪里申请？",
+    "chunk_id": "ck_fce87c0151",
+    "model": "deepseek-chat"
+  },
+  "9c470f8326210921": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "入职需要提交体检报告吗？",
+    "chunk_id": "ck_d8b3feb9e7",
+    "model": "deepseek-chat"
+  },
+  "8f94df8bedb3d26d": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "试用期延长后薪资还是 90% 吗？",
+    "chunk_id": "ck_1ef69509b5",
+    "model": "deepseek-chat"
+  },
+  "88a9163fdfe53d77": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "P7 的 6 个月试用期可以提前转正吗？",
+    "chunk_id": "ck_1ef69509b5",
+    "model": "deepseek-chat"
+  },
+  "b03a7ccb85321897": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "实习生实习期满可以直接转正吗？",
+    "chunk_id": "ck_671cbafd20",
+    "model": "deepseek-chat"
+  },
+  "b4978bd7607632e2": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "代码覆盖率要求达到多少百分比？",
+    "chunk_id": "ck_0200ace185",
+    "model": "deepseek-chat"
+  },
+  "d6f844420fd69fb3": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "一个 PR 最多可以评审几轮？",
+    "chunk_id": "ck_0200ace185",
+    "model": "deepseek-chat"
+  },
+  "8a1d66e67a929cf1": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "代码评审有积分或奖励吗？",
+    "chunk_id": "ck_b5053cb294",
+    "model": "deepseek-chat"
+  },
+  "3996fab1b6133e77": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "单元测试必须在几分钟内跑完？",
+    "chunk_id": "ck_0200ace185",
+    "model": "deepseek-chat"
+  },
+  "ae2a5d61f655f043": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "接受供应商宴请的人均标准是多少元？",
+    "chunk_id": "ck_a4d4cbdbe2",
+    "model": "deepseek-chat"
+  },
+  "91cd85940a73dacd": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "年假结转上限是 10 天吧？",
+    "chunk_id": "ck_6cc22a0f41",
+    "model": "deepseek-chat"
+  },
+  "2f4324d3ca3b7585": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "收受供应商 300 元购物卡该怎么处理？",
+    "chunk_id": "ck_c179eb2b61",
+    "model": "deepseek-chat"
+  },
+  "6c8d01666a6b9362": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "年假没休完可以折现吗？",
+    "chunk_id": "ck_6cc22a0f41",
+    "model": "deepseek-chat"
+  },
+  "585eec2f67218004": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "职场骚扰举报后多久出结论？",
+    "chunk_id": "ck_c9513425cb",
+    "model": "deepseek-chat"
+  },
+  "3833e8486bdb5860": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "产假期间的工资怎么发？",
+    "chunk_id": "ck_2705e6c7d9",
+    "model": "deepseek-chat"
+  },
+  "8b6573a99551e70e": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "年终奖要交多少个税？",
+    "chunk_id": "ck_a3e82f68b1",
+    "model": "deepseek-chat"
+  },
+  "5ff103467196a82d": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "差旅借款需要谁审批？",
+    "chunk_id": "ck_ac1c991699",
+    "model": "deepseek-chat"
+  },
+  "982b76cb500a1c7d": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "出差期间生病住院的费用能报销吗？",
+    "chunk_id": "ck_80b5960004",
+    "model": "deepseek-chat"
+  },
+  "6bfaabf058be00d5": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "VPN 客户端在哪里下载？",
+    "chunk_id": "ck_ffeb0c897a",
+    "model": "deepseek-chat"
+  },
+  "928adbf78189d666": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "实习生有试用期吗？多久？",
+    "chunk_id": "ck_5287008ea5",
+    "model": "deepseek-chat"
+  },
+  "6eceb86269d22dbc": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "生产环境只读权限申请要多久审批完？",
+    "chunk_id": "ck_e9fb927817",
+    "model": "deepseek-chat"
+  },
+  "1ef910301f9cdf59": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "MFA 可以用短信验证码吗？",
+    "chunk_id": "ck_fce87c0151",
+    "model": "deepseek-chat"
+  },
+  "2ba293a06a4ee501": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "试用期员工有年假吗？",
+    "chunk_id": "ck_fb61964c8f",
+    "model": "deepseek-chat"
+  },
+  "42e43f6663171626": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "报销单需要经过哪些人审批？",
+    "chunk_id": "ck_36038de0bf",
+    "model": "deepseek-chat"
+  },
+  "e5047fc1d5217c80": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "转正评估什么时候发起？",
+    "chunk_id": "ck_1ef69509b5",
+    "model": "deepseek-chat"
+  },
+  "ebd5f15d67a56481": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "产检假有几天？产检算病假吗？",
+    "chunk_id": "ck_4251189b71",
+    "model": "deepseek-chat"
+  },
+  "88dfff2aface9663": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "独生子女父母住院有护理假吗？",
+    "chunk_id": "ck_c71f2c806c",
+    "model": "deepseek-chat"
+  },
+  "fa281cc05e8f0954": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "员工的股权激励什么时候行权？",
+    "chunk_id": "ck_671cbafd20",
+    "model": "deepseek-chat"
+  },
+  "383683739f8771cf": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "公积金缴存基数和比例是多少？",
+    "chunk_id": "ck_f8288969da",
+    "model": "deepseek-chat"
+  },
+  "c09c7cf894681d63": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "社保是按什么基数缴纳的？",
+    "chunk_id": "ck_f8288969da",
+    "model": "deepseek-chat"
+  },
+  "8d58f7341ca0133f": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "租房有补贴吗？怎么申请？",
+    "chunk_id": "ck_f8288969da",
+    "model": "deepseek-chat"
+  },
+  "c6228294e50d5ea9": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "境外出差的住宿标准是多少一晚？",
+    "chunk_id": "ck_6f5f98bc6f",
+    "model": "deepseek-chat"
+  },
+  "1f8e9ad8391c5e65": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "发票丢了还能报销吗？怎么处理？",
+    "chunk_id": "ck_a9bc346da3",
+    "model": "deepseek-chat"
+  },
+  "462ec66ce8700b6c": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "差旅借款最多能借多少？",
+    "chunk_id": "ck_ac1c991699",
+    "model": "deepseek-chat"
+  },
+  "2bda749078607fb8": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "提交 IT 工单后多久必须响应？",
+    "chunk_id": "ck_55afb9644b",
+    "model": "deepseek-chat"
+  },
+  "3fac41f0486e62f5": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "软件安装申请被拒绝可以申诉吗？",
+    "chunk_id": "ck_8ef4d42f1a",
+    "model": "deepseek-chat"
+  },
+  "4db1565caf4091d5": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "竞业限制的补偿金每月多少钱？",
+    "chunk_id": "ck_b8876fc3f7",
+    "model": "deepseek-chat"
+  },
+  "d1120e933c7cccc3": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "利益冲突申报多久能审批完？",
+    "chunk_id": "ck_a4d4cbdbe2",
+    "model": "deepseek-chat"
+  },
+  "8a739e11291da059": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "公司密码要求 8 位以上就行吧？",
+    "chunk_id": "ck_7fc496f965",
+    "model": "deepseek-chat"
+  },
+  "3bf213945c133fbc": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "报销单是一个月内提交就行吧？",
+    "chunk_id": "ck_5b6c0363af",
+    "model": "deepseek-chat"
+  },
+  "f3fcfc62f17597f2": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "P4 的年终奖个人系数是多少？",
+    "chunk_id": "ck_6f5f98bc6f",
+    "model": "deepseek-chat"
+  },
+  "9938e597b26de23e": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "S 级绩效的年度调薪幅度是多少？",
+    "chunk_id": "ck_6cc22a0f41",
+    "model": "deepseek-chat"
+  },
+  "82d78fe65a9f5dcc": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "能把公司代码贴到公开的 AI 工具里问问题吗？",
+    "chunk_id": "ck_0ae196460b",
+    "model": "deepseek-chat"
+  },
+  "2cfc4194b0807119": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "可以用自己的电脑办公吗？",
+    "chunk_id": "ck_0ae196460b",
+    "model": "deepseek-chat"
+  },
+  "83d16ceb92aa7e1a": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "服务台周末上班吗？",
+    "chunk_id": "ck_6dfdaec93f",
+    "model": "deepseek-chat"
+  },
+  "a5a3f1f3a2afe921": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "P6 出差飞行 6 小时可以坐公务舱吗？",
+    "chunk_id": "ck_99102f966b",
+    "model": "deepseek-chat"
+  },
+  "90731d56e79a10f2": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "可以自己 approve 自己的 PR 吗？",
+    "chunk_id": "ck_99cf79e937",
+    "model": "deepseek-chat"
+  },
+  "1383f4cd20fb25b3": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "丧假需要提供什么证明材料？",
+    "chunk_id": "ck_4251189b71",
+    "model": "deepseek-chat"
+  },
+  "842b2b0b59a138a3": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "护理假期间工资怎么算？",
+    "chunk_id": "ck_2705e6c7d9",
+    "model": "deepseek-chat"
+  },
+  "aa22c2fce9da5ca7": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "境外出差住宿的报销上限是多少？",
+    "chunk_id": "ck_b0dcc8c719",
+    "model": "deepseek-chat"
+  },
+  "6b494ae99d2e9fb7": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "电子发票原件丢了可以重新下载吗？",
+    "chunk_id": "ck_a9bc346da3",
+    "model": "deepseek-chat"
+  },
+  "a49f6dfe2a1e552c": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "工单提交后一直没人处理该怎么办？",
+    "chunk_id": "ck_ffeb0c897a",
+    "model": "deepseek-chat"
+  },
+  "8ec2a6e0d67db4bf": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "入职体检的费用公司报销吗？",
+    "chunk_id": "ck_f92ab5e362",
+    "model": "deepseek-chat"
+  },
+  "63eae4437b212aa2": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "P1 出差可以坐高铁一等座吗？",
+    "chunk_id": "ck_99102f966b",
+    "model": "deepseek-chat"
+  },
+  "518f2d7595f710df": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "打印机驱动在哪里下载？",
+    "chunk_id": "ck_fdfe9b9452",
+    "model": "deepseek-chat"
+  },
+  "7b6e579aed5021c7": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "忘记密码了怎么重置？",
+    "chunk_id": "ck_6dfdaec93f",
+    "model": "deepseek-chat"
+  },
+  "12749fa831ee927f": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "MFA 设备丢了可以线上申请重置吗？",
+    "chunk_id": "ck_6dfdaec93f",
+    "model": "deepseek-chat"
+  },
+  "0ae1489113a79b16": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "P3 出差可以坐高铁一等座吗？",
+    "chunk_id": "ck_99102f966b",
+    "model": "deepseek-chat"
+  },
+  "6570af826d0cc268": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "P7 出差可以坐公务舱吗？",
+    "chunk_id": "ck_99102f966b",
+    "model": "deepseek-chat"
+  },
+  "cbdbd3200769cd08": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "P2 在一线城市出差，住宿上限是多少？",
+    "chunk_id": "ck_6f5f98bc6f",
+    "model": "deepseek-chat"
+  },
+  "5e92cf8cc35786ea": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "P6 去二线城市出差，住宿标准是多少？",
+    "chunk_id": "ck_6f5f98bc6f",
+    "model": "deepseek-chat"
+  },
+  "24eb773874bf4d35": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "实习生出差需要谁来发起？",
+    "chunk_id": "ck_2eacca1f5b",
+    "model": "deepseek-chat"
+  },
+  "7974dcdcf658526e": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "公司密码可以使用 123456 这种连续数字吗？",
+    "chunk_id": "ck_64e8c7403d",
+    "model": "deepseek-chat"
+  },
+  "00aec2b1a8a08876": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "密码连续输错几次会被锁定？",
+    "chunk_id": "ck_6dfdaec93f",
+    "model": "deepseek-chat"
+  },
+  "a903fcbd98eb601a": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "申请安装抓包工具要多久审批？",
+    "chunk_id": "ck_7f25cc5a8e",
+    "model": "deepseek-chat"
+  },
+  "b1620d46bb0b6b8d": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "核心模块的 PR 需要几个人 Approve？",
+    "chunk_id": "ck_99cf79e937",
+    "model": "deepseek-chat"
+  },
+  "4d6cb1fa36cc5625": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "试用期薪资是转正后的多少？",
+    "chunk_id": "ck_1ef69509b5",
+    "model": "deepseek-chat"
+  },
+  "8d5c12a54e3ac5db": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "试用期最多可以延长多久？",
+    "chunk_id": "ck_1ef69509b5",
+    "model": "deepseek-chat"
+  },
+  "920f6fe8f5b9d4c2": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "事假每个月最多几天？",
+    "chunk_id": "ck_11e5269319",
+    "model": "deepseek-chat"
+  },
+  "d1a547fce8d9c194": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "病假期间工资按什么标准发？",
+    "chunk_id": "ck_4251189b71",
+    "model": "deepseek-chat"
+  },
+  "7d610dd7c7b9d70a": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "年假可以和法定节假日连着休吗？",
+    "chunk_id": "ck_fb61964c8f",
+    "model": "deepseek-chat"
+  },
+  "4b50f515d33637f4": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "离职后保密义务还要持续多久？",
+    "chunk_id": "ck_34b92d6ae2",
+    "model": "deepseek-chat"
+  },
+  "922a33d90174b1a0": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "举报职场骚扰可以匿名吗？",
+    "chunk_id": "ck_c9513425cb",
+    "model": "deepseek-chat"
+  },
+  "354d695377e2af52": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "收受供应商价值 800 元的礼品要怎么处理？",
+    "chunk_id": "ck_a4d4cbdbe2",
+    "model": "deepseek-chat"
+  },
+  "7bb3a810550bbda3": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "绩效 C 级的年终奖个人系数是多少？",
+    "chunk_id": "ck_a3e82f68b1",
+    "model": "deepseek-chat"
+  },
+  "8dbcb3bc0e01bf6b": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "连续两个考核周期都是 D 会怎么样？",
+    "chunk_id": "ck_c4f3e63fe1",
+    "model": "deepseek-chat"
+  },
+  "6d906a004de06bc8": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "年度调薪一般几月进行？",
+    "chunk_id": "ck_78d2deac3f",
+    "model": "deepseek-chat"
+  },
+  "90af4e94c6efbde0": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "对绩效结果申诉要在几天内提交？",
+    "chunk_id": "ck_3c45f05f6d",
+    "model": "deepseek-chat"
+  },
+  "9e31f95251fe6412": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "可以用年假抵扣病假吗？",
+    "chunk_id": "ck_fb61964c8f",
+    "model": "deepseek-chat"
+  },
+  "881755bbdad8a65b": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "加班需要提前审批吗？",
+    "chunk_id": "ck_9e9d9896e5",
+    "model": "deepseek-chat"
+  },
+  "a92cf84bb475aa34": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "出差可以乘坐轮船吗？船票能报销吗？",
+    "chunk_id": "ck_99102f966b",
+    "model": "deepseek-chat"
+  },
+  "94c688586dff1516": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "打印机支持彩色打印吗？",
+    "chunk_id": "ck_fdfe9b9452",
+    "model": "deepseek-chat"
+  },
+  "84bbe89e1eeffc09": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "会议室怎么预订？",
+    "chunk_id": "ck_80b5960004",
+    "model": "deepseek-chat"
+  },
+  "024eb279cd5dd960": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "一次出差的费用可以分几次提交报销吗？",
+    "chunk_id": "ck_36038de0bf",
+    "model": "deepseek-chat"
+  },
+  "3db2e5a86b12407c": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "转正评估没通过，可以再申请一次评估吗？",
+    "chunk_id": "ck_1ef69509b5",
+    "model": "deepseek-chat"
+  },
+  "1d2e271f354690fa": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "绩效结果会影响社保缴费基数吗？",
+    "chunk_id": "ck_f8288969da",
+    "model": "deepseek-chat"
+  },
+  "4cf3288892d29a29": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "收受供应商回扣要承担什么法律责任？",
+    "chunk_id": "ck_671260561a",
+    "model": "deepseek-chat"
+  },
+  "01402010fffa13dc": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "病假期间可以在家远程办公吗？",
+    "chunk_id": "ck_5cf69904cd",
+    "model": "deepseek-chat"
+  },
+  "b4cb769b4278fc61": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "P3 出差可以坐高铁一等座吗？",
+    "chunk_id": "ck_99102f966b",
+    "model": "deepseek-chat"
+  },
+  "8486eca19a4a9b5f": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "P7 出差可以坐公务舱吗？",
+    "chunk_id": "ck_99102f966b",
+    "model": "deepseek-chat"
+  },
+  "8b5640ac31f5620c": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "P2 在一线城市出差，住宿上限是多少？",
+    "chunk_id": "ck_6f5f98bc6f",
+    "model": "deepseek-chat"
+  },
+  "9b57a80459bee9c7": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "P6 去二线城市出差，住宿标准是多少？",
+    "chunk_id": "ck_6f5f98bc6f",
+    "model": "deepseek-chat"
+  },
+  "b9d3eede449e1a17": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "实习生出差需要谁来发起？",
+    "chunk_id": "ck_2eacca1f5b",
+    "model": "deepseek-chat"
+  },
+  "b5504940d6a32c80": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "公司密码可以使用 123456 这种连续数字吗？",
+    "chunk_id": "ck_64e8c7403d",
+    "model": "deepseek-chat"
+  },
+  "aa1498ead680b5e4": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "密码连续输错几次会被锁定？",
+    "chunk_id": "ck_6dfdaec93f",
+    "model": "deepseek-chat"
+  },
+  "806f9b43d338a0a2": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "申请安装抓包工具要多久审批？",
+    "chunk_id": "ck_7f25cc5a8e",
+    "model": "deepseek-chat"
+  },
+  "d0f7e6a045d74905": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "核心模块的 PR 需要几个人 Approve？",
+    "chunk_id": "ck_99cf79e937",
+    "model": "deepseek-chat"
+  },
+  "5386188e396f269d": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "试用期薪资是转正后的多少？",
+    "chunk_id": "ck_1ef69509b5",
+    "model": "deepseek-chat"
+  },
+  "77e163dc609812a2": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "试用期最多可以延长多久？",
+    "chunk_id": "ck_1ef69509b5",
+    "model": "deepseek-chat"
+  },
+  "430447baff4444a7": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "事假每个月最多几天？",
+    "chunk_id": "ck_11e5269319",
+    "model": "deepseek-chat"
+  },
+  "aed881624fba303b": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "病假期间工资按什么标准发？",
+    "chunk_id": "ck_4251189b71",
+    "model": "deepseek-chat"
+  },
+  "5bfde2e8bfca4f05": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "年假可以和法定节假日连着休吗？",
+    "chunk_id": "ck_fb61964c8f",
+    "model": "deepseek-chat"
+  },
+  "04f45c5a85c227da": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "离职后保密义务还要持续多久？",
+    "chunk_id": "ck_34b92d6ae2",
+    "model": "deepseek-chat"
+  },
+  "6d67a0e1902cd8aa": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "举报职场骚扰可以匿名吗？",
+    "chunk_id": "ck_c9513425cb",
+    "model": "deepseek-chat"
+  },
+  "ac942873770475c5": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "收受供应商价值 800 元的礼品要怎么处理？",
+    "chunk_id": "ck_a4d4cbdbe2",
+    "model": "deepseek-chat"
+  },
+  "78271efb9cd8ba8c": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "绩效 C 级的年终奖个人系数是多少？",
+    "chunk_id": "ck_a3e82f68b1",
+    "model": "deepseek-chat"
+  },
+  "2dcf944ddba70307": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "连续两个考核周期都是 D 会怎么样？",
+    "chunk_id": "ck_c4f3e63fe1",
+    "model": "deepseek-chat"
+  },
+  "856955ac64eb7477": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "年度调薪一般几月进行？",
+    "chunk_id": "ck_78d2deac3f",
+    "model": "deepseek-chat"
+  },
+  "79b7da95a6894213": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "对绩效结果申诉要在几天内提交？",
+    "chunk_id": "ck_3c45f05f6d",
+    "model": "deepseek-chat"
+  },
+  "c74d18e31387f48d": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "可以用年假抵扣病假吗？",
+    "chunk_id": "ck_fb61964c8f",
+    "model": "deepseek-chat"
+  },
+  "d434c270115fd826": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "加班需要提前审批吗？",
+    "chunk_id": "ck_9e9d9896e5",
+    "model": "deepseek-chat"
+  },
+  "7496508e5438f3b2": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "出差可以乘坐轮船吗？船票能报销吗？",
+    "chunk_id": "ck_99102f966b",
+    "model": "deepseek-chat"
+  },
+  "687e5182c5a9361f": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "打印机支持彩色打印吗？",
+    "chunk_id": "ck_fdfe9b9452",
+    "model": "deepseek-chat"
+  },
+  "fff2335e30972de3": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "会议室怎么预订？",
+    "chunk_id": "ck_80b5960004",
+    "model": "deepseek-chat"
+  },
+  "bf76efa139b44f2a": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "一次出差的费用可以分几次提交报销吗？",
+    "chunk_id": "ck_36038de0bf",
+    "model": "deepseek-chat"
+  },
+  "fa73a05f275bb51a": {
+    "verdict": true,
+    "raw": "YES",
+    "question": "转正评估没通过，可以再申请一次评估吗？",
+    "chunk_id": "ck_1ef69509b5",
+    "model": "deepseek-chat"
+  },
+  "360430ad4081df86": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "绩效结果会影响社保缴费基数吗？",
+    "chunk_id": "ck_f8288969da",
+    "model": "deepseek-chat"
+  },
+  "c968f24d6934d021": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "收受供应商回扣要承担什么法律责任？",
+    "chunk_id": "ck_671260561a",
+    "model": "deepseek-chat"
+  },
+  "1bc47ed147ee19b4": {
+    "verdict": false,
+    "raw": "NO",
+    "question": "病假期间可以在家远程办公吗？",
+    "chunk_id": "ck_5cf69904cd",
+    "model": "deepseek-chat"
+  }
+}

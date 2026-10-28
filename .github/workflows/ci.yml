@@ -20,13 +20,20 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      # ★ 刻意不装任何运行时依赖：
-      #   本项目核心零第三方依赖，所以这一步本身就是一条验证 ——
-      #   如果哪天不小心引入了必装依赖，这里会直接失败。
+      # ★ 这一步必须在"安装任何东西之前"跑。
+      #   本项目的核心承诺是**运行时零第三方依赖**，而
+      #   "在一台什么都没装的机器上跑通 `python -m docpilot info`"
+      #   就是这条承诺的证明。哪天不小心引入了必装依赖，这里会直接失败。
       #   （不装 PyYAML 也顺带覆盖了内置 mini-YAML 的代码路径。）
-
       - name: 环境自检（验证零依赖可运行）
         run: python -m docpilot info
+
+      # ⚠ 只安装**开发依赖**：pytest 是测试工具，不是运行时依赖。
+      #   这一行曾经缺失，导致三个 Python 版本全部报
+      #   "No module named pytest" —— 工作流在跑测试，却没装 pytest。
+      #   版本约束与 pyproject.toml 的 [dev] extra 保持一致。
+      - name: 安装开发依赖（pytest）
+        run: python -m pip install --disable-pip-version-check --quiet "pytest>=7.0"
 
       - name: 单元测试
         run: python -m pytest tests -q -p no:cacheprovider

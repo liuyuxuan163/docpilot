@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DocPilot · 系统设计讲解</title>
+<style>
+  :root{
+    --bg:#eef1f6; --page:#ffffff; --ink:#16202c; --muted:#5b6b7f;
+    --accent:#1f6feb; --accent2:#0f8a5f; --warn:#9a5b00; --danger:#b42318;
+    --line:#e2e7ee; --panel:#f6f8fb; --code:#f2f5f9; --codetext:#0a5c43;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased; overflow:hidden;
+  }
+  #bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);width:0;transition:width .25s ease;z-index:50}
+  #stage{position:relative;height:100%;display:flex;align-items:center;justify-content:center;padding:26px 34px 48px}
+  .slide{
+    position:absolute; inset:26px 34px 48px; margin:auto;
+    max-width:1150px; max-height:calc(100vh - 74px);
+    background:var(--page); border:1px solid var(--line); border-radius:16px;
+    box-shadow:0 10px 30px rgba(22,32,44,.07);
+    /* 顶部留白必须大于 .sec 标签的高度，否则首行内容会压到标签上。
+       底部因为 .take 有 margin-top:auto，实际是上对齐布局，所以不需要补偿。 */
+    padding:clamp(46px,4.2vw,62px) clamp(24px,3vw,52px) clamp(18px,2vw,26px);
+    opacity:0; transform:translateY(10px); pointer-events:none;
+    transition:opacity .26s ease, transform .26s ease;
+    display:flex; flex-direction:column; justify-content:flex-start; overflow:hidden;
+  }
+  .slide.active{opacity:1; transform:none; pointer-events:auto}
+  .sec{position:absolute;top:clamp(14px,1.5vw,20px);left:clamp(24px,3vw,52px);font-size:12px;letter-spacing:.14em;color:#93a1b3;text-transform:uppercase;line-height:1.2}
+  h1{font-size:clamp(30px,3.6vw,50px);line-height:1.16;margin:0 0 14px;letter-spacing:-.5px}
+  h2{font-size:clamp(20px,2.15vw,29px);line-height:1.28;margin:0 0 14px;letter-spacing:-.2px}
+  h2 .sub{display:block;font-size:clamp(12.5px,1.15vw,15px);color:var(--muted);font-weight:400;margin-top:7px;letter-spacing:0}
+  h3{font-size:clamp(13.5px,1.3vw,16px);margin:0 0 7px;color:var(--accent);font-weight:600}
+  p,li,td,th{font-size:clamp(13.5px,1.28vw,17px);line-height:1.72}
+  p{margin:8px 0;color:#26313f}
+  .muted{color:var(--muted)}
+  b,strong{color:#0b1520}
+  code{background:var(--code);border:1px solid #e3e9f1;border-radius:5px;padding:1px 6px;font-size:.9em;color:var(--codetext)}
+  ul{margin:6px 0 6px 1.1em;padding:0}
+  li{margin:5px 0}
+  .small p,.small li,.small td,.small th,.small div{font-size:clamp(12px,1.08vw,14.5px);line-height:1.6}
+  .dense th,.dense td{padding:6px 10px;font-size:clamp(11.5px,1.02vw,13.5px);line-height:1.5}
+  /* 封面 */
+  .cover{background:linear-gradient(150deg,#ffffff 0%,#f4f7fc 62%,#eaf1fb 100%)}
+  .cover .kicker{font-size:12.5px;letter-spacing:.24em;color:var(--accent);margin-bottom:18px}
+  .cover .lead{font-size:clamp(15px,1.55vw,20px);color:#2c3a4b;max-width:860px;line-height:1.72;margin-top:6px}
+  .cover .rule{height:3px;width:92px;background:var(--accent);border-radius:2px;margin:20px 0}
+  /* 栅格 */
+  .grid{display:grid;gap:13px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .card .k{font-size:11.5px;color:var(--muted);letter-spacing:.09em;margin-bottom:5px}
+  .card .v{font-size:clamp(21px,2.5vw,34px);font-weight:700;color:#0b1520;line-height:1.08;letter-spacing:-.5px}
+  .card .d{font-size:clamp(11.5px,1.05vw,13.5px);color:var(--muted);margin-top:6px;line-height:1.52}
+  .card.ok{background:#f1faf6;border-color:#cfe9dd} .card.ok .v{color:var(--accent2)}
+  .card.bad{background:#fdf3f2;border-color:#f3d6d2} .card.bad .v{color:var(--danger)}
+  .card.warn{background:#fdf7ef;border-color:#f2e2cb} .card.warn .v{color:var(--warn)}
+  /* 表格 */
+  table{width:100%;border-collapse:collapse;margin:8px 0;background:var(--page);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  th,td{text-align:left;padding:8px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#f4f7fb;color:#33445a;font-weight:600;font-size:12px;letter-spacing:.03em}
+  tr:last-child td{border-bottom:none}
+  td.num{font-variant-numeric:tabular-nums;color:#0b1520;white-space:nowrap;font-weight:600}
+  .pill{display:inline-block;background:#f2f5f9;border:1px solid var(--line);color:#3d4d61;border-radius:999px;padding:3px 11px;font-size:12px;margin:0 6px 6px 0}
+  .pill.a{border-color:#cfe0fb;color:#1a5fd0;background:#f3f8ff}
+  .pill.g{border-color:#cfe9dd;color:#0d7a54;background:#f3fbf7}
+  /* 流程图 */
+  .flow{display:flex;align-items:stretch;gap:8px;margin:12px 0;flex-wrap:wrap}
+  .node{flex:1 1 0;min-width:100px;background:var(--page);border:1px solid #dbe3ee;border-radius:10px;padding:11px 10px;text-align:center}
+  .node .t{font-size:13px;font-weight:700;color:#0b1520}
+  .node .s{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.45}
+  .node.hi{background:#f3f8ff;border-color:#b9d3fa}
+  .node.ok{background:#f3fbf7;border-color:#bfe3d4}
+  .node.bad{background:#fdf4f3;border-color:#f0cfca}
+  .arrow{align-self:center;color:#a9b7c9;font-size:15px}
+  /* 步骤 */
+  .step{display:flex;gap:10px;align-items:flex-start;margin:7px 0}
+  .step .n{flex:0 0 22px;height:22px;border-radius:7px;background:#eef3fb;border:1px solid #d5e2f7;color:#1a5fd0;font-size:11.5px;display:flex;align-items:center;justify-content:center;font-weight:700;margin-top:1px}
+  .step .b{flex:1;font-size:clamp(12.5px,1.18vw,15.5px);line-height:1.58;color:#26313f}
+  /* 提示条 */
+  .note{background:#f3f8ff;border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0;color:#22344a;font-size:clamp(12.5px,1.15vw,15px);line-height:1.62}
+  .note.ok{background:#f3fbf7;border-left-color:var(--accent2)}
+  .note.warn{background:#fdf7ef;border-left-color:var(--warn)}
+  .note.bad{background:#fdf4f3;border-left-color:var(--danger)}
+  /* 页脚结论 */
+  .take{margin-top:auto;padding-top:12px;border-top:1px solid var(--line);color:#1c2a3a;font-size:clamp(12.5px,1.18vw,15.5px);line-height:1.6;flex-shrink:0}
+  .take b{color:#0b1520}
+  .take::before{content:"结论";display:inline-block;font-size:10.5px;letter-spacing:.12em;color:var(--accent);border:1px solid #cfe0fb;background:#f3f8ff;border-radius:5px;padding:1px 6px;margin-right:9px;vertical-align:2px}
+  /* 分岔 */
+  .phase{background:var(--page);border:1px solid #dbe3ee;border-radius:12px;padding:13px 16px}
+  .phase .h{font-size:13.5px;font-weight:700;color:#0b1520;margin-bottom:6px}
+  .phase .h em{font-style:normal;color:var(--muted);font-weight:400;font-size:11.5px;margin-left:9px}
+  .phase.off{border-color:#b9d3fa;background:#f7fbff}
+  .phase.on{border-color:#bfe3d4;background:#f6fdfa}
+  .fork{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:11px}
+  .vsep{text-align:center;color:#a9b7c9;font-size:14px;line-height:1;margin:3px 0}
+  #foot{position:fixed;left:34px;right:34px;bottom:13px;display:flex;justify-content:space-between;align-items:center;color:#7d8ba0;font-size:12px;letter-spacing:.02em}
+  #foot .hint{color:#a3aebd}
+  /* 窗口较矮时（笔记本共享屏幕常见）收紧一点，避免正文被卡片裁掉 */
+  @media (max-height:780px){
+    .slide{padding-top:clamp(40px,3.4vw,50px);padding-bottom:clamp(14px,1.6vw,20px)}
+    h1{font-size:clamp(26px,3vw,40px)}
+    .take{font-size:13px}
+  }
+  @page{size:1280px 720px;margin:0}
+  @media print{
+    html,body{overflow:visible;background:#fff}
+    #bar,#foot{display:none}
+    #stage{display:block;padding:0;height:auto}
+    .slide{position:relative;inset:auto;opacity:1!important;transform:none!important;pointer-events:auto;
+           width:1280px;height:720px;max-width:none;max-height:none;border-radius:0;border:none;box-shadow:none;
+           page-break-after:always;break-after:page;background:#fff}
+  }
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="stage">
+
+  <!-- 01 -->
+  <section class="slide active cover">
+    <div class="kicker">企业知识库问答 AGENT · 系统设计</div>
+    <h1>DocPilot</h1>
+    <p class="lead">一个刻意做小的 RAG Agent。它的设计目标不是"答得多"，而是<b>答得可信</b>：<br/>
+      结论可溯源 · 无依据即拒答 · 无权限内容不可见。</p>
+    <div class="rule"></div>
+    <div>
+      <span class="pill a">Python</span><span class="pill a">RAG</span>
+      <span class="pill a">ReAct</span><span class="pill a">MCP</span>
+      <span class="pill g">零核心第三方依赖</span>
+    </div>
+    <div class="take">下面按 <b>问题 → 总览 → 关键设计 → 度量与边界</b> 四段来讲，每一步都有一个可复现的证据。</div>
+  </section>
+
+  <!-- 02 -->
+  <section class="slide">
+    <div class="sec">01 · 问题定义</div>
+    <h2>企业问答的失败模式和聊天机器人不同</h2>
+    <div class="grid g2">
+      <div class="card"><div class="k">聊天机器人答错</div><div class="v" style="font-size:20px">顶多没用</div><div class="d">用户重新问一次，成本可以忽略</div></div>
+      <div class="card bad"><div class="k">企业知识库答错</div><div class="v" style="font-size:20px">是一条事故</div><div class="d">答错一条制度、金额或时限，员工照着执行，责任在公司</div></div>
+    </div>
+    <p style="margin-top:14px">所以真正需要解决的问题是两件事：<b>让它在没有依据时明确拒答</b>；<b>让每一句结论都能指回原文</b>。</p>
+    <div class="take">这类失败有一个共同点：<b>它不会报错</b>。系统只会安静地给出一个看起来很有依据的错误结论 —— 因此"设计"和"度量"必须一起做。</div>
+  </section>
+
+  <!-- 03 -->
+  <section class="slide">
+    <div class="sec">01 · 问题定义</div>
+    <h2>设计目标与约束<span class="sub">五个目标，对应五个可以检查的结果</span></h2>
+    <table class="dense">
+      <tr><th style="width:15%">目标</th><th style="width:33%">设计手段</th><th>为什么不是更简单的做法</th></tr>
+      <tr><td><b>可溯源</b></td><td>引用标号由框架生成并校验，不取模型输出的结构化引用</td><td>让模型"顺手写个来源"，它会写不存在的来源</td></tr>
+      <tr><td><b>可拒答</b></td><td>两条语义明确的信号做 AND，阈值网格搜索标定</td><td>用混合分数做绝对阈值，失败是随机的、无法解释</td></tr>
+      <tr><td><b>可隔离</b></td><td>权限在检索阶段过滤，无权限片段不进上下文</td><td>生成后再打码，一处路径遗漏就泄漏</td></tr>
+      <tr><td><b>可回归</b></td><td>离线 Mock 基线做 CI，真实模型做验收</td><td>只用真实模型：不确定、要花钱、CI 无法稳定复现</td></tr>
+      <tr><td><b>可移植</b></td><td>检索能力用 MCP 标准协议对外暴露</td><td>为每个前端各写一套，行为会漂移</td></tr>
+    </table>
+    <div class="take">约束是"零核心第三方依赖 + 离线可跑"：任何一台装好 Python 的机器上 <b>克隆下来即可运行</b>，代价是所有能力都要自己实现。</div>
+  </section>
+
+  <!-- 04 -->
+  <section class="slide">
+    <div class="sec">02 · 系统总览</div>
+    <h2>两个阶段，两条调用路径<span class="sub">MCP 不是第三个阶段，它是第二阶段的另一个出口</span></h2>
+    <div class="phase off">
+      <div class="h">① 离线建库<em>进程启动跑一次 · 约 10ms · 8 篇文档 → 75 个片段</em></div>
+      <div class="muted">拆 front matter（含权限）→ 按标题与段落切块 → 建倒排索引 + 向量表 + 元数据</div>
+    </div>
+    <div class="vsep">▼ 产物只读：倒排表 / 向量表 / chunks 字典 / 权限元数据</div>
+    <div class="phase on">
+      <div class="h">② 在线问答<em>每次提问</em></div>
+      <div class="muted">检索 → 融合 → 重排 → 证据判定 → 生成 → 引用映射</div>
+    </div>
+    <div class="fork">
+      <div class="card" style="border-color:#b9d3fa;background:#f7fbff">
+        <div class="k">路径 A · 内部 Agent</div>
+        <div class="d">完整 ReAct 循环 + 收尾四步；模型由本系统提供；<b>拒答与引用由框架执行</b></div>
+      </div>
+      <div class="card" style="border-color:#bfe3d4;background:#f6fdfa">
+        <div class="k">路径 B · MCP 出口</div>
+        <div class="d">JSON-RPC over stdio；模型由宿主提供；<b>拒答与引用以"建议"形式给出</b></div>
+      </div>
+    </div>
+    <div class="take">两条路径共用<b>同一个工具注册表和同一份知识库</b>，区别只在"谁调用、调用后谁收尾"。</div>
+  </section>
+
+  <!-- 05 -->
+  <section class="slide">
+    <div class="sec">02 · 系统总览</div>
+    <h2>阶段一：离线建库的四个产物</h2>
+    <div class="flow">
+      <div class="node"><div class="t">切块</div><div class="s">按标题切分<br/>段内按空行分隔<br/>贪心拼接并重叠</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">倒排表</div><div class="s">词项 → 文档<br/>词频 / 长度</div></div>
+      <div class="node"><div class="t">向量表</div><div class="s">每块 256 维<br/>哈希投影</div></div>
+      <div class="node"><div class="t">chunks 字典</div><div class="s">chunk_id →<br/>原文 + 章节路径</div></div>
+      <div class="node"><div class="t">权限元数据</div><div class="s">visibility<br/>来自 front matter</div></div>
+    </div>
+    <p>倒排表负责"字面对得上"，向量表负责"说法不同也能召回"，chunks 字典供引用映射，权限元数据是隔离的依据。</p>
+    <div class="note warn"><b>一个有意义的负结果：</b>示例语料的单段最长 247 字符，当 <code>chunk_size &gt; 247</code> 时贪心拼接的判定恒为真，
+      切块粒度实际由 Markdown 小节结构决定 —— 实测 <code>chunk_size=800</code> 与 <code>360</code> 产出的片段数<b>完全相同</b>。
+      这说明该参数存在适用区间，并非"调了没用"。</div>
+    <div class="take">离线产物的质量决定在线阶段的上限：切块把一句话劈开，后面的检索和重排都救不回来。</div>
+  </section>
+
+  <!-- 06 -->
+  <section class="slide">
+    <div class="sec">02 · 系统总览</div>
+    <h2>阶段二：一次问答的完整路径</h2>
+    <div class="flow">
+      <div class="node hi"><div class="t">准备</div><div class="s">system + 历史<br/>+ 本轮问题</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">ReAct ⨯ 6</div><div class="s">调模型 → 执行工具<br/>→ 结果回填</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">降级</div><div class="s">预算用尽<br/>给部分结论</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">引用</div><div class="s">标号 → 文档<br/>校验范围</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">拒答识别</div><div class="s">三类拒答</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">记忆</div><div class="s">记入会话<br/>供下一轮</div></div>
+    </div>
+    <div class="grid g2" style="margin-top:6px">
+      <div class="card"><div class="k">循环内四个动作</div><div class="d">预算检查（工具调用上限）→ 调模型（带工具的 JSON Schema）→ 判断是否调用工具 → 执行并回填</div></div>
+      <div class="card"><div class="k">一份数据，两种形态</div><div class="d">给模型看的是<b>摘要</b>（缩字段而非截字符串）；给框架用的是<b>完整 payload</b>（用于引用映射与降级）</div></div>
+    </div>
+    <div class="take">模型只负责"决定下一步做什么"，<b>证据判定、引用映射、失败兜底都在框架里</b> —— 这些是可以用单元测试断言的。</div>
+  </section>
+
+  <!-- 07 -->
+  <section class="slide">
+    <div class="sec">03 · 关键设计</div>
+    <h2>检索：为什么必须是两路，以及为什么只按排名融合</h2>
+    <div class="flow">
+      <div class="node bad"><div class="t">① 权限</div><div class="s">先算可访问集合<br/>allowed_ids</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">② 稀疏 BM25</div><div class="s">倒排取候选（与权限求交）<br/>打分取前 8</div></div>
+      <div class="node"><div class="t">③ 稠密</div><div class="s">查询向量与全库相似度<br/>取前 8</div></div>
+      <div class="arrow">→</div>
+      <div class="node hi"><div class="t">④ RRF 融合</div><div class="s">Σ w/(k+rank)<br/>k=60 · w=(1.2, 1.0)</div></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="k">两路各自的强弱</div><div class="d">企业文档的关键信息多是<b>低频精确词</b>（制度编号、金额、时限），纯语义容易糊掉；而用户提问又常口语化，纯关键词会漏。两者弱项互补。</div></div>
+      <div class="card"><div class="k">融合只用排名</div><div class="d">BM25 分数无界、余弦相似度在 [-1,1]，量纲不可比。只用名次融合可以绕开对齐问题，也更容易解释"为什么它排前面"。</div></div>
+    </div>
+    <div class="take">权限在检索<b>之前</b>生效：无权限片段根本不会进入打分，更不会进入上下文。</div>
+  </section>
+
+  <!-- 08 -->
+  <section class="slide">
+    <div class="sec">03 · 关键设计</div>
+    <h2>重排：三个可解释的信号，并顺带产出拒答依据</h2>
+    <table class="dense">
+      <tr><th style="width:30%">信号</th><th style="width:12%">权重</th><th>衡量什么</th></tr>
+      <tr><td>IDF 加权实义覆盖率</td><td class="num">0.55</td><td>命中的是"稀有实义词"还是"到处都是的通用词"</td></tr>
+      <tr><td>字符覆盖率</td><td class="num">0.25</td><td>问题的实义字符有多少出现在该段落里</td></tr>
+      <tr><td>最长连续命中字符数</td><td class="num">0.20</td><td>是"整句对上"，还是"只撞了两个零散字"</td></tr>
+    </table>
+    <p>排序主键用的是<b>这个相关性分数</b>，融合分只在平局时用来打破并列。</p>
+    <div class="note bad"><b>一个被修正的设计错误：</b>早期以混合分数排序，而它含"标题命中"这一项 ——
+      问"出差住酒店超预算怎么办"时，标题里带"常见问题"的入职文档排到了第一，
+      真正写"超标部分由个人承担"的差旅制度掉到第六。<b>根因是排序主键选了一个不可解释的量。</b></div>
+    <div class="take">重排不只是精排：<code>relevance</code> 与 <code>longest_span_chars</code> 都由它产出，<b>后面的证据判定完全依赖这两个数</b>。</div>
+  </section>
+
+  <!-- 09 -->
+  <section class="slide">
+    <div class="sec">03 · 关键设计</div>
+    <h2>证据判定：拒答与误答的分界点</h2>
+    <div class="card small" style="font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--code);line-height:1.9">
+      <div><b style="color:#0b1520">has_evidence</b> =</div>
+      <div>&nbsp;&nbsp;bool(results)</div>
+      <div>&nbsp;&nbsp;<b style="color:#9a5b00">and not restricted</b>&nbsp;&nbsp;&nbsp;&nbsp;<span class="muted"># 权限优先</span></div>
+      <div>&nbsp;&nbsp;<b style="color:#1a5fd0">and best_relevance &gt;= 0.28</b>&nbsp;&nbsp;<span class="muted"># 相关性是否达标</span></div>
+      <div>&nbsp;&nbsp;<b style="color:#0d7a54">and best_span &gt;= 2</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="muted"># 不是零散撞字</span></div>
+    </div>
+    <table class="dense" style="margin-top:10px">
+      <tr><th>标注集实测</th><th style="width:36%">relevance 区间</th><th style="width:30%">最长连续命中</th></tr>
+      <tr><td>应当回答</td><td class="num">0.444 ~ 0.720</td><td class="num">4 ~ 5</td></tr>
+      <tr><td>应当拒答</td><td class="num" style="color:var(--danger)">0.000 ~ 0.579（与上组重叠）</td><td class="num" style="color:var(--accent2)">0 ~ 2（干净分开）</td></tr>
+    </table>
+    <div class="take">单看相关性分不开这两组，<b>必须再加"最长连续命中"</b>，这就是为什么判定用 AND 而不是单一阈值。</div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <div class="sec">03 · 关键设计</div>
+    <h2>引用：标号由框架生成，不采信模型给的来源</h2>
+    <div class="grid g2">
+      <div class="card"><div class="k">模型产出</div><div class="d">答案正文带上 <code>[1]</code>、<code>[2]</code> 标号</div></div>
+      <div class="card ok"><div class="k">框架产出</div><div class="d">按检索结果的实际顺序，把 <code>[1]</code> 映射到真实的文档与章节，并<b>校验标号范围</b></div></div>
+    </div>
+    <table class="dense" style="margin-top:10px">
+      <tr><th style="width:36%">情况</th><th>处理方式</th></tr>
+      <tr><td>标号都在范围内</td><td>按检索顺序生成映射</td></tr>
+      <tr><td>标号越界（只检索到 3 条却写 <code>[9]</code>）</td><td>记入调用轨迹，<b>不臆造来源</b></td></tr>
+      <tr><td>完全没有标引用</td><td>补上相关度最高的前几条来源，而不是留空</td></tr>
+      <tr><td>判定为应当拒答</td><td><b>不附引用</b> —— 否则用户会以为系统在拿这些片段当依据</td></tr>
+    </table>
+    <div class="take">实测引用有效性为 <b>1.000（零伪造引用）</b>，真实模型复测同样为 0 条伪造 —— 这一点不依赖模型是否配合。</div>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide">
+    <div class="sec">03 · 关键设计</div>
+    <h2>权限：四个位置，一个原则</h2>
+    <div class="grid g4">
+      <div class="card bad"><div class="k">① 检索入口</div><div class="d"><b>allowed_ids</b><br/>过滤掉无权片段<br/>无权内容不参与打分</div></div>
+      <div class="card warn"><div class="k">② 证据判定</div><div class="d"><b>受限文档识别</b><br/>问题指向无权文档时<br/>明确告知，不拿别的文档凑答案</div></div>
+      <div class="card"><div class="k">③ 收尾</div><div class="d">权限类拒答文案<br/>且<b>不附引用</b></div></div>
+      <div class="card ok"><div class="k">④ 服务端</div><div class="d"><b>角色绑定在进程上</b><br/>命令行 &gt; 环境变量 &gt; 配置<br/>绝不作为工具参数</div></div>
+    </div>
+    <div class="note bad"><b>只做过滤是不够的：</b>无权限用户问"P4 职级绩效占比"，系统会拿差旅住宿标准来回答 ——
+      既答错了问题，又间接暴露了"确实存在一份薪酬文档"。因此增加了"受限文档识别"。</div>
+    <p>判定刻意从严：覆盖率足够高<b>且明显优于可见文档</b>时才提示无权限 —— 误报"你无权访问"会让用户以为系统故障。</p>
+    <div class="take">原则是<b>权限属于部署属性，而不是请求属性</b>：角色永远不会作为工具参数暴露给模型。</div>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide">
+    <div class="sec">03 · 关键设计</div>
+    <h2>收尾：失败也要给出可用的结果</h2>
+    <table class="dense">
+      <tr><th style="width:18%">环节</th><th style="width:40%">做法</th><th>设计理由</th></tr>
+      <tr><td><b>降级</b></td><td>调用预算用尽时，用已检索到的片段拼一个"部分结论"</td><td>不空手而归；读完整 payload 而不是给模型看的摘要，否则引用信息已被压缩掉</td></tr>
+      <tr><td><b>拒答识别</b></td><td>识别"没有依据 / 证据不足 / 无权限"三类</td><td>识别错了，拒答准确率与误拒率两个指标都会失真</td></tr>
+      <tr><td><b>会话记忆</b></td><td>保留最近若干轮，供下一轮消解指代</td><td>多轮追问的上下文必须真正进入提示词，而不是只给工具用</td></tr>
+    </table>
+    <div class="note ok">这三个环节<b>只在路径 A 与评测中发生</b>。走 MCP 时本系统不产出答案文本，收尾由宿主完成。</div>
+    <div class="take">把"模型该做的"和"框架该做的"划清，是这类系统可测试、可复现的前提。</div>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide">
+    <div class="sec">03 · 关键设计</div>
+    <h2>MCP 出口：同一内核，不同前端</h2>
+    <div class="flow">
+      <div class="node"><div class="t">握手</div><div class="s">版本协商<br/>+ 使用说明</div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">工具列表</div><div class="s">只暴露 2 个<br/>标注为只读</div></div>
+      <div class="arrow">→</div>
+      <div class="node hi"><div class="t">工具调用</div><div class="s">复用同一注册表<br/><b>角色在此注入</b></div></div>
+      <div class="arrow">→</div>
+      <div class="node"><div class="t">返回结果</div><div class="s">文本块给模型<br/>结构化块给程序</div></div>
+    </div>
+    <table class="dense">
+      <tr><th style="width:30%">设计决定</th><th>理由</th></tr>
+      <tr><td>只暴露检索与列表两个工具</td><td>不暴露改写工具（宿主本身就有对话）；不暴露整条问答链路（宿主已在运行自己的 Agent，避免两层决策互相干扰）</td></tr>
+      <tr><td>角色由服务端绑定</td><td>客户端若能传角色参数，等于允许它自称高权限；注入发生在参数校验之后</td></tr>
+      <tr><td>日志只写标准错误</td><td>标准输出是协议通道，混入一行日志就会让宿主解析失败</td></tr>
+      <tr><td>工具失败标记在结果里</td><td>执行失败属于"结果"而非协议错误：宿主能看到原因并改变问法</td></tr>
+    </table>
+    <div class="take">对外暴露的是<b>能力</b>而不是<b>流程</b>：宿主拿到的是证据与判定结论，如何组织答案由宿主决定。</div>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide">
+    <div class="sec">04 · 度量与边界</div>
+    <h2>指标设计：四类互相制衡，而不是一个总分</h2>
+    <table class="dense">
+      <tr><th style="width:20%">指标</th><th style="width:12%">实测</th><th style="width:10%">门禁</th><th>为什么不能去掉</th></tr>
+      <tr><td>复合分</td><td class="num">0.931</td><td class="num">≥0.75</td><td>四项加权的整体视图</td></tr>
+      <tr><td>检索命中</td><td class="num">0.952</td><td class="num">≥0.85</td><td>检索层失效时，生成层再强也没有意义</td></tr>
+      <tr><td>引用有效性</td><td class="num">1.000</td><td class="num">≥0.95</td><td>零伪造引用，是本系统最核心的对外承诺</td></tr>
+      <tr><td>拒答正确率</td><td class="num">0.857</td><td class="num">≥0.70</td><td>该拒时是否拒；门禁刻意低于当前能力，避免长期红灯被忽略</td></tr>
+      <tr><td>误拒率</td><td class="num">0.000</td><td class="num">≤0.15</td><td><b>该答却拒是另一种失败</b>，与幻觉同等严重</td></tr>
+    </table>
+    <p>门禁阈值按<b>实测能力</b>标定，而不是设一个乐观目标：把门槛定在能力之上，等于没有门槛。</p>
+    <div class="take">拒答必须双向考核。只统计"幻觉"会让系统越来越保守，最后变成什么都不肯答 —— 那同样是失败。</div>
+  </section>
+
+  <!-- 15 -->
+  <section class="slide">
+    <div class="sec">04 · 度量与边界</div>
+    <h2>验证一：自建难题集，暴露了原指标的高估</h2>
+    <div class="grid g3">
+      <div class="card bad"><div class="k">原评测集</div><div class="v">6 / 21</div><div class="d">只有 6 条"应当拒答"的负例，且多为零字面重合的简单题</div></div>
+      <div class="card bad"><div class="k">更关键的问题</div><div class="v" style="font-size:18px">阈值也来自它</div><div class="d">在同一批数据上调参、再报"提升了"，属于对评测集过拟合</div></div>
+      <div class="card warn"><div class="k">自建规模</div><div class="v">60 条</div><div class="d">与文档真实事实同构、但文档恰好没有答案</div></div>
+    </div>
+    <table class="dense" style="margin-top:10px">
+      <tr><th style="width:24%">负例类型</th><th>示例</th></tr>
+      <tr><td>同胞槽位缺失</td><td>文档写了绩效工资占比，提问"期权授予比例"</td></tr>
+      <tr><td>概念只在同义词表</td><td>词典里有"加班 / 调休"，语料里没有任何条款</td></tr>
+      <tr><td>只答了一半</td><td>年终奖有公式、有发放条件，但没写发放月份</td></tr>
+      <tr><td>带有错误前提</td><td>"结转上限是 10 天吧？"实际为 5 天</td></tr>
+    </table>
+    <div class="take">机制上：<b>脚本只产生候选，标签由人确认</b>；每条候选附带关键词全库命中数与系统误判依据，复核成本从分钟级降到秒级。</div>
+  </section>
+
+  <!-- 16 -->
+  <section class="slide">
+    <div class="sec">04 · 度量与边界</div>
+    <h2>验证二：这个短板调参救不了</h2>
+    <div class="grid g2">
+      <div class="card bad"><div class="k">词面判定在难题集上的误判（Mock 基线）</div><div class="v">89.8%</div><div class="d">95% CI 79.5% – 95.3%，59 条负例</div></div>
+      <div class="card ok"><div class="k">同一批数据上的误拒</div><div class="v">0 / 18</div><div class="d">问题不是太保守，而是放行太多</div></div>
+    </div>
+    <div class="grid g2" style="margin-top:12px">
+      <div class="card warn"><div class="k">零误拒约束下的调参上限</div><div class="v">32%</div><div class="d">提高阈值最多只能挡住 19/59，再抬就会误伤应当回答的问题</div></div>
+      <div class="card"><div class="k">换成真实模型后的实测</div><div class="v">0 / 68</div><div class="d">人工核对后真误答 0 条（59 条主集 + 9 条留出集）</div></div>
+    </div>
+    <div class="note">口径需要说清楚：<b>89.8% 是"离线基线中词面判定的误判率"，不是"系统整体误答率"</b>。
+      离线基线把判定结论当作唯一依据，判定错一次就误答一次；真实模型在读取片段后会自行判断。</div>
+    <div class="take">这个对比本身就给出了结论：<b>判定能力在模型层，不在检索层</b> —— 优化方向应是更换判定信号，而不是继续调阈值。</div>
+  </section>
+
+  <!-- 17 -->
+  <section class="slide">
+    <div class="sec">04 · 度量与边界</div>
+    <h2>验证三：接真实模型后，暴露了三个离线测不到的问题</h2>
+    <table class="dense">
+      <tr><th style="width:22%">现象</th><th style="width:40%">根因</th><th>修复结果</th></tr>
+      <tr><td>多轮追问得分降到 0.25，模型回答"没有上文"</td><td>历史仅在未显式传入时才渲染进提示词；评测恰好显式传入了历史，于是模型只看到一句孤立问题</td><td>历史无条件进入提示词，三条多轮用例<b>全部回到 1.0</b></td></tr>
+      <tr><td>无权限时回答成"没有找到依据"</td><td>系统提示词没有提及受限来源字段；这句提示原本只写死在离线基线的回答模板里</td><td>明确回答"当前角色没有访问该文档的权限"</td></tr>
+      <tr><td>9 条正确拒答被统计成误答</td><td>拒答识别是一张按离线基线表述写的关键词表，覆盖不到真实模型的措辞</td><td>只看结论句 + 模式匹配：召回 <b>87.8% → 98.6%</b>，误判 <b>7.3% → 3.6%</b></td></tr>
+    </table>
+    <div class="note ok">修复后真实模型（deepseek-flash）21 条：<b>复合分 0.9881</b>，检索命中 1.000，拒答正确 1.000，伪造引用 0 条。</div>
+    <div class="take">结论：<b>离线基线能验证链路，不能验证判断力</b>；而且"评测工具本身"也需要被评测 —— 否则指标失真比效果差更危险。</div>
+  </section>
+
+  <!-- 18 -->
+  <section class="slide">
+    <div class="sec">04 · 度量与边界</div>
+    <h2>当前状态</h2>
+    <table>
+      <tr><th>维度</th><th style="width:30%">离线基线（CI 可复现）</th><th style="width:32%">真实模型（deepseek-flash）</th></tr>
+      <tr><td>端到端复合分（21 条）</td><td class="num">0.931</td><td class="num">0.9881</td></tr>
+      <tr><td>引用有效性</td><td class="num">1.000</td><td class="num">0.952<span class="muted" style="font-weight:400">（唯一无引用的是"列出文档"类问题）</span></td></tr>
+      <tr><td>误拒率</td><td class="num">0.000</td><td class="num">0 / 15</td></tr>
+      <tr><td>伪造引用</td><td class="num">0 条</td><td class="num">0 条</td></tr>
+      <tr><td>单次问答开销</td><td class="num">约 2.2k token / 67 ms</td><td class="num">约 3.6k token / 7.7 s</td></tr>
+      <tr><td>工程度量</td><td class="num" colspan="2">2,903 行有效代码 · 259 个测试 · 零核心第三方依赖</td></tr>
+    </table>
+    <div class="take">两套数据并存是有意的：<b>离线基线保证可回归，真实模型负责验收</b>，两者测量的是不同层面的问题。</div>
+  </section>
+
+  <!-- 19 -->
+  <section class="slide">
+    <div class="sec">04 · 度量与边界</div>
+    <h2>已知边界</h2>
+    <ul>
+      <li><b>判定偏字面</b>：遇到"话题相近但文档没有答案"的提问会放行。已验证调参的上限只有约三分之一，正确的修法是更换判定信号。</li>
+      <li><b>评测集是文件级的</b>：分辨不出切块这类"文件内部"的改动。实测调整切块粒度时，端到端指标没有变化 —— 指标的作用层级与参数的作用层级不匹配。</li>
+      <li><b>规模未经验证</b>：75 个片段可以全量计算，到十万级必须换成向量库与倒排索引，当前实现不具备该性能特征。</li>
+      <li><b>拒答识别仍依赖表述形式</b>：已从 87.8% 提升到 98.6%，彻底的做法是引入判定模型。</li>
+      <li><b>MCP 路径下拒答是"建议"而非"执行"</b>：执行者是宿主模型，本系统只能提供判定结论与使用说明。</li>
+      <li><b>MCP 暴露后，检索结果会原样进入宿主上下文</b>：文档正文里的指令性文本不再受本系统提示词约束。已做过注入测试（嵌入的标记未被输出，模型主动识别并提示），但这不等于防护完备。</li>
+    </ul>
+    <div class="take">这些限制都写在仓库 README 与架构文档里 —— 一个系统的可信度，很大程度上取决于它的作者如何描述它的边界。</div>
+  </section>
+
+  <!-- 20 -->
+  <section class="slide">
+    <div class="sec">04 · 度量与边界</div>
+    <h2>如果继续投入，优先级是这样排的</h2>
+    <table class="dense">
+      <tr><th style="width:8%">序</th><th style="width:26%">方向</th><th style="width:40%">理由</th><th>预期收益</th></tr>
+      <tr><td class="num">1</td><td>把判定移到模型层</td><td>已验证：小规模实验中误答可压到 0，代价是每次查询多一次调用</td><td>直接解决最大的短板</td></tr>
+      <tr><td class="num">2</td><td>把评测的拒答识别换成判定模型</td><td>当前依赖表述形式，会让所有指标失真</td><td>让度量本身可信</td></tr>
+      <tr><td class="num">3</td><td>扩充留出集负例</td><td>当前负例样本量导致置信区间偏宽</td><td>结论更稳，可作为回归基线</td></tr>
+      <tr><td class="num">4</td><td>换真实向量模型与重排器</td><td>收益待验证：此前的消融显示，单独替换嵌入对端到端指标没有影响</td><td>优先级最低 —— 因为它不解决判定问题</td></tr>
+    </table>
+    <div class="take">排序依据是<b>"是否直接作用于已知短板"</b>，而不是实现难度或技术新颖度。</div>
+  </section>
+
+  <!-- 21 -->
+  <section class="slide">
+    <div class="sec">05 · 复现</div>
+    <h2>全部可离线复现，无需任何密钥</h2>
+    <div class="card small" style="font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--code);line-height:2">
+      <div><span class="muted">$</span> python -m docpilot info&nbsp;&nbsp;&nbsp;&nbsp;<span class="muted"># 环境自检：配置来自哪一层</span></div>
+      <div><span class="muted">$</span> python -m docpilot eval&nbsp;&nbsp;&nbsp;&nbsp;<span class="muted"># 复合分 0.931 + 质量门禁</span></div>
+      <div><span class="muted">$</span> python scripts/eval_stratified.py --reviewed-only&nbsp;&nbsp;<span class="muted"># 难题集分层结果</span></div>
+      <div><span class="muted">$</span> python -m docpilot mcp --role public&nbsp;&nbsp;<span class="muted"># 启动 MCP 服务端</span></div>
+      <div><span class="muted">$</span> python -m pytest tests -q&nbsp;&nbsp;<span class="muted"># 259 个测试</span></div>
+    </div>
+    <p style="margin-top:14px">两阶段设计、四条关键路径、三次验证实验，都在仓库文档里有对应的记录与复现命令。</p>
+    <div class="take">这个项目最想说明的一点：<b>系统的可信度来自可验证的证据，而不是看起来聪明的回答</b> —— 包括主动公开它 89.8% 的误判率，以及据此否掉自己最初的技术假设。</div>
+  </section>
+
+</div>
+
+<div id="foot">
+  <span>DocPilot · 系统设计讲解</span>
+  <span class="hint">← → 翻页 · F 全屏 · P 打印 / 导出 PDF</span>
+  <span id="counter">1 / 21</span>
+</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var bar = document.getElementById('bar');
+  var counter = document.getElementById('counter');
+  var cur = 0;
+
+  function show(i){
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function(s, k){ s.classList.toggle('active', k === cur); });
+    bar.style.width = ((cur + 1) / slides.length * 100) + '%';
+    counter.textContent = (cur + 1) + ' / ' + slides.length;
+    if (history.replaceState) history.replaceState(null, '', '#' + (cur + 1));
+  }
+  function next(){ show(cur + 1); }
+  function prev(){ show(cur - 1); }
+
+  document.addEventListener('keydown', function(e){
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Enter'){ e.preventDefault(); next(); }
+    else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace'){ e.preventDefault(); prev(); }
+    else if (k === 'Home'){ e.preventDefault(); show(0); }
+    else if (k === 'End'){ e.preventDefault(); show(slides.length - 1); }
+    else if (k === 'f' || k === 'F'){
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+    else if (k === 'p' || k === 'P'){ window.print(); }
+    else if (/^[1-9]$/.test(k)){ show(parseInt(k, 10) - 1); }
+  });
+
+  document.addEventListener('click', function(e){
+    if (e.target.closest('a,button,code')) return;
+    if (e.clientX > window.innerWidth / 2) next(); else prev();
+  });
+
+  var start = parseInt((location.hash || '#1').slice(1), 10);
+  show(isNaN(start) ? 0 : start - 1);
+})();
+</script>
+</body>
+</html>
